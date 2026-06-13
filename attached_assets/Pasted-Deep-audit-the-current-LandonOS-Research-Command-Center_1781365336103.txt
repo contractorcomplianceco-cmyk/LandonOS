@@ -1,0 +1,209 @@
+Deep audit the current LandonOS Research Command Center build against the provided visual mockup, one piece at a time.
+
+Primary goal:
+Make the actual app match the mockup as closely as possible in structure, visual style, layout, navigation, spacing, hierarchy, labels, and interaction behavior.
+
+Reference mockup:
+Use the LandonOS Research Command Center visual mockup as the design target. Treat it as the source of truth for the app’s visual direction.
+
+Audit method:
+Do not do a vague overall review. Audit and fix the design one piece at a time.
+
+Work in this order:
+
+1. Overall shell
+- Dark navy/rich blue app frame
+- Executive Rose OS look
+- White work surfaces
+- Silver/steel borders
+- Electric blue primary actions
+- Clean dashboard density
+- No yellow/gold, beige/tan, brown/orange, generic purple gradients, decorative blobs, or student-style visuals
+
+2. Left sidebar
+- LandonOS identity at top
+- “Research Command Center” subtitle
+- Navigation items:
+  - Command Center
+  - Research Builder
+  - Prompt Coach
+  - Research GPS
+  - Report Builder
+  - Source Vault
+  - Blocked Help
+  - RoseOS Chat
+  - Handoff
+  - Rewards
+  - Training Academy
+  - Company Brain
+- Active state should match the mockup
+- Sidebar should feel polished, not generic
+
+3. Top bar
+- Title: “AI-Guided Research Training Cockpit”
+- Subtitle or scope: “Compliance / Business Research”
+- Search field
+- Status chips:
+  - Source Check
+  - Human Review Required
+  - Draft Only
+- Make spacing, hierarchy, and alignment match the mockup
+
+4. Guided Research Builder
+- Main large workspace panel
+- Heading: “Guided Research Builder”
+- Supporting text: “Start the research correctly before asking AI or building the report.”
+- Fields:
+  - Research Type
+  - Decision Supported
+  - Required Sources
+  - Reviewer
+  - What Not To Assume
+- Buttons:
+  - Generate Research Plan
+  - Ask RoseOS
+  - I’m Blocked
+- Make the form feel guided and executive, not plain
+
+5. Research GPS
+- Horizontal progress tracker
+- Steps:
+  - Understand
+  - Questions
+  - Sources
+  - Verify
+  - Report
+  - Handoff
+- Show statuses:
+  - Complete
+  - In Progress
+  - Needs Help
+  - Not Started
+- Include progress percentage
+- Match the mockup’s compact, polished progress-card style
+
+6. Research Report Builder
+- Report preview panel
+- Heading: “Research Report Builder”
+- Sections:
+  - Objective
+  - Executive Summary
+  - Key Findings
+  - Risks
+  - Recommendation
+  - Sources
+- Include “Report Readiness Score”
+- Include warning chips:
+  - Needs official source
+  - Open questions remain
+- Make this panel feel like a leadership-ready report builder, not a simple text area
+
+7. AI Prompt Coach
+- Include improved prompt preview
+- Buttons or actions:
+  - Improve Prompt
+  - Check Assumptions
+- Must remind user that AI output is draft only until source-checked and human-reviewed
+
+8. Blocked / Need Help
+- Include queue items:
+  - Needs Sources
+  - Conflicting Info
+  - Rose Review
+- Include urgency/status badges
+- Should look like a real help-routing workflow, not a static note
+
+9. RoseOS Chat
+- Right-side mentor panel
+- Heading: “RoseOS Chat”
+- Chat should ask clarifying questions
+- Include actions:
+  - Improve Prompt
+  - Check Sources
+  - Prepare Handoff
+  - Ask RoseOS
+- Must feel like a research mentor, not a generic chatbot
+- Include safety guidance that final company decisions and client-facing guidance require human review
+
+10. Reward Center
+- Show:
+  - Level 2: Source Finder
+  - Points
+  - Progress bar
+  - Badges:
+    - Official Source Added
+    - Clean Handoff
+- Keep rewards professional and skill-based, not childish
+
+11. Brainstorming Studio
+- Include idea prompts:
+  - What opportunity are we missing?
+  - What could be automated?
+  - What should Rose know?
+- Ideas should be convertible into research, automation, or leadership questions
+
+12. Training Academy
+- Include lessons:
+  - Use AI Responsibly
+  - Verify Sources
+  - Write Executive Summary
+- Include completion/status labels
+
+13. Company Brain Updates
+- Include suggested records:
+  - Decision Log
+  - Requirements Registry
+  - Automation Registry
+- Make clear these are suggestions, not automatic records
+
+14. Research Completed Handoff
+- Include card or panel:
+  - Ready for Rose
+  - Human Review Required
+- Handoff should show that research is not complete until source quality and open questions are resolved
+
+15. Responsiveness
+- Test desktop, tablet, and mobile
+- Mobile navigation must work
+- No overlap
+- No clipped labels
+- Text must fit inside buttons/cards
+- Layout should remain polished
+
+16. Interactivity
+- Every visible button should either work or be intentionally disabled with a clear reason
+- No dead buttons
+- Forms should accept input
+- Status changes should update counts/progress
+- Dashboard cards should be clickable where appropriate
+- localStorage persistence should work if this is still a prototype
+
+17. Final verification
+Run:
+- typecheck
+- build
+- browser preview
+- console check
+- responsive check
+- click-through test
+
+Required output:
+Give me a section-by-section audit report.
+
+For each section, report:
+- Current match score from 1-10
+- What does not match the mockup
+- What you fixed
+- What still needs review
+- Screenshot or visual proof after fixes if possible
+
+Important:
+Do not redesign in a different direction.
+Do not simplify the app into a generic dashboard.
+Do not use yellow/gold-heavy branding.
+Do not use beige/tan, brown/orange, or purple SaaS gradients.
+Do not remove the Rose OS executive feel.
+Do not treat AI output as final.
+Do not make compliance or business conclusions client-facing without human review.
+
+The final app should look and feel like the mockup: an executive AI-guided research training cockpit for LandonOS.
