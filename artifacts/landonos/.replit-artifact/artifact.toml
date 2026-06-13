@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "LandonOS Research Command Center"
+version = "1.0.0"
+id = "artifacts/landonos"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23120
+
+[services.development]
+run = "pnpm --filter @workspace/landonos run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/landonos", "run", "build" ]
+publicDir = "artifacts/landonos/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23120"
+BASE_PATH = "/"

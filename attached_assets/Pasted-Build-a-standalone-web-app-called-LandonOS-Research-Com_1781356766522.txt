@@ -1,0 +1,525 @@
+Build a standalone web app called “LandonOS Research Command Center.”
+
+Purpose:
+LandonOS is an AI-guided research training cockpit for Landon. It should help him learn how to do compliance and business research properly, use AI responsibly, collect source-backed information, build leadership-ready research reports, ask for help when blocked, brainstorm ideas, complete research handoffs, and level up his skills over time.
+
+This is a standalone app for now. Use localStorage persistence for the prototype. Do not build external integrations yet. The app may later connect to Rose OS, Command Center, Company Brain, Zoho, or other systems, but this first version should work independently.
+
+Primary user:
+Landon.
+
+Review users:
+Rose, Carmen, Gregg, and leadership.
+
+Research focus:
+Compliance research and business research.
+
+Visual style:
+Create a sleek, executive, high-quality custom interface. It should feel like an executive intelligence desk, not a school dashboard or generic task app.
+
+Use:
+- Dark navy / rich blue foundation
+- White work surfaces
+- Silver / steel borders and dividers
+- Electric blue primary actions
+- Clean executive typography
+- Polished dashboard layout
+- Subtle shadows
+- Strong spacing
+- Professional status badges
+
+Avoid:
+- Yellow-heavy branding
+- Beige/tan palettes
+- Brown/orange palettes
+- Generic purple SaaS gradients
+- Decorative blobs
+- Student-style visuals
+- Clutter
+- Lorem ipsum
+
+Main navigation:
+1. Command Center
+2. Guided Research Builder
+3. AI Prompt Coach
+4. Research GPS
+5. Research Report Builder
+6. Source Vault
+7. Blocked / Need Help
+8. RoseOS Chat
+9. Research Completed Handoff
+10. Brainstorming Studio
+11. Reward Center
+12. Training Academy
+13. Company Brain Updates
+14. Settings
+
+General app requirements:
+- All navigation must work.
+- All buttons that appear clickable must do something.
+- Use realistic sample data.
+- Allow adding, editing, deleting, archiving, filtering, searching, and status changes where appropriate.
+- Store app data in localStorage.
+- Data must persist after browser refresh.
+- Include empty states.
+- Include success messages or toasts where useful.
+- Include responsive desktop, tablet, and mobile layouts.
+- Include mobile navigation.
+- No dead buttons.
+- No broken routes.
+- No overlapping text.
+- No clipped labels.
+- No placeholder lorem ipsum.
+- Run typecheck/build and fix errors before completion.
+
+MODULE 1: Command Center
+
+Create the main dashboard with:
+- Welcome header: “LandonOS Research Command Center”
+- Subtitle: “AI-guided compliance and business research cockpit”
+- Today’s research priorities
+- Open research requests
+- Blocked items
+- Reports in progress
+- Reports ready for review
+- Completed handoffs
+- Current level and reward progress
+- Source quality warnings
+- Quick actions:
+  - New Research Request
+  - Start Research Builder
+  - Ask RoseOS Chat
+  - Build Research Report
+  - I’m Blocked
+  - Create Handoff
+
+Dashboard cards should show real counts that update when item statuses change.
+
+MODULE 2: Guided Research Builder
+
+Create a step-by-step research intake flow.
+
+Fields:
+- Research title
+- Research type:
+  - Compliance Research
+  - Business Research
+  - Market Research
+  - Competitor Research
+  - Client / Account Research
+  - Internal Operations Research
+- Requester
+- Reviewer
+- Priority:
+  - Low
+  - Medium
+  - High
+  - Executive
+- Due date
+- What are you trying to find out?
+- What decision will this support?
+- What do we already know?
+- What sources are required?
+- What should not be assumed?
+- What would make this research complete?
+- Does this require human review?
+- Notes
+
+After submission, generate and display:
+- Research plan
+- Source checklist
+- AI prompt
+- Follow-up questions
+- Suggested report outline
+- Recommended reviewer
+
+The generated plan can be template-based. It does not need a live AI API yet.
+
+MODULE 3: AI Prompt Coach
+
+Create a workspace where Landon can enter a rough research question and improve it.
+
+Input:
+- Rough prompt or research question
+- Research type
+- Intended output
+- Required sources
+- Reviewer
+
+Buttons:
+- Improve my prompt
+- Make it more specific
+- Add source requirements
+- Turn into an executive research prompt
+- Create follow-up questions
+- Check assumptions
+- Create report outline
+
+Show:
+- Original prompt
+- Improved prompt
+- Why the improved prompt is better
+- Follow-up questions
+- Source requirements
+- Review warning
+
+Include this reminder:
+“AI output is draft only until source-checked and human-reviewed.”
+
+MODULE 4: Research GPS
+
+Create a visual guided workflow that shows where Landon is in the research process.
+
+Steps:
+1. Understand request
+2. Build research questions
+3. Find sources
+4. Verify sources
+5. Compare findings
+6. Identify risks and opportunities
+7. Build report
+8. Quality check
+9. Handoff
+10. Company Brain update suggestion
+
+Each step should support status:
+- Not Started
+- In Progress
+- Complete
+- Needs Help
+
+Allow Landon to update step status. Show progress percentage.
+
+MODULE 5: Research Report Builder
+
+Create a report-building workspace.
+
+Report fields:
+- Report title
+- Related research request
+- Prepared for
+- Prepared by
+- Date
+- Research objective
+- Executive summary
+- Key findings
+- Source-backed facts
+- Risks
+- Opportunities
+- Unknowns
+- Recommendation
+- Next steps
+- Sources reviewed
+- Reviewer notes
+- Status:
+  - Draft
+  - Needs Sources
+  - Ready for Review
+  - Needs More Research
+  - Reviewed
+  - Approved
+  - Archived
+
+Add a Report Readiness Score based on:
+- Required sections completed
+- Number of sources attached
+- Source quality
+- Whether open questions remain
+- Whether human review is required
+- Whether reviewer notes are unresolved
+
+Show warnings:
+- “Needs official source”
+- “AI-only source risk”
+- “Human review required”
+- “Open questions remain”
+
+Include a copy/export-ready report preview.
+
+MODULE 6: Source Vault
+
+Create a searchable source library.
+
+Source fields:
+- Source title
+- URL or file reference
+- Source type:
+  - Official Source
+  - Internal Company Record
+  - Client-Provided
+  - Competitor
+  - Market / Industry
+  - AI Draft
+  - Unknown
+- Related research request
+- Date captured
+- Summary
+- Key facts
+- Confidence rating
+- Source quality rating
+- Tags
+- Notes
+
+Behavior:
+- Add/edit/archive sources
+- Link sources to research requests and reports
+- Filter by source type
+- Search by title, summary, key facts, or tags
+- Highlight official sources
+- Flag AI Draft and Unknown sources
+- Warn if a report relies only on AI Draft or Unknown sources
+
+MODULE 7: Blocked / Need Help
+
+Create an “I’m Stuck” help area.
+
+Blocker types:
+- I don’t know where to start
+- I can’t find sources
+- I found conflicting information
+- I don’t understand the topic
+- I need a better AI prompt
+- I need Rose review
+- I need Carmen review
+- I need Gregg review
+- I need help turning this into a report
+- I need help deciding what matters
+
+Blocker fields:
+- Related research item
+- Blocker type
+- Description
+- Urgency:
+  - Low
+  - Medium
+  - High
+  - Executive
+- Who should help?
+- What have you tried?
+- Suggested next step
+- Status:
+  - Open
+  - In Review
+  - Waiting on Landon
+  - Resolved
+  - Archived
+
+Show a blocked queue and allow status changes.
+
+MODULE 8: RoseOS Chat
+
+Create a chat-style mentor panel. This does not need a real AI API yet. Use template-based simulated responses and prompt generation.
+
+Chat modes:
+- Help me understand this topic
+- Help me build a research plan
+- Help me check my sources
+- Help me write the report
+- Help me prepare a handoff
+- Help me brainstorm next steps
+- Help me improve my prompt
+- Help me identify risks
+
+The chat should guide Landon with clarifying questions, not just give final answers.
+
+Each chat mode should produce:
+- Suggested next question
+- Suggested AI prompt
+- Source reminder
+- Human review reminder
+- Next action
+
+Include a persistent safety note:
+“RoseOS Chat is a research guide. Final company decisions and client-facing guidance require human review.”
+
+MODULE 9: Research Completed Handoff
+
+Create a structured handoff form.
+
+Fields:
+- Research title
+- What was researched
+- Why it matters
+- What was found
+- What is still unknown
+- Recommended action
+- Who should review it?
+- Does this affect a company decision?
+- Does this affect a client-facing process?
+- Should Company Brain be updated?
+- Sources attached
+- Report attached
+- Status:
+  - Draft
+  - Ready for Rose
+  - Ready for Carmen
+  - Ready for Gregg
+  - Needs More Research
+  - Approved
+  - Archived
+
+Include a clean handoff preview that can be copied.
+
+MODULE 10: Brainstorming Studio
+
+Create a guided idea space.
+
+Prompt cards:
+- What opportunity are we missing?
+- What risk should we watch?
+- What could be automated?
+- What would help sales?
+- What would help compliance?
+- What would help Gregg prepare?
+- What should Rose know?
+- What research should we do next?
+- What process seems confusing?
+- What pattern are you noticing?
+
+Idea fields:
+- Idea title
+- Category:
+  - Opportunity
+  - Risk
+  - Automation
+  - Sales Support
+  - Compliance Support
+  - Client Support
+  - Internal Process
+- Description
+- Why it matters
+- Suggested next action
+- Convert to:
+  - Research Request
+  - Automation Idea
+  - Leadership Question
+  - Company Brain Update Suggestion
+
+MODULE 11: Reward Center
+
+Create a level-up and skill progress center.
+
+Levels:
+- Level 1: Research Trainee
+- Level 2: Source Finder
+- Level 3: Brief Builder
+- Level 4: Compliance Research Assistant
+- Level 5: Business Intelligence Operator
+- Level 6: Executive Research Analyst
+
+Award points for:
+- Completing a research request
+- Adding an official source
+- Improving a prompt
+- Raising a blocker early
+- Completing a report
+- Completing a handoff
+- Getting a report approved
+- Suggesting a Company Brain update
+- Completing training lessons
+
+Reward quality over speed. Do not reward rushing.
+
+Show:
+- Current level
+- Points
+- Next level progress
+- Badges earned
+- Recent achievements
+- Suggested skill to improve next
+
+MODULE 12: Training Academy
+
+Create training tracks with lessons and completion checklists.
+
+Training tracks:
+1. How to use AI responsibly
+2. How to verify sources
+3. How to write an executive summary
+4. How to research compliance topics
+5. How to research business opportunities
+6. How to identify risks
+7. How to ask for help early
+8. How to prepare a clean handoff
+9. How to separate facts from assumptions
+10. How to suggest Company Brain updates
+
+Each lesson should include:
+- Lesson title
+- Short explanation
+- Checklist
+- Completion status
+- Practice task
+- Related app module
+
+MODULE 13: Company Brain Updates
+
+Create a suggestions area for company record updates.
+
+Suggested record types:
+- Active Projects Tracker
+- Decision Log
+- Build Registry
+- Requirements Registry
+- Automation Registry
+- SOP Library
+- Knowledge Gap Report
+- Team Directory
+
+Fields:
+- Update title
+- Related research item
+- Recommended record
+- What changed
+- Why it matters
+- Draft update text
+- Status:
+  - Suggested
+  - Needs Review
+  - Approved to Record
+  - Recorded
+  - Archived
+
+Guardrail:
+Do not auto-record company decisions. Everything stays suggested until reviewed.
+
+MODULE 14: Settings
+
+Include:
+- App name
+- User profile
+- Role labels
+- Research type management
+- Source type management
+- Reward settings
+- Reset sample data
+- Export all data as JSON
+- Import JSON backup
+
+Compliance and research guardrails:
+- AI-generated content is draft only.
+- Official sources should be preferred.
+- Unknown sources should be flagged.
+- AI Draft sources should be flagged.
+- Compliance and business conclusions require human review before client-facing or company-decision use.
+- Do not imply legal, CPA, licensing board, or compliance advice is final.
+- Human review is required before approval.
+- The system should help Landon learn, not replace judgment.
+
+Final verification:
+After building, run typecheck/build. Test:
+- Navigation
+- Forms
+- Filters
+- Search
+- Status changes
+- Dashboard counts
+- localStorage persistence
+- Mobile layout
+- Report readiness scoring
+- Reward points
+- Blocker creation
+- Handoff preview
+- Company Brain suggestion creation
+
+Fix any errors before marking complete.

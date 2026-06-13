@@ -1,0 +1,1 @@
+- [DESIGN subagent build gotchas](design-subagent-gotchas.md) — subagents sometimes report success without writing files, and escape template-literal backticks/`${` with stray backslashes; always typecheck and verify files after.
