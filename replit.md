@@ -22,7 +22,11 @@ A standalone, frontend-only web app: an AI-guided research training cockpit for 
 - `src/lib/default-data.ts` — seeded sample data + exported constants (`RESEARCH_TYPES`, `SOURCE_TYPES`, `GPS_STEPS`)
 - `src/lib/rewards.ts` — level thresholds + progress helpers (`LEVELS`, `levelForPoints`, `levelProgress`)
 - `src/hooks/use-store.tsx` — the localStorage store. `useStore()` → `{ data, updateData, resetData }`; storage key `landonos_data`
-- `src/components/layout.tsx` — sidebar + responsive mobile drawer nav (all 14 routes)
+- `src/lib/walkthrough.ts` — `TOUR_STEPS` (narrated guided-tour steps) + `PAGE_HELP` (per-route help prompt content)
+- `src/hooks/use-help.tsx` — `HelpProvider` + `useHelp()`; controls persistent help hints (storage key `landonos_help_hints`, default on) and guided-tour state
+- `src/components/guided-tour.tsx` — narrated walkthrough overlay (Web Speech API), launched from the topbar play button
+- `src/components/page-help.tsx` — persistent on-screen help card, rendered once in the layout and keyed by current route
+- `src/components/layout.tsx` — sidebar + responsive mobile drawer nav (all 14 routes); topbar play button (start walkthrough) + help toggle
 - `src/App.tsx` — route wiring; `src/pages/*` — one file per module
 
 ## Architecture decisions

@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/hooks/use-store";
+import { useHelp } from "@/hooks/use-help";
+import { PageHelp } from "@/components/page-help";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +29,8 @@ import {
   Bell,
   Plus,
   FileSearch,
+  HelpCircle,
+  PlayCircle,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -239,6 +243,7 @@ function GlobalSearch() {
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { data } = useStore();
+  const { hintsEnabled, toggleHints, startTour } = useHelp();
   const [, navigate] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -314,6 +319,29 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
               <button
                 type="button"
+                onClick={startTour}
+                className="rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
+                aria-label="Start narrated walkthrough"
+                title="Start narrated walkthrough"
+              >
+                <PlayCircle size={18} />
+              </button>
+              <button
+                type="button"
+                onClick={toggleHints}
+                className={cn(
+                  "rounded-md p-2 hover:bg-accent hover:text-foreground",
+                  hintsEnabled ? "text-primary" : "text-muted-foreground"
+                )}
+                aria-label={hintsEnabled ? "Hide help hints" : "Show help hints"}
+                aria-pressed={hintsEnabled}
+                title={hintsEnabled ? "Help hints on" : "Help hints off"}
+              >
+                <HelpCircle size={18} />
+              </button>
+
+              <button
+                type="button"
                 onClick={() => navigate("/blocked")}
                 className="relative rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
                 aria-label="Attention items"
@@ -367,7 +395,10 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Scrollable Page Content */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8">
-          <div className="max-w-7xl mx-auto">{children}</div>
+          <div className="max-w-7xl mx-auto">
+            <PageHelp />
+            {children}
+          </div>
         </div>
       </main>
     </div>

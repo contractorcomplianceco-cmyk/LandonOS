@@ -3,7 +3,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppProvider } from "@/hooks/use-store";
+import { HelpProvider } from "@/hooks/use-help";
 import { AppLayout } from "@/components/layout";
+import { GuidedTour } from "@/components/guided-tour";
 
 import NotFound from "@/pages/not-found";
 import Dashboard from "@/pages/dashboard";
@@ -51,9 +53,12 @@ function App() {
       <TooltipProvider>
         <AppProvider>
           <WouterRouter base={import.meta.env.BASE_URL?.replace(/\/$/, "") || ""}>
-            <AppLayout>
-              <Router />
-            </AppLayout>
+            <HelpProvider>
+              <AppLayout>
+                <Router />
+              </AppLayout>
+              <GuidedTour />
+            </HelpProvider>
           </WouterRouter>
           <Toaster />
         </AppProvider>
