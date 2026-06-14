@@ -94,19 +94,29 @@ const NAV_SECTIONS = [
 
 function SidebarBrand() {
   return (
-    <div className="px-4 py-4 border-b border-sidebar-border/60 flex items-center gap-3">
-      <img
-        src={ccaCrest}
-        alt="CCA crest"
-        className="h-10 w-10 shrink-0 object-contain drop-shadow-md"
-      />
-      <div className="min-w-0">
-        <h1 className="font-bold text-base leading-tight text-sidebar-foreground tracking-tight">
-          LandonOS
-        </h1>
-        <p className="text-[11px] text-sidebar-foreground/60 leading-tight truncate">
-          Research Command Center
-        </p>
+    <div className="relative px-4 py-4 border-b border-sidebar-border/60">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-sidebar-primary/40 to-transparent" />
+      <div className="flex items-center gap-3">
+        <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/[0.06] ring-1 ring-white/10 shadow-inner">
+          <img
+            src={ccaCrest}
+            alt="CCA crest"
+            className="h-8 w-8 object-contain drop-shadow-md"
+          />
+        </div>
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5">
+            <h1 className="font-bold text-base leading-tight text-sidebar-foreground tracking-tight">
+              LandonOS
+            </h1>
+            <span className="rounded bg-sidebar-primary/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-sky-300 ring-1 ring-sidebar-primary/30">
+              Enterprise
+            </span>
+          </div>
+          <p className="text-[11px] text-sidebar-foreground/55 leading-tight truncate">
+            Research Command Center
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -123,7 +133,7 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
           openVideo();
           onNavigate?.();
         }}
-        className="group relative block w-full overflow-hidden rounded-lg border border-sidebar-border/60 shadow-md transition-all hover:border-sidebar-primary/50 hover:shadow-lg"
+        className="group relative block w-full overflow-hidden rounded-xl border border-sidebar-border/60 shadow-md transition-all hover:border-sidebar-primary/50 hover:shadow-lg"
       >
         <div className="relative aspect-video w-full bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.35),transparent_60%)]" />
@@ -144,8 +154,11 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
       </button>
       {NAV_SECTIONS.map((section) => (
         <div key={section.label}>
-          <div className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-sidebar-foreground/40">
-            {section.label}
+          <div className="flex items-center gap-2 px-3 pb-2">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-sidebar-foreground/40">
+              {section.label}
+            </span>
+            <span className="h-px flex-1 bg-sidebar-border/50" />
           </div>
           <div className="space-y-0.5">
             {section.items.map((item) => {
@@ -154,13 +167,25 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
                 <Link key={item.href} href={item.href} className="block" onClick={onNavigate}>
                   <div
                     className={cn(
-                      "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                      "group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all",
                       isActive
-                        ? "bg-sidebar-primary/15 text-sidebar-primary border-l-2 border-sidebar-primary pl-[10px]"
-                        : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                        ? "bg-gradient-to-r from-sidebar-primary/25 via-sidebar-primary/10 to-transparent text-white shadow-sm"
+                        : "text-sidebar-foreground/70 hover:bg-white/[0.06] hover:text-white"
                     )}
                   >
-                    <item.icon size={18} className={isActive ? "text-sidebar-primary" : "opacity-70"} />
+                    {isActive && (
+                      <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-gradient-to-b from-sky-400 to-sidebar-primary" />
+                    )}
+                    <span
+                      className={cn(
+                        "flex h-7 w-7 shrink-0 items-center justify-center rounded-md transition-colors",
+                        isActive
+                          ? "bg-sidebar-primary/25 text-sky-300 ring-1 ring-sidebar-primary/30"
+                          : "text-sidebar-foreground/55 group-hover:text-white"
+                      )}
+                    >
+                      <item.icon size={16} />
+                    </span>
                     <span className="truncate">{item.label}</span>
                   </div>
                 </Link>
@@ -183,19 +208,42 @@ function SidebarFooter() {
     data.requests.filter((r) => r.status === "Blocked").length;
 
   return (
-    <div className="px-4 py-4 border-t border-sidebar-border/60">
-      <div className="rounded-md bg-sidebar-accent/40 px-3 py-2.5">
-        <div className="text-[11px] font-semibold uppercase tracking-wider text-sidebar-foreground/50 mb-1">
-          Today's Focus
+    <div className="px-3 py-4 border-t border-sidebar-border/60">
+      <div className="rounded-xl bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-3 ring-1 ring-white/10">
+        <div className="mb-2.5 flex items-center justify-between">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-sidebar-foreground/50">
+            Today's Focus
+          </span>
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+          </span>
         </div>
-        <div className="text-sm text-sidebar-foreground/90 leading-snug">
-          {activeResearches} active {activeResearches === 1 ? "research" : "researches"}
-        </div>
-        <div className="text-xs text-sidebar-foreground/60">
-          {needAttention} need your attention
+        <div className="flex items-stretch gap-3">
+          <div className="flex-1">
+            <div className="text-2xl font-bold leading-none tabular-nums text-white">
+              {activeResearches}
+            </div>
+            <div className="mt-1 text-[10px] text-sidebar-foreground/55">
+              Active {activeResearches === 1 ? "research" : "researches"}
+            </div>
+          </div>
+          <div className="w-px self-stretch bg-white/10" />
+          <div className="flex-1">
+            <div className="text-2xl font-bold leading-none tabular-nums text-sky-300">
+              {needAttention}
+            </div>
+            <div className="mt-1 text-[10px] text-sidebar-foreground/55">Need attention</div>
+          </div>
         </div>
       </div>
-      <div className="mt-3 text-[11px] text-sidebar-foreground/40">RoseOS v2.7.4</div>
+      <div className="mt-3 flex items-center justify-between px-1">
+        <span className="text-[11px] text-sidebar-foreground/40">RoseOS v2.7.4</span>
+        <span className="flex items-center gap-1.5 text-[10px] font-medium text-emerald-300/80">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+          Operational
+        </span>
+      </div>
     </div>
   );
 }
@@ -339,7 +387,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background">
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-64 bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex-col shrink-0">
+      <aside className="hidden md:flex w-64 bg-gradient-to-b from-sidebar to-slate-950 text-sidebar-foreground border-r border-sidebar-border flex-col shrink-0">
         <SidebarBrand />
         <SidebarNav />
         <SidebarFooter />
@@ -349,7 +397,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetContent
           side="left"
-          className="w-72 p-0 bg-sidebar text-sidebar-foreground border-sidebar-border [&>button]:text-sidebar-foreground"
+          className="w-72 p-0 bg-gradient-to-b from-sidebar to-slate-950 text-sidebar-foreground border-sidebar-border [&>button]:text-sidebar-foreground"
         >
           <SheetTitle className="sr-only">Navigation</SheetTitle>
           <div className="flex flex-col h-full">
