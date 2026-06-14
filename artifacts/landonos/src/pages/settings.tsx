@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { useStore } from "@/hooks/use-store";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { PageHeader } from "@/components/page-header";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -121,49 +122,18 @@ export default function Settings() {
 
   return (
     <div className="space-y-6">
-      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="min-w-0">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
-              <Settings2 className="h-3.5 w-3.5" />
-              Workspace Configuration
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">Settings</h1>
-            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
-              Tune your profile, the lists that drive every module, reward values, and your data backups — all in one place.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4 shrink-0">
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <List className="h-3.5 w-3.5" /> Research Types
-              </div>
-              <div className="mt-1 text-2xl font-bold text-white">{settings.researchTypes.length}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <Database className="h-3.5 w-3.5" /> Source Types
-              </div>
-              <div className="mt-1 text-2xl font-bold text-white">{settings.sourceTypes.length}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <User className="h-3.5 w-3.5" /> Reviewers
-              </div>
-              <div className="mt-1 text-2xl font-bold text-white">{settings.roleLabels.length}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <Award className="h-3.5 w-3.5" /> Reward Rules
-              </div>
-              <div className="mt-1 text-2xl font-bold text-white">{Object.keys(settings.rewardSettings).length}</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        icon={Settings2}
+        eyebrow="Workspace Configuration"
+        title="Settings"
+        subtitle="Tune your profile, the lists that drive every module, reward values, and your data backups — all in one place."
+        stats={[
+          { label: "Research Types", value: settings.researchTypes.length, icon: List },
+          { label: "Source Types", value: settings.sourceTypes.length, icon: Database },
+          { label: "Reviewers", value: settings.roleLabels.length, icon: User },
+          { label: "Reward Rules", value: Object.keys(settings.rewardSettings).length, icon: Award },
+        ]}
+      />
 
       <Tabs defaultValue="profile" className="space-y-6">
         <TabsList className="bg-card border w-full justify-start h-auto p-1 rounded-md overflow-x-auto flex-nowrap">

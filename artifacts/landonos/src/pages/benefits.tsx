@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -54,36 +55,17 @@ export default function BenefitsPage() {
   return (
     <div className="space-y-6">
       {/* Hero */}
-      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="min-w-0">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
-              <HeartPulse className="h-3.5 w-3.5" />
-              Benefits & Time Off
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">My Benefits</h1>
-            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
-              Review your time-off balances, health coverage, and perks. Plan changes are handled by HR and Payroll.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-3 shrink-0">
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <Plane className="h-3.5 w-3.5" /> PTO Left
-              </div>
-              <div className="mt-1 text-2xl font-bold text-white">11 days</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <Shield className="h-3.5 w-3.5" /> Plans
-              </div>
-              <div className="mt-1 text-2xl font-bold text-white">3 active</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        icon={HeartPulse}
+        eyebrow="Benefits & Time Off"
+        title="My Benefits"
+        subtitle="Review your time-off balances, health coverage, and perks. Plan changes are handled by HR and Payroll."
+        stats={[
+          { label: "PTO Left", value: "11 days", icon: Plane },
+          { label: "Plans", value: "3 active", icon: Shield },
+        ]}
+        statsClassName="grid grid-cols-2 gap-3 shrink-0"
+      />
 
       {/* Time-off balances */}
       <Card className="border-t-4 border-t-blue-500">

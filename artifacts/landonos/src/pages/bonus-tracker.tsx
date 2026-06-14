@@ -3,6 +3,7 @@ import { useStore } from "@/hooks/use-store";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { StatCard, type Accent } from "@/components/stat-card";
+import { PageHeader } from "@/components/page-header";
 import {
   Wallet,
   TrendingUp,
@@ -66,36 +67,17 @@ export default function BonusTrackerPage() {
   return (
     <div className="space-y-6">
       {/* Hero */}
-      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="min-w-0">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
-              <Wallet className="h-3.5 w-3.5" />
-              Incentive & Bonus Tracker
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">Bonus Tracker</h1>
-            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
-              {name}'s performance incentives for the year. Amounts are calculated by Finance and paid through Payroll — informational only.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-3 shrink-0">
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <TrendingUp className="h-3.5 w-3.5" /> Earned YTD
-              </div>
-              <div className="mt-1 text-2xl font-bold text-white">{fmt(ytd)}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <Clock className="h-3.5 w-3.5" /> Pending
-              </div>
-              <div className="mt-1 text-2xl font-bold text-white">{fmt(pending)}</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        icon={Wallet}
+        eyebrow="Incentive & Bonus Tracker"
+        title="Bonus Tracker"
+        subtitle={`${name}'s performance incentives for the year. Amounts are calculated by Finance and paid through Payroll — informational only.`}
+        stats={[
+          { label: "Earned YTD", value: fmt(ytd), icon: TrendingUp },
+          { label: "Pending", value: fmt(pending), icon: Clock },
+        ]}
+        statsClassName="grid grid-cols-2 gap-3 shrink-0"
+      />
 
       {/* Metric strip */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

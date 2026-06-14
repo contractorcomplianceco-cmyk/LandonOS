@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ACCENT, StatCard, type Accent } from "@/components/stat-card";
+import { PageHeader } from "@/components/page-header";
 import { levelProgress } from "@/lib/rewards";
 
 const COMPLIANCE_TIPS = [
@@ -78,50 +79,32 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Executive hero banner */}
-      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.18),transparent_50%)]" />
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="min-w-0">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-              </span>
-              All systems operational
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
-              Command Center
-            </h1>
-            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
-              AI-guided compliance and business research cockpit. Verify every source, keep humans in the loop.
-            </p>
-            <Link
-              href="/guided-research-builder?new=1"
-              className="mt-4 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-900"
-            >
-              Start New Research <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          <div className="flex shrink-0 items-stretch gap-3">
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <Award className="h-3.5 w-3.5" /> Level
-              </div>
-              <div className="mt-1 text-lg font-bold text-white">{data.rewardState.level}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <Activity className="h-3.5 w-3.5" /> Points
-              </div>
-              <div className="mt-1 text-lg font-bold text-white">
-                {data.rewardState.points.toLocaleString()}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow={
+          <>
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+            </span>
+            All systems operational
+          </>
+        }
+        title="Command Center"
+        subtitle="AI-guided compliance and business research cockpit. Verify every source, keep humans in the loop."
+        action={
+          <Link
+            href="/guided-research-builder?new=1"
+            className="inline-flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-900"
+          >
+            Start New Research <ArrowRight className="h-4 w-4" />
+          </Link>
+        }
+        stats={[
+          { label: "Level", value: data.rewardState.level, icon: Award },
+          { label: "Points", value: data.rewardState.points.toLocaleString(), icon: Activity },
+        ]}
+        statsClassName="flex shrink-0 items-stretch gap-3"
+      />
 
       {/* Quick Actions */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">

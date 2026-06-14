@@ -4,6 +4,7 @@ import { Blocker, BlockerStatus, Priority } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Toolbar } from "@/components/toolbar";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -174,19 +175,21 @@ export default function Blocked() {
         ))}
       </div>
 
-      <div className="flex items-center space-x-2 bg-card p-2 rounded-lg border w-fit">
-        <Filter className="w-4 h-4 text-muted-foreground ml-2" />
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[180px] border-none shadow-none focus:ring-0">
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Active">Active Issues</SelectItem>
-            <SelectItem value="All">All Issues</SelectItem>
-            <SelectItem value="Resolved">Resolved</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <Toolbar className="w-fit">
+        <div className="flex items-center gap-2">
+          <Filter className="w-4 h-4 text-muted-foreground" />
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[180px] border-none shadow-none focus:ring-0">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Active">Active Issues</SelectItem>
+              <SelectItem value="All">All Issues</SelectItem>
+              <SelectItem value="Resolved">Resolved</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </Toolbar>
 
       <div className="grid grid-cols-1 gap-4">
         {filteredBlockers.length === 0 ? (

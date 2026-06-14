@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { LEVELS, levelProgress } from "@/lib/rewards";
 import { StatCard } from "@/components/stat-card";
 import { cn } from "@/lib/utils";
+import { PageHeader } from "@/components/page-header";
 import { Award, Star, Medal, Zap, BookOpen, Target, CheckCircle2, TrendingUp, GraduationCap } from "lucide-react";
 
 export default function RewardCenter() {
@@ -19,40 +20,18 @@ export default function RewardCenter() {
   
   return (
     <div className="space-y-6">
-      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="space-y-3">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-50 ring-1 ring-white/15 backdrop-blur">
-              <Award className="h-3.5 w-3.5" />
-              Skill Progression
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold text-white">Reward Center</h1>
-            <p className="max-w-xl text-blue-100/80">
-              Track your professional growth — quality and thoroughness are rewarded over speed.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Level</div>
-              <div className="text-2xl font-bold text-white">{rewardState.level}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Points</div>
-              <div className="text-2xl font-bold text-white">{rewardState.points}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Badges</div>
-              <div className="text-2xl font-bold text-white">{rewardState.badges.length}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">To Next</div>
-              <div className="text-2xl font-bold text-white">{progress.percent}%</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        icon={Award}
+        eyebrow="Skill Progression"
+        title="Reward Center"
+        subtitle="Track your professional growth — quality and thoroughness are rewarded over speed."
+        stats={[
+          { label: "Level", value: rewardState.level },
+          { label: "Points", value: rewardState.points },
+          { label: "Badges", value: rewardState.badges.length },
+          { label: "To Next", value: `${progress.percent}%` },
+        ]}
+      />
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard label="Points" value={rewardState.points} icon={Star} color="blue" />

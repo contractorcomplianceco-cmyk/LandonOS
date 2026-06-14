@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { generatePromptImprovement } from "@/lib/prompt-coach-templates";
 import { Sparkles, Target, Database, FileText, CheckCircle2, ShieldAlert, AlertTriangle, ListChecks } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { PageHeader } from "@/components/page-header";
 
 const QUALITY_CHECKLIST: { title: string; detail: string }[] = [
   { title: "Define the role", detail: "Tell the AI who it is (e.g. compliance analyst) so tone and rigor match the task." },
@@ -58,39 +59,17 @@ export default function PromptCoach() {
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Executive hero banner */}
-      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="min-w-0">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5" />
-              Prompt engineering
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
-              AI Prompt Coach
-            </h1>
-            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
-              Transform rough questions into disciplined, source-backed executive prompts. Every rewrite keeps verification and human review in the loop.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 shrink-0">
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <Target className="h-3.5 w-3.5" /> Strategies
-              </div>
-              <div className="mt-1 text-2xl font-bold text-white">6</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <ShieldAlert className="h-3.5 w-3.5" /> Output
-              </div>
-              <div className="mt-1 text-sm font-bold text-white">Draft until reviewed</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        icon={Sparkles}
+        eyebrow="Prompt engineering"
+        title="AI Prompt Coach"
+        subtitle="Transform rough questions into disciplined, source-backed executive prompts. Every rewrite keeps verification and human review in the loop."
+        stats={[
+          { label: "Strategies", value: 6, icon: Target },
+          { label: "Output", value: <span className="text-sm">Draft until reviewed</span>, icon: ShieldAlert },
+        ]}
+        statsClassName="grid grid-cols-2 gap-3 shrink-0"
+      />
 
       <Alert variant="default" className="bg-destructive/10 text-destructive border-destructive/20">
         <ShieldAlert className="h-4 w-4" />

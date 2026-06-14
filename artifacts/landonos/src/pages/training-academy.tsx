@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { levelForPoints } from "@/lib/rewards";
 import { StatCard } from "@/components/stat-card";
+import { PageHeader } from "@/components/page-header";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { GraduationCap, CheckCircle2, Circle, PlayCircle, BookOpen, Star, ListChecks } from "lucide-react";
@@ -89,40 +90,18 @@ export default function TrainingAcademy() {
 
   return (
     <div className="space-y-6">
-      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="space-y-3">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-50 ring-1 ring-white/15 backdrop-blur">
-              <GraduationCap className="h-3.5 w-3.5" />
-              Skill Curriculum
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold text-white">Training Academy</h1>
-            <p className="max-w-xl text-blue-100/80">
-              Master the art of AI-guided, source-verified intelligence gathering — one lesson at a time.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Completed</div>
-              <div className="text-2xl font-bold text-white">{completedLessons}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Lessons</div>
-              <div className="text-2xl font-bold text-white">{allLessons.length}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Progress</div>
-              <div className="text-2xl font-bold text-white">{progressPercent}%</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Tracks</div>
-              <div className="text-2xl font-bold text-white">{tracks.length}</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        icon={GraduationCap}
+        eyebrow="Skill Curriculum"
+        title="Training Academy"
+        subtitle="Master the art of AI-guided, source-verified intelligence gathering — one lesson at a time."
+        stats={[
+          { label: "Completed", value: completedLessons },
+          { label: "Lessons", value: allLessons.length },
+          { label: "Progress", value: `${progressPercent}%` },
+          { label: "Tracks", value: tracks.length },
+        ]}
+      />
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard label="Tracks" value={tracks.length} icon={BookOpen} color="blue" />

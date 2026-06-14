@@ -9,8 +9,8 @@ export interface PageHeaderStat {
 }
 
 interface PageHeaderProps {
-  icon: LucideIcon;
-  eyebrow: string;
+  icon?: LucideIcon;
+  eyebrow: React.ReactNode;
   title: string;
   subtitle?: string;
   action?: React.ReactNode;
@@ -37,7 +37,7 @@ export function PageHeader({
       <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
-            <Icon className="h-3.5 w-3.5" />
+            {Icon && <Icon className="h-3.5 w-3.5" />}
             {eyebrow}
           </div>
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
