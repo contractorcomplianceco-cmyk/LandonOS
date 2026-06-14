@@ -5,6 +5,7 @@ import { useStore } from "@/hooks/use-store";
 import { useHelp } from "@/hooks/use-help";
 import { useToast } from "@/hooks/use-toast";
 import { PageHelp } from "@/components/page-help";
+import ccaCrest from "@assets/cca-crest-inset_1781446966845.png";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,7 +30,6 @@ import {
   GraduationCap,
   BrainCircuit,
   Settings,
-  ShieldCheck,
   Target,
   Sparkles,
   Bot,
@@ -67,9 +67,11 @@ const NAV_ITEMS = [
 function SidebarBrand() {
   return (
     <div className="px-4 py-4 border-b border-sidebar-border/60 flex items-center gap-3">
-      <div className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white p-2 rounded-md shadow-md shadow-blue-900/30 shrink-0">
-        <ShieldCheck size={20} />
-      </div>
+      <img
+        src={ccaCrest}
+        alt="CCA crest"
+        className="h-10 w-10 shrink-0 object-contain drop-shadow-md"
+      />
       <div className="min-w-0">
         <h1 className="font-bold text-base leading-tight text-sidebar-foreground tracking-tight">
           LandonOS
