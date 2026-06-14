@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { AlertTriangle, Plus, LifeBuoy, Filter } from "lucide-react";
+import { AlertTriangle, Plus, LifeBuoy, Filter, CheckCircle2 } from "lucide-react";
 
 const BLOCKER_TYPES = [
   "I don't know where to start",
@@ -103,20 +103,68 @@ export default function Blocked() {
     return <Badge variant="secondary">{urgency}</Badge>;
   };
 
+  const activeBlockers = data.blockers.filter(
+    (b) => b.status === "Open" || b.status === "In Review" || b.status === "Waiting on Landon"
+  );
+  const blockerKpis = [
+    {
+      label: "Active Issues",
+      value: activeBlockers.length,
+      icon: LifeBuoy,
+    },
+    {
+      label: "Urgent",
+      value: activeBlockers.filter((b) => b.urgency === "High" || b.urgency === "Executive").length,
+      icon: AlertTriangle,
+    },
+    {
+      label: "Resolved",
+      value: data.blockers.filter((b) => b.status === "Resolved").length,
+      icon: CheckCircle2,
+    },
+  ];
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center">
-            <AlertTriangle className="w-8 h-8 mr-3 text-destructive" />
-            Blocked / Need Help
-          </h1>
-          <p className="text-muted-foreground mt-1">Raise issues early. Don't spin your wheels.</p>
+      {/* Executive hero banner */}
+      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
+        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
+              <LifeBuoy className="h-3.5 w-3.5" />
+              Escalation desk
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
+              Blocked / Need Help
+            </h1>
+            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
+              Raise issues early instead of spinning your wheels. Log what you tried, who should help, and the suggested next step — then route it for review.
+            </p>
+            <button
+              type="button"
+              onClick={handleCreate}
+              className="mt-4 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-900"
+            >
+              <LifeBuoy className="h-4 w-4" /> I'm Stuck
+            </button>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3 shrink-0">
+            {blockerKpis.map((k) => (
+              <div
+                key={k.label}
+                className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur"
+              >
+                <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
+                  <k.icon className="h-3.5 w-3.5" /> {k.label}
+                </div>
+                <div className="mt-1 text-2xl font-bold text-white">{k.value}</div>
+              </div>
+            ))}
+          </div>
         </div>
-        <Button onClick={handleCreate} variant="destructive">
-          <LifeBuoy className="w-4 h-4 mr-2" />
-          I'm Stuck
-        </Button>
       </div>
 
       <div className="flex items-center space-x-2 bg-card p-2 rounded-lg border w-fit">
