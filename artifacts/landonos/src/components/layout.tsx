@@ -53,7 +53,7 @@ const NAV_ITEMS = [
 function SidebarBrand() {
   return (
     <div className="px-4 py-4 border-b border-sidebar-border/60 flex items-center gap-3">
-      <div className="bg-primary text-primary-foreground p-2 rounded-md shadow-sm shrink-0">
+      <div className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white p-2 rounded-md shadow-md shadow-blue-900/30 shrink-0">
         <ShieldCheck size={20} />
       </div>
       <div className="min-w-0">
