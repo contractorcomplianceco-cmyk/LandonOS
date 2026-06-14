@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { FileText, Target, Search, Plus, Filter, Trash2, Edit2, Play, Archive, AlertTriangle } from "lucide-react";
+import { Target, Search, Plus, Trash2, Edit2, Play, Archive, AlertTriangle, ClipboardList, Clock, ShieldAlert } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function GuidedResearchBuilder() {
@@ -161,12 +161,81 @@ export default function GuidedResearchBuilder() {
     setActiveTab("builder");
   };
 
+  const activeRequests = data.requests.filter(
+    (r) => r.status !== "Archived"
+  );
+  const kpis = [
+    {
+      label: "Active Requests",
+      value: activeRequests.length,
+      icon: ClipboardList,
+    },
+    {
+      label: "In Progress",
+      value: data.requests.filter((r) => r.status === "In Progress").length,
+      icon: Clock,
+    },
+    {
+      label: "Awaiting Review",
+      value: activeRequests.filter(
+        (r) => r.requiresHumanReview && r.status !== "Completed"
+      ).length,
+      icon: ShieldAlert,
+    },
+  ];
+
+  const priorityAccent = (priority: Priority) =>
+    priority === "Executive" || priority === "High"
+      ? "border-l-rose-500"
+      : priority === "Medium"
+      ? "border-l-blue-500"
+      : "border-l-slate-400";
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Guided Research Builder</h1>
-          <p className="text-muted-foreground">Start the research correctly before asking AI or building the report.</p>
+      {/* Executive hero banner */}
+      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
+        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
+              <Target className="h-3.5 w-3.5" />
+              Structured intake
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
+              Research Builder
+            </h1>
+            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
+              Scope the question, lock the required sources, and define what not to assume before involving AI. Disciplined intake keeps the whole workflow defensible.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                resetForm();
+                setActiveTab("builder");
+              }}
+              className="mt-4 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-900"
+            >
+              <Plus className="h-4 w-4" /> New Request
+            </button>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3 shrink-0">
+            {kpis.map((k) => (
+              <div
+                key={k.label}
+                className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur"
+              >
+                <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
+                  <k.icon className="h-3.5 w-3.5" /> {k.label}
+                </div>
+                <div className="mt-1 text-2xl font-bold text-white">
+                  {k.value}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -233,7 +302,7 @@ export default function GuidedResearchBuilder() {
               ) : (
                 <div className="space-y-4">
                   {filteredRequests.map(req => (
-                    <Card key={req.id} className="border-border/50 shadow-sm overflow-hidden">
+                    <Card key={req.id} className={`border-border/50 border-l-4 ${priorityAccent(req.priority)} shadow-sm overflow-hidden transition-shadow hover:shadow-md`}>
                       <div className="p-4 flex flex-col md:flex-row justify-between gap-4">
                         <div className="flex-1 space-y-2">
                           <div className="flex items-center gap-2">
@@ -289,10 +358,17 @@ export default function GuidedResearchBuilder() {
 
         <TabsContent value="builder">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
+            <Card className="border-t-4 border-t-blue-500">
               <CardHeader>
-                <CardTitle>{editingId ? "Edit Request" : "Intake Form"}</CardTitle>
-                <CardDescription>Fill out all required context to structure the research.</CardDescription>
+                <div className="flex items-start gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-500 text-white shadow-md shadow-blue-500/30">
+                    <ClipboardList className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <CardTitle>{editingId ? "Edit Request" : "Intake Form"}</CardTitle>
+                    <CardDescription>Fill out all required context to structure the research.</CardDescription>
+                  </div>
+                </div>
               </CardHeader>
               <CardContent>
                 <form id="builder-form" onSubmit={handleSubmit} className="space-y-4">
