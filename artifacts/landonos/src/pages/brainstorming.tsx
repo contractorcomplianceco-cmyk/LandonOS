@@ -55,6 +55,11 @@ export default function BrainstormingStudio() {
     ? data.ideas 
     : data.ideas.filter(i => i.category === filterCategory);
 
+  const totalIdeas = data.ideas.length;
+  const convertedCount = data.ideas.filter(i => i.convertTo).length;
+  const opportunityCount = data.ideas.filter(i => i.category === "Opportunity").length;
+  const riskCount = data.ideas.filter(i => i.category === "Risk").length;
+
   const handleOpenDialog = (idea?: Idea, defaultTitle?: string, defaultCategory?: IdeaCategory) => {
     if (idea) {
       setEditingId(idea.id);
@@ -172,17 +177,45 @@ export default function BrainstormingStudio() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <Lightbulb className="w-8 h-8 text-primary" />
-            Brainstorming Studio
-          </h1>
-          <p className="text-muted-foreground">Capture, categorize, and convert ideas into actionable research.</p>
+      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
+        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="space-y-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-50 ring-1 ring-white/15 backdrop-blur">
+              <Lightbulb className="h-3.5 w-3.5" />
+              Idea Pipeline
+            </span>
+            <h1 className="text-3xl md:text-4xl font-bold text-white">Brainstorming Studio</h1>
+            <p className="max-w-xl text-blue-100/80">
+              Capture, categorize, and convert ideas into actionable research and company decisions.
+            </p>
+            <Button
+              onClick={() => handleOpenDialog()}
+              className="bg-white text-slate-900 hover:bg-blue-50"
+            >
+              <Plus className="w-4 h-4 mr-2" /> Freeform Idea
+            </Button>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Total Ideas</div>
+              <div className="text-2xl font-bold text-white">{totalIdeas}</div>
+            </div>
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Converted</div>
+              <div className="text-2xl font-bold text-white">{convertedCount}</div>
+            </div>
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Opportunities</div>
+              <div className="text-2xl font-bold text-white">{opportunityCount}</div>
+            </div>
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Risks</div>
+              <div className="text-2xl font-bold text-white">{riskCount}</div>
+            </div>
+          </div>
         </div>
-        <Button onClick={() => handleOpenDialog()}>
-          <Plus className="w-4 h-4 mr-2" /> Freeform Idea
-        </Button>
       </div>
 
       <div className="space-y-4">
