@@ -3,10 +3,19 @@ import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/hooks/use-store";
 import { useHelp } from "@/hooks/use-help";
+import { useToast } from "@/hooks/use-toast";
 import { PageHelp } from "@/components/page-help";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import {
   LayoutDashboard,
   Compass,
@@ -31,6 +40,11 @@ import {
   FileSearch,
   HelpCircle,
   PlayCircle,
+  UserCog,
+  Briefcase,
+  HeartPulse,
+  LogOut,
+  ChevronDown,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -244,6 +258,7 @@ function GlobalSearch() {
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { data } = useStore();
   const { hintsEnabled, toggleHints, startTour } = useHelp();
+  const { toast } = useToast();
   const [, navigate] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -362,24 +377,61 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
               <div className="mx-1 hidden h-8 w-px bg-white/15 sm:block" />
 
-              <button
-                type="button"
-                onClick={() => navigate("/settings")}
-                className="flex items-center gap-2 rounded-md p-1 pr-2 hover:bg-white/10"
-                aria-label="Profile and settings"
-              >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/15 text-sm font-bold text-white ring-1 ring-white/20">
-                  {initials}
-                </div>
-                <div className="hidden text-left leading-tight md:block">
-                  <div className="text-sm font-medium text-white">
-                    {data.settings.userName || "Landon"}
-                  </div>
-                  <div className="text-[11px] text-blue-200/70">
-                    {data.settings.userRole || "Research Lead"}
-                  </div>
-                </div>
-              </button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className="flex items-center gap-2 rounded-md p-1 pr-2 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                    aria-label="Open profile menu"
+                  >
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/15 text-sm font-bold text-white ring-1 ring-white/20">
+                      {initials}
+                    </div>
+                    <div className="hidden text-left leading-tight md:block">
+                      <div className="text-sm font-medium text-white">
+                        {data.settings.userName || "Landon"}
+                      </div>
+                      <div className="text-[11px] text-blue-200/70">
+                        {data.settings.userRole || "Research Lead"}
+                      </div>
+                    </div>
+                    <ChevronDown size={15} className="hidden text-blue-100/70 md:block" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel className="flex flex-col">
+                    <span className="text-sm font-medium">{data.settings.userName || "Landon"}</span>
+                    <span className="text-xs font-normal text-muted-foreground">
+                      {data.settings.userRole || "Research Lead"}
+                    </span>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate("/account")}>
+                    <UserCog className="mr-2 h-4 w-4" /> My Account
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/employee-account")}>
+                    <Briefcase className="mr-2 h-4 w-4" /> Employee Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/benefits")}>
+                    <HeartPulse className="mr-2 h-4 w-4" /> My Benefits
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate("/settings")}>
+                    <Settings className="mr-2 h-4 w-4" /> Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="text-rose-600 focus:text-rose-700"
+                    onClick={() =>
+                      toast({
+                        title: "Signed out",
+                        description: "This is a local demo workspace — there is no remote session to end.",
+                      })
+                    }
+                  >
+                    <LogOut className="mr-2 h-4 w-4" /> Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
               <Button
                 onClick={() => navigate("/guided-research-builder?new=1")}

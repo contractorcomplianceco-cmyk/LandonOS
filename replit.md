@@ -27,7 +27,8 @@ A standalone, frontend-only web app: an AI-guided research training cockpit for 
 - `src/hooks/use-help.tsx` — `HelpProvider` + `useHelp()`; controls persistent help hints (storage key `landonos_help_hints`, default on) and guided-tour state
 - `src/components/guided-tour.tsx` — narrated walkthrough overlay (Web Speech API), launched from the topbar play button
 - `src/components/page-help.tsx` — persistent on-screen help card, rendered once in the layout and keyed by current route
-- `src/components/layout.tsx` — sidebar + responsive mobile drawer nav (all 14 routes); topbar play button (start walkthrough) + help toggle
+- `src/components/layout.tsx` — sidebar + responsive mobile drawer nav (all 14 module routes); topbar play button (start walkthrough) + help toggle + profile DropdownMenu (My Account, Employee Profile, My Benefits, Settings, Sign Out)
+- `src/pages/account.tsx` (/account), `src/pages/employee-account.tsx` (/employee-account), `src/pages/benefits.tsx` (/benefits) — personal pages reached only from the profile dropdown (not in the sidebar nav); realistic mock data, no store mutations
 - `src/App.tsx` — route wiring; `src/pages/*` — one file per module
 
 ## Architecture decisions
@@ -39,7 +40,7 @@ A standalone, frontend-only web app: an AI-guided research training cockpit for 
 
 ## Product
 
-14 modules: Command Center dashboard, Guided Research Builder, AI Prompt Coach, Research GPS (10-step workflow), Report Builder (readiness score + warnings), Source Vault (official/AI-draft/unknown flagging), Blocked/Need Help, RoseOS Chat (mentor), Completed Handoff, Brainstorming Studio, Reward Center, Training Academy, RoseOS (the company brain — record-query chat + reviewed update suggestions; route `/company-brain`), and Settings. Compliance guardrail throughout: AI output is draft only until source-checked and human-reviewed; company decisions are never auto-recorded.
+14 modules: Command Center dashboard, Guided Research Builder, AI Prompt Coach, Research GPS (10-step workflow), Report Builder (readiness score + warnings), Source Vault (official/AI-draft/unknown flagging), Blocked/Need Help, RoseOS Chat (mentor), Completed Handoff, Brainstorming Studio, Reward Center, Training Academy, RoseOS (the company brain — record-query chat + reviewed update suggestions; route `/company-brain`), and Settings. Plus three personal pages reachable only from the header profile dropdown (not the sidebar): My Account (`/account` — sign-in/security, preferences, notifications), Employee Profile (`/employee-account` — read-only employment record; compensation/payroll/tax gated to HR/Payroll), My Benefits (`/benefits` — time-off, insurance, retirement/perks; changes managed by HR/Payroll). Compliance guardrail throughout: AI output is draft only until source-checked and human-reviewed; company decisions are never auto-recorded.
 
 ## User preferences
 

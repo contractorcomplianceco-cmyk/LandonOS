@@ -22,6 +22,9 @@ import RewardCenter from "@/pages/reward-center";
 import TrainingAcademy from "@/pages/training-academy";
 import CompanyBrain from "@/pages/company-brain";
 import Settings from "@/pages/settings";
+import Account from "@/pages/account";
+import EmployeeAccount from "@/pages/employee-account";
+import Benefits from "@/pages/benefits";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +44,9 @@ function Router() {
       <Route path="/reward-center" component={RewardCenter} />
       <Route path="/training-academy" component={TrainingAcademy} />
       <Route path="/company-brain" component={CompanyBrain} />
+      <Route path="/account" component={Account} />
+      <Route path="/employee-account" component={EmployeeAccount} />
+      <Route path="/benefits" component={Benefits} />
       <Route path="/settings" component={Settings} />
       <Route component={NotFound} />
     </Switch>
