@@ -114,13 +114,13 @@ function SidebarBrand() {
 
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const [location] = useLocation();
-  const { startTour } = useHelp();
+  const { openVideo } = useHelp();
   return (
     <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
       <button
         type="button"
         onClick={() => {
-          startTour();
+          openVideo();
           onNavigate?.();
         }}
         className="group relative block w-full overflow-hidden rounded-lg border border-sidebar-border/60 shadow-md transition-all hover:border-sidebar-primary/50 hover:shadow-lg"
@@ -134,11 +134,11 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
             </span>
           </div>
           <span className="absolute right-2 top-2 rounded bg-black/40 px-1.5 py-0.5 text-[10px] font-medium tabular-nums text-white/90 backdrop-blur">
-            2:00
+            0:26
           </span>
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-3 pb-2 pt-6 text-left">
-            <div className="text-xs font-semibold text-white">Narrated Walkthrough</div>
-            <div className="text-[11px] text-blue-100/80">Watch the guided tour</div>
+            <div className="text-xs font-semibold text-white">Watch the Hype Reel</div>
+            <div className="text-[11px] text-blue-100/80">Tour LandonOS with music</div>
           </div>
         </div>
       </button>

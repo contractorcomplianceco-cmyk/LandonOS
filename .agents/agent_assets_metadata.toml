@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "eGigAtJu2XlgOSE5wVtK-"
+uri = "file://attached_assets/generated_audio/landonos_walkthrough_theme.mp3"
+type = "audio"
+title = "landonos walkthrough theme"

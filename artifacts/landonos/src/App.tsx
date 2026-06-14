@@ -6,6 +6,7 @@ import { AppProvider } from "@/hooks/use-store";
 import { HelpProvider } from "@/hooks/use-help";
 import { AppLayout } from "@/components/layout";
 import { GuidedTour } from "@/components/guided-tour";
+import { WalkthroughVideo } from "@/components/walkthrough-video";
 
 import NotFound from "@/pages/not-found";
 import Dashboard from "@/pages/dashboard";
@@ -70,6 +71,7 @@ function App() {
                 <Router />
               </AppLayout>
               <GuidedTour />
+              <WalkthroughVideo />
             </HelpProvider>
           </WouterRouter>
           <Toaster />

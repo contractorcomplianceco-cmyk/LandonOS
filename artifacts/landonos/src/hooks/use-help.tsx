@@ -20,6 +20,9 @@ interface HelpContextType {
   prevStep: () => void;
   narrationOn: boolean;
   toggleNarration: () => void;
+  videoOpen: boolean;
+  openVideo: () => void;
+  closeVideo: () => void;
 }
 
 const HelpContext = createContext<HelpContextType | undefined>(undefined);
@@ -43,6 +46,7 @@ export function HelpProvider({ children }: { children: ReactNode }) {
   const [tourActive, setTourActive] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const [narrationOn, setNarrationOn] = useState(true);
+  const [videoOpen, setVideoOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -71,6 +75,8 @@ export function HelpProvider({ children }: { children: ReactNode }) {
   const toggleHints = useCallback(() => setHintsEnabled((v) => !v), []);
   const disableHints = useCallback(() => setHintsEnabled(false), []);
   const toggleNarration = useCallback(() => setNarrationOn((v) => !v), []);
+  const openVideo = useCallback(() => setVideoOpen(true), []);
+  const closeVideo = useCallback(() => setVideoOpen(false), []);
 
   return (
     <HelpContext.Provider
@@ -86,6 +92,9 @@ export function HelpProvider({ children }: { children: ReactNode }) {
         prevStep,
         narrationOn,
         toggleNarration,
+        videoOpen,
+        openVideo,
+        closeVideo,
       }}
     >
       {children}
