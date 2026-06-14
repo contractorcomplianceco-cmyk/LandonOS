@@ -248,17 +248,81 @@ ${report.sourcesReviewed.map(id => {
     );
   };
 
+  const nonArchivedReports = data.reports.filter((r) => r.status !== "Archived");
+  const reportKpis = [
+    {
+      label: "Active Reports",
+      value: nonArchivedReports.length,
+      icon: FileText,
+    },
+    {
+      label: "Approved",
+      value: nonArchivedReports.filter((r) => r.status === "Approved").length,
+      icon: CheckCircle2,
+    },
+    {
+      label: "Awaiting Review",
+      value: nonArchivedReports.filter((r) => r.status === "Ready for Review").length,
+      icon: ShieldAlert,
+    },
+  ];
+
+  const statusAccent = (status: ReportStatus) => {
+    switch (status) {
+      case "Approved":
+        return "border-l-emerald-500";
+      case "Reviewed":
+      case "Ready for Review":
+        return "border-l-blue-500";
+      case "Needs Sources":
+      case "Needs More Research":
+        return "border-l-rose-500";
+      default:
+        return "border-l-slate-400";
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Research Report Builder</h1>
-          <p className="text-muted-foreground">Draft, review, and finalize executive research reports</p>
+      {/* Executive hero banner */}
+      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
+        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
+              <FileText className="h-3.5 w-3.5" />
+              Executive reporting
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
+              Report Builder
+            </h1>
+            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
+              Draft, score, and finalize source-backed executive reports. The readiness score flags gaps before anything reaches a decision-maker.
+            </p>
+            <button
+              type="button"
+              onClick={handleCreate}
+              className="mt-4 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-900"
+            >
+              <Plus className="h-4 w-4" /> New Report
+            </button>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3 shrink-0">
+            {reportKpis.map((k) => (
+              <div
+                key={k.label}
+                className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur"
+              >
+                <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
+                  <k.icon className="h-3.5 w-3.5" /> {k.label}
+                </div>
+                <div className="mt-1 text-2xl font-bold text-white">{k.value}</div>
+              </div>
+            ))}
+          </div>
         </div>
-        <Button onClick={handleCreate}>
-          <Plus className="w-4 h-4 mr-2" />
-          New Report
-        </Button>
       </div>
 
       <div className="flex items-center space-x-2">
@@ -285,7 +349,7 @@ ${report.sourcesReviewed.map(id => {
             const warnings = getWarnings(report);
             
             return (
-              <Card key={report.id} className="hover:border-primary/50 transition-colors">
+              <Card key={report.id} className={`border-l-4 ${statusAccent(report.status)} hover:border-primary/50 transition-colors`}>
                 <CardContent className="p-6 flex flex-col md:flex-row gap-6">
                   <div className="flex-1 space-y-4">
                     <div className="flex items-start justify-between">
