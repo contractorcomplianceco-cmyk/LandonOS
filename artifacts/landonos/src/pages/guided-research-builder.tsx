@@ -15,9 +15,10 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Progress } from "@/components/ui/progress";
-import { Target, Search, Plus, Trash2, Edit2, Play, Archive, ClipboardList, Clock, ShieldAlert, Sparkles } from "lucide-react";
+import { Target, Plus, Trash2, Edit2, Play, Archive, ClipboardList, Clock, ShieldAlert, Sparkles } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageHeader } from "@/components/page-header";
+import { Toolbar } from "@/components/toolbar";
 import { EmptyState } from "@/components/empty-state";
 import { ConfirmDeleteDialog } from "@/components/confirm-delete-dialog";
 
@@ -254,52 +255,40 @@ export default function GuidedResearchBuilder() {
         </TabsList>
 
         <TabsContent value="list" className="space-y-4">
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex flex-col md:flex-row gap-4 items-end md:items-center justify-between">
-                <CardTitle className="text-lg font-medium">Research Requests</CardTitle>
-                <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
-                  <div className="relative w-full md:w-64">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input 
-                      placeholder="Search requests..." 
-                      className="pl-8" 
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                  </div>
-                  <Select value={filterType} onValueChange={setFilterType}>
-                    <SelectTrigger className="w-full md:w-40">
-                      <SelectValue placeholder="Type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Types</SelectItem>
-                      {data.settings.researchTypes.map(t => (
-                        <SelectItem key={t} value={t}>{t}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select value={filterStatus} onValueChange={setFilterStatus}>
-                    <SelectTrigger className="w-full md:w-40">
-                      <SelectValue placeholder="Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Statuses</SelectItem>
-                      <SelectItem value="Open">Open</SelectItem>
-                      <SelectItem value="In Progress">In Progress</SelectItem>
-                      <SelectItem value="Blocked">Blocked</SelectItem>
-                      <SelectItem value="Completed">Completed</SelectItem>
-                      <SelectItem value="Archived">Archived</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Button onClick={() => setActiveTab("builder")} className="shrink-0">
-                    <Plus className="h-4 w-4 mr-2" /> New
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {filteredRequests.length === 0 ? (
+          <Toolbar
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            searchPlaceholder="Search requests..."
+          >
+            <Select value={filterType} onValueChange={setFilterType}>
+              <SelectTrigger className="w-full sm:w-40">
+                <SelectValue placeholder="Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                {data.settings.researchTypes.map(t => (
+                  <SelectItem key={t} value={t}>{t}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger className="w-full sm:w-40">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Statuses</SelectItem>
+                <SelectItem value="Open">Open</SelectItem>
+                <SelectItem value="In Progress">In Progress</SelectItem>
+                <SelectItem value="Blocked">Blocked</SelectItem>
+                <SelectItem value="Completed">Completed</SelectItem>
+                <SelectItem value="Archived">Archived</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button onClick={() => setActiveTab("builder")} className="shrink-0">
+              <Plus className="h-4 w-4 mr-2" /> New
+            </Button>
+          </Toolbar>
+          {filteredRequests.length === 0 ? (
                 <EmptyState
                   icon={Target}
                   title="No requests found"
@@ -358,8 +347,6 @@ export default function GuidedResearchBuilder() {
                   ))}
                 </div>
               )}
-            </CardContent>
-          </Card>
         </TabsContent>
 
         <TabsContent value="builder">
