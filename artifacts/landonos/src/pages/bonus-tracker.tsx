@@ -66,17 +66,16 @@ export default function BonusTrackerPage() {
 
   return (
     <div className="space-y-6">
-      {/* Hero */}
       <PageHeader
         icon={Wallet}
         eyebrow="Incentive & Bonus Tracker"
         title="Bonus Tracker"
         subtitle={`${name}'s performance incentives for the year. Amounts are calculated by Finance and paid through Payroll — informational only.`}
+        statsClassName="grid grid-cols-2 gap-3 shrink-0"
         stats={[
           { label: "Earned YTD", value: fmt(ytd), icon: TrendingUp },
           { label: "Pending", value: fmt(pending), icon: Clock },
         ]}
-        statsClassName="grid grid-cols-2 gap-3 shrink-0"
       />
 
       {/* Metric strip */}

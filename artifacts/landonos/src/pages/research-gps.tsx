@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Compass, CheckCircle2, Circle, Clock, AlertTriangle, ArrowRight, ListChecks } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { EmptyState } from "@/components/empty-state";
 
 const STEP_BORDER: Record<Status, string> = {
   "Complete": "border-l-emerald-500 bg-emerald-500/5",
@@ -70,17 +71,16 @@ export default function ResearchGPS() {
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
-      {/* Executive hero banner */}
       <PageHeader
         icon={Compass}
         eyebrow="10-step workflow"
         title="Research GPS"
         subtitle="Navigate every research mission through a disciplined, auditable 10-step path — from scoping the question to handoff for human review."
+        statsClassName="grid grid-cols-2 gap-3 shrink-0"
         stats={[
           { label: "Workflow Steps", value: GPS_STEPS.length, icon: CheckCircle2 },
           { label: "Active Missions", value: activeMissions.length, icon: Clock },
         ]}
-        statsClassName="grid grid-cols-2 gap-3 shrink-0"
       />
 
       <Card className="border-t-4 border-t-blue-500">
@@ -106,10 +106,11 @@ export default function ResearchGPS() {
       </Card>
 
       {!activeRequest ? (
-        <div className="h-64 flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl text-muted-foreground">
-          <Compass className="w-12 h-12 mb-4 opacity-20" />
-          <p>Select a research request to view its GPS path.</p>
-        </div>
+        <EmptyState
+          icon={Compass}
+          description="Select a research request to view its GPS path."
+          className="h-64"
+        />
       ) : (
         <div className="space-y-8 animate-in fade-in duration-300">
           {(() => {

@@ -78,7 +78,6 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Executive hero banner */}
       <PageHeader
         eyebrow={
           <>
@@ -91,6 +90,7 @@ export default function Dashboard() {
         }
         title="Command Center"
         subtitle="AI-guided compliance and business research cockpit. Verify every source, keep humans in the loop."
+        statsClassName="grid grid-cols-2 gap-3 shrink-0"
         action={
           <Link
             href="/guided-research-builder?new=1"
@@ -103,7 +103,6 @@ export default function Dashboard() {
           { label: "Level", value: data.rewardState.level, icon: Award },
           { label: "Points", value: data.rewardState.points.toLocaleString(), icon: Activity },
         ]}
-        statsClassName="flex shrink-0 items-stretch gap-3"
       />
 
       {/* Quick Actions */}

@@ -78,17 +78,16 @@ export default function TeamLeadTrackPage() {
 
   return (
     <div className="space-y-6">
-      {/* Hero */}
       <PageHeader
         icon={Rocket}
         eyebrow="Leadership Development"
         title="Team Lead Track"
         subtitle={`${name}'s path toward leading a research team. Progress is reviewed and signed off by your manager.`}
+        statsClassName="grid grid-cols-2 gap-3 shrink-0"
         stats={[
           { label: "Track Progress", value: `${overall}%`, icon: Target },
           { label: "Skills Met", value: `${met}/${COMPETENCIES.length}`, icon: CheckCircle2 },
         ]}
-        statsClassName="grid grid-cols-2 gap-3 shrink-0"
       />
 
       {/* Metric strip */}

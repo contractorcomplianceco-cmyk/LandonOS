@@ -58,17 +58,16 @@ export default function PromptCoach() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
-      {/* Executive hero banner */}
       <PageHeader
         icon={Sparkles}
         eyebrow="Prompt engineering"
         title="AI Prompt Coach"
         subtitle="Transform rough questions into disciplined, source-backed executive prompts. Every rewrite keeps verification and human review in the loop."
+        statsClassName="grid grid-cols-2 gap-3 shrink-0"
         stats={[
           { label: "Strategies", value: 6, icon: Target },
           { label: "Output", value: <span className="text-sm">Draft until reviewed</span>, icon: ShieldAlert },
         ]}
-        statsClassName="grid grid-cols-2 gap-3 shrink-0"
       />
 
       <Alert variant="default" className="bg-destructive/10 text-destructive border-destructive/20">

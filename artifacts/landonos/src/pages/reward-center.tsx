@@ -26,10 +26,10 @@ export default function RewardCenter() {
         title="Reward Center"
         subtitle="Track your professional growth — quality and thoroughness are rewarded over speed."
         stats={[
-          { label: "Level", value: rewardState.level },
-          { label: "Points", value: rewardState.points },
-          { label: "Badges", value: rewardState.badges.length },
-          { label: "To Next", value: `${progress.percent}%` },
+          { label: "Level", value: rewardState.level, icon: Award },
+          { label: "Points", value: rewardState.points, icon: Star },
+          { label: "Badges", value: rewardState.badges.length, icon: Medal },
+          { label: "To Next", value: `${progress.percent}%`, icon: TrendingUp },
         ]}
       />
       

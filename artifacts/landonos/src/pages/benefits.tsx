@@ -54,17 +54,16 @@ export default function BenefitsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Hero */}
       <PageHeader
         icon={HeartPulse}
         eyebrow="Benefits & Time Off"
         title="My Benefits"
         subtitle="Review your time-off balances, health coverage, and perks. Plan changes are handled by HR and Payroll."
+        statsClassName="grid grid-cols-2 gap-3 shrink-0"
         stats={[
           { label: "PTO Left", value: "11 days", icon: Plane },
           { label: "Plans", value: "3 active", icon: Shield },
         ]}
-        statsClassName="grid grid-cols-2 gap-3 shrink-0"
       />
 
       {/* Time-off balances */}

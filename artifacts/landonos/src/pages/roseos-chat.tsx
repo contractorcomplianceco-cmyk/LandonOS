@@ -167,17 +167,16 @@ export default function RoseOSChat() {
 
   return (
     <div className="space-y-6 h-full flex flex-col">
-      {/* Executive hero banner */}
       <PageHeader
         icon={ShieldCheck}
         eyebrow="Research mentor"
         title="RoseOS Chat"
         subtitle="Your AI-guided mentor for research strategy and planning — structured prompts and next steps, always paired with source and human-review reminders."
+        statsClassName="grid grid-cols-2 gap-3 shrink-0"
         stats={[
           { label: "Guidance Modes", value: CHAT_MODES.length, icon: MessageSquare },
           { label: "Human Review", value: "Required", icon: ShieldCheck },
         ]}
-        statsClassName="grid grid-cols-2 gap-3 shrink-0"
       />
 
       <div className="bg-primary/10 border border-primary/20 text-primary-foreground p-3 rounded-md flex items-start gap-3">

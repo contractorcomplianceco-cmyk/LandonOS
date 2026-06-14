@@ -80,17 +80,16 @@ export default function AccountPage() {
 
   return (
     <div className="space-y-6">
-      {/* Hero */}
       <PageHeader
         icon={UserCog}
         eyebrow="Account & Security"
         title="My Account"
         subtitle="Manage your sign-in, security, and personal app preferences. These are your own settings — not HR or payroll records."
+        statsClassName="grid grid-cols-2 gap-3 shrink-0"
         stats={[
           { label: "2FA", value: twoFactor ? "On" : "Off", icon: ShieldCheck },
           { label: "Sessions", value: sessions.length, icon: Monitor },
         ]}
-        statsClassName="grid grid-cols-2 gap-3 shrink-0"
       />
 
       {/* Sign-in & security */}

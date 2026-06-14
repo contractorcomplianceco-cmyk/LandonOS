@@ -18,6 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { OnboardingScene } from "@/components/onboarding-scenes";
+import { PageHeader } from "@/components/page-header";
 import {
   ONBOARDING_SECTIONS,
   ONBOARDING_MUSIC,
@@ -216,34 +217,22 @@ export default function Welcome() {
       <audio ref={narrationRef} preload="auto" className="hidden" />
       <audio ref={musicRef} src={onboardingAsset(ONBOARDING_MUSIC)} preload="auto" className="hidden" />
 
-      {/* Hero */}
-      <section className="relative overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-6 md:p-8">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.3),transparent_55%)]" />
-        <div className="relative flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-start gap-4">
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/20 backdrop-blur">
-              <Sparkles className="h-6 w-6 text-sky-300" />
-            </span>
-            <div>
-              <h2 className="text-2xl font-black tracking-tight text-white md:text-3xl">
-                Welcome to LandonOS
-              </h2>
-              <p className="mt-1 max-w-xl text-sm text-blue-100/80 md:text-base">
-                Get oriented three ways — watch the narrated tour, step through the guided
-                walkthrough at your own pace, or download the written user guide.
-              </p>
-            </div>
-          </div>
+      <PageHeader
+        icon={Sparkles}
+        eyebrow="Welcome & Onboarding"
+        title="Welcome to LandonOS"
+        subtitle="Get oriented three ways — watch the narrated tour, step through the guided walkthrough at your own pace, or download the written user guide."
+        action={
           <a
             href={USER_GUIDE_PDF}
             download
-            className="inline-flex shrink-0 items-center gap-2 self-start rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-md transition-colors hover:bg-blue-50 md:self-auto"
+            className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-md transition-colors hover:bg-blue-50"
           >
             <Download className="h-4 w-4" />
             User Guide (PDF)
           </a>
-        </div>
-      </section>
+        }
+      />
 
       {/* Mode toggle */}
       <div className="flex flex-col items-center gap-2">

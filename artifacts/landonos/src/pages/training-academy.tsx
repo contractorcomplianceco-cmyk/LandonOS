@@ -96,10 +96,10 @@ export default function TrainingAcademy() {
         title="Training Academy"
         subtitle="Master the art of AI-guided, source-verified intelligence gathering — one lesson at a time."
         stats={[
-          { label: "Completed", value: completedLessons },
-          { label: "Lessons", value: allLessons.length },
-          { label: "Progress", value: `${progressPercent}%` },
-          { label: "Tracks", value: tracks.length },
+          { label: "Completed", value: completedLessons, icon: CheckCircle2 },
+          { label: "Lessons", value: allLessons.length, icon: GraduationCap },
+          { label: "Progress", value: `${progressPercent}%`, icon: ListChecks },
+          { label: "Tracks", value: tracks.length, icon: BookOpen },
         ]}
       />
       

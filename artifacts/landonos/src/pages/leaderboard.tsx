@@ -61,17 +61,16 @@ export default function LeaderboardPage() {
 
   return (
     <div className="space-y-6">
-      {/* Hero */}
       <PageHeader
         icon={Trophy}
         eyebrow="Research Team Leaderboard"
         title="Leaderboard"
         subtitle="Friendly competition across the research team. Points come from verified, human-reviewed work."
+        statsClassName="grid grid-cols-2 gap-3 shrink-0"
         stats={[
           { label: "Your Rank", value: `#${myRank}`, icon: Trophy },
           { label: "Streak", value: `${me.streak} wks`, icon: Flame },
         ]}
-        statsClassName="grid grid-cols-2 gap-3 shrink-0"
       />
 
       {/* Metric strip */}
