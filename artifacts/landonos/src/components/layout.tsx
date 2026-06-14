@@ -48,6 +48,7 @@ import {
   Wallet,
   Rocket,
   Trophy,
+  Play,
 } from "lucide-react";
 
 const NAV_SECTIONS = [
@@ -113,8 +114,34 @@ function SidebarBrand() {
 
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const [location] = useLocation();
+  const { startTour } = useHelp();
   return (
     <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
+      <button
+        type="button"
+        onClick={() => {
+          startTour();
+          onNavigate?.();
+        }}
+        className="group relative block w-full overflow-hidden rounded-lg border border-sidebar-border/60 shadow-md transition-all hover:border-sidebar-primary/50 hover:shadow-lg"
+      >
+        <div className="relative aspect-video w-full bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.35),transparent_60%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.3),transparent_55%)]" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/30 backdrop-blur transition-transform group-hover:scale-110">
+              <Play className="h-5 w-5 translate-x-[1px] fill-white text-white" />
+            </span>
+          </div>
+          <span className="absolute right-2 top-2 rounded bg-black/40 px-1.5 py-0.5 text-[10px] font-medium tabular-nums text-white/90 backdrop-blur">
+            2:00
+          </span>
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-3 pb-2 pt-6 text-left">
+            <div className="text-xs font-semibold text-white">Narrated Walkthrough</div>
+            <div className="text-[11px] text-blue-100/80">Watch the guided tour</div>
+          </div>
+        </div>
+      </button>
       {NAV_SECTIONS.map((section) => (
         <div key={section.label}>
           <div className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-sidebar-foreground/40">
