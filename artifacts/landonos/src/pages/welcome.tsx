@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Play,
   Pause,
@@ -30,6 +30,18 @@ type Mode = "video" | "guided";
 
 const SECTIONS = ONBOARDING_SECTIONS;
 const LAST = SECTIONS.length - 1;
+
+// Static drifting particles for the player backdrop (no random re-renders).
+const PARTICLES = [
+  { left: "12%", top: "22%", size: 6, dur: 5.5, delay: 0 },
+  { left: "82%", top: "18%", size: 4, dur: 6.5, delay: 0.6 },
+  { left: "68%", top: "70%", size: 8, dur: 7, delay: 1.2 },
+  { left: "26%", top: "78%", size: 5, dur: 6, delay: 0.3 },
+  { left: "48%", top: "12%", size: 4, dur: 5, delay: 1.6 },
+  { left: "90%", top: "52%", size: 6, dur: 7.5, delay: 0.9 },
+  { left: "6%", top: "54%", size: 5, dur: 6.8, delay: 1.9 },
+  { left: "40%", top: "88%", size: 4, dur: 5.8, delay: 0.4 },
+];
 
 export default function Welcome() {
   const { toast } = useToast();
@@ -122,7 +134,7 @@ export default function Welcome() {
       if (m) {
         m.loop = true;
         m.muted = muted;
-        m.volume = 0.22;
+        m.volume = 0.3;
         if (m.paused) {
           const mp = m.play();
           if (mp && typeof mp.catch === "function") mp.catch(() => {});
@@ -283,6 +295,26 @@ export default function Welcome() {
           {/* Animated background */}
           <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950" />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(56,189,248,0.22),transparent_50%)]" />
+          {/* Pulsing accent glow for energy */}
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_72%_82%,rgba(37,99,235,0.22),transparent_55%)]"
+            animate={{ opacity: [0.45, 0.95, 0.45] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+          />
+          {/* Drifting energy particles */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            {PARTICLES.map((p, i) => (
+              <motion.span
+                key={i}
+                aria-hidden
+                className="absolute rounded-full bg-sky-400/40 blur-[1px]"
+                style={{ left: p.left, top: p.top, width: p.size, height: p.size }}
+                animate={{ y: [0, -22, 0], opacity: [0.15, 0.7, 0.15] }}
+                transition={{ duration: p.dur, repeat: Infinity, ease: "easeInOut", delay: p.delay }}
+              />
+            ))}
+          </div>
 
           {/* Scene (keyed so it re-mounts and replays on every change) */}
           <AnimatePresence mode="wait">
