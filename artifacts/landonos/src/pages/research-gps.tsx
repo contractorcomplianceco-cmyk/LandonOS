@@ -60,19 +60,46 @@ export default function ResearchGPS() {
     return Math.round((completed / total) * 100);
   };
 
+  const activeMissions = data.requests.filter((r) => r.status !== "Archived");
+
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center">
-            <Compass className="w-8 h-8 mr-3 text-primary" />
-            Research GPS
-          </h1>
-          <p className="text-muted-foreground">Navigate the 10-step executive research workflow.</p>
+      {/* Executive hero banner */}
+      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
+        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
+              <Compass className="h-3.5 w-3.5" />
+              10-step workflow
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
+              Research GPS
+            </h1>
+            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
+              Navigate every research mission through a disciplined, auditable 10-step path — from scoping the question to handoff for human review.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 shrink-0">
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
+                <CheckCircle2 className="h-3.5 w-3.5" /> Workflow Steps
+              </div>
+              <div className="mt-1 text-2xl font-bold text-white">{GPS_STEPS.length}</div>
+            </div>
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
+                <Clock className="h-3.5 w-3.5" /> Active Missions
+              </div>
+              <div className="mt-1 text-2xl font-bold text-white">{activeMissions.length}</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <Card>
+      <Card className="border-t-4 border-t-blue-500">
         <CardHeader className="pb-4">
           <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Select Active Mission</CardTitle>
           <Select value={selectedReqId} onValueChange={setSelectedReqId}>
@@ -101,21 +128,22 @@ export default function ResearchGPS() {
         </div>
       ) : (
         <div className="space-y-8 animate-in fade-in duration-300">
-          <Card className="bg-sidebar text-sidebar-foreground border-sidebar-border">
-            <CardContent className="p-6 flex flex-col md:flex-row items-center gap-6">
+          <Card className="relative overflow-hidden border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 text-white shadow-lg">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.25),transparent_55%)]" />
+            <CardContent className="relative p-6 flex flex-col md:flex-row items-center gap-6">
               <div className="flex-1 space-y-2 w-full">
                 <h2 className="text-xl font-bold">{activeRequest.title}</h2>
-                <div className="flex gap-2 text-sm text-sidebar-foreground/70">
-                  <Badge variant="outline" className="border-sidebar-foreground/20 text-sidebar-foreground">{activeRequest.type}</Badge>
+                <div className="flex items-center gap-2 text-sm text-blue-100/80">
+                  <Badge variant="outline" className="border-white/25 text-white">{activeRequest.type}</Badge>
                   <span className="flex items-center"><ArrowRight className="w-3 h-3 mx-1" /> {activeRequest.reviewer}</span>
                 </div>
               </div>
               <div className="w-full md:w-64 shrink-0 space-y-2">
-                <div className="flex justify-between text-sm font-medium">
+                <div className="flex justify-between text-sm font-medium text-blue-100">
                   <span>Overall Progress</span>
                   <span>{calculateProgress(activeRequest)}%</span>
                 </div>
-                <Progress value={calculateProgress(activeRequest)} className="h-2" />
+                <Progress value={calculateProgress(activeRequest)} className="h-2 bg-white/15" />
               </div>
             </CardContent>
           </Card>
