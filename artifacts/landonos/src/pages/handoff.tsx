@@ -40,6 +40,9 @@ export default function HandoffPage() {
   });
 
   const activeHandoffs = data.handoffs.filter(h => h.status !== 'Archived');
+  const readyCount = activeHandoffs.filter(h => h.status.startsWith("Ready for")).length;
+  const approvedCount = data.handoffs.filter(h => h.status === "Approved").length;
+  const needsResearchCount = activeHandoffs.filter(h => h.status === "Needs More Research").length;
 
   const handleOpenDialog = (handoff?: Handoff) => {
     if (handoff) {
@@ -158,17 +161,45 @@ FLAGS:
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <Send className="w-8 h-8 text-primary" />
-            Research Completed Handoff
-          </h1>
-          <p className="text-muted-foreground">Structure and submit your research for leadership review.</p>
+      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
+        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="space-y-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-50 ring-1 ring-white/15 backdrop-blur">
+              <Send className="h-3.5 w-3.5" />
+              Leadership Handoff
+            </span>
+            <h1 className="text-3xl md:text-4xl font-bold text-white">Research Completed Handoff</h1>
+            <p className="max-w-xl text-blue-100/80">
+              Structure and submit your research for leadership review — self-contained, source-checked, and decision-ready.
+            </p>
+            <Button
+              onClick={() => handleOpenDialog()}
+              className="bg-white text-slate-900 hover:bg-blue-50"
+            >
+              <Plus className="w-4 h-4 mr-2" /> New Handoff
+            </Button>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Active</div>
+              <div className="text-2xl font-bold text-white">{activeHandoffs.length}</div>
+            </div>
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Ready for Review</div>
+              <div className="text-2xl font-bold text-white">{readyCount}</div>
+            </div>
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Approved</div>
+              <div className="text-2xl font-bold text-white">{approvedCount}</div>
+            </div>
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Needs Research</div>
+              <div className="text-2xl font-bold text-white">{needsResearchCount}</div>
+            </div>
+          </div>
         </div>
-        <Button onClick={() => handleOpenDialog()}>
-          <Plus className="w-4 h-4 mr-2" /> New Handoff
-        </Button>
       </div>
 
       <div className="bg-primary/5 border border-primary/10 p-4 rounded-md flex items-start gap-3">
