@@ -45,23 +45,50 @@ import {
   HeartPulse,
   LogOut,
   ChevronDown,
+  Wallet,
+  Rocket,
+  Trophy,
 } from "lucide-react";
 
-const NAV_ITEMS = [
-  { href: "/", label: "Command Center", icon: LayoutDashboard },
-  { href: "/guided-research-builder", label: "Research Builder", icon: Target },
-  { href: "/prompt-coach", label: "Prompt Coach", icon: Sparkles },
-  { href: "/research-gps", label: "Research GPS", icon: Compass },
-  { href: "/report-builder", label: "Report Builder", icon: FileText },
-  { href: "/source-vault", label: "Source Vault", icon: Database },
-  { href: "/blocked", label: "Blocked Help", icon: AlertTriangle },
-  { href: "/roseos-chat", label: "RoseOS Chat", icon: Bot },
-  { href: "/handoff", label: "Handoff", icon: Send },
-  { href: "/brainstorming", label: "Brainstorming", icon: Lightbulb },
-  { href: "/reward-center", label: "Rewards", icon: Award },
-  { href: "/training-academy", label: "Training Academy", icon: GraduationCap },
-  { href: "/company-brain", label: "RoseOS", icon: BrainCircuit },
-  { href: "/settings", label: "Settings", icon: Settings },
+const NAV_SECTIONS = [
+  {
+    label: "Overview",
+    items: [{ href: "/", label: "Command Center", icon: LayoutDashboard }],
+  },
+  {
+    label: "Research",
+    items: [
+      { href: "/guided-research-builder", label: "Research Builder", icon: Target },
+      { href: "/prompt-coach", label: "Prompt Coach", icon: Sparkles },
+      { href: "/research-gps", label: "Research GPS", icon: Compass },
+      { href: "/source-vault", label: "Source Vault", icon: Database },
+      { href: "/report-builder", label: "Report Builder", icon: FileText },
+      { href: "/handoff", label: "Handoff", icon: Send },
+    ],
+  },
+  {
+    label: "Collaborate",
+    items: [
+      { href: "/roseos-chat", label: "RoseOS Chat", icon: Bot },
+      { href: "/blocked", label: "Blocked Help", icon: AlertTriangle },
+      { href: "/brainstorming", label: "Brainstorming", icon: Lightbulb },
+      { href: "/company-brain", label: "RoseOS", icon: BrainCircuit },
+    ],
+  },
+  {
+    label: "Growth & Rewards",
+    items: [
+      { href: "/training-academy", label: "Training Academy", icon: GraduationCap },
+      { href: "/reward-center", label: "Rewards", icon: Award },
+      { href: "/bonus-tracker", label: "Bonus Tracker", icon: Wallet },
+      { href: "/team-lead-track", label: "Team Lead Track", icon: Rocket },
+      { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
+    ],
+  },
+  {
+    label: "Workspace",
+    items: [{ href: "/settings", label: "Settings", icon: Settings }],
+  },
 ];
 
 function SidebarBrand() {
@@ -87,25 +114,34 @@ function SidebarBrand() {
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const [location] = useLocation();
   return (
-    <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-0.5">
-      {NAV_ITEMS.map((item) => {
-        const isActive = location === item.href;
-        return (
-          <Link key={item.href} href={item.href} className="block" onClick={onNavigate}>
-            <div
-              className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                isActive
-                  ? "bg-sidebar-primary/15 text-sidebar-primary border-l-2 border-sidebar-primary pl-[10px]"
-                  : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-              )}
-            >
-              <item.icon size={18} className={isActive ? "text-sidebar-primary" : "opacity-70"} />
-              <span className="truncate">{item.label}</span>
-            </div>
-          </Link>
-        );
-      })}
+    <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
+      {NAV_SECTIONS.map((section) => (
+        <div key={section.label}>
+          <div className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-sidebar-foreground/40">
+            {section.label}
+          </div>
+          <div className="space-y-0.5">
+            {section.items.map((item) => {
+              const isActive = location === item.href;
+              return (
+                <Link key={item.href} href={item.href} className="block" onClick={onNavigate}>
+                  <div
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                      isActive
+                        ? "bg-sidebar-primary/15 text-sidebar-primary border-l-2 border-sidebar-primary pl-[10px]"
+                        : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                    )}
+                  >
+                    <item.icon size={18} className={isActive ? "text-sidebar-primary" : "opacity-70"} />
+                    <span className="truncate">{item.label}</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      ))}
     </nav>
   );
 }

@@ -25,6 +25,9 @@ import Settings from "@/pages/settings";
 import Account from "@/pages/account";
 import EmployeeAccount from "@/pages/employee-account";
 import Benefits from "@/pages/benefits";
+import BonusTracker from "@/pages/bonus-tracker";
+import TeamLeadTrack from "@/pages/team-lead-track";
+import Leaderboard from "@/pages/leaderboard";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +46,9 @@ function Router() {
       <Route path="/brainstorming" component={Brainstorming} />
       <Route path="/reward-center" component={RewardCenter} />
       <Route path="/training-academy" component={TrainingAcademy} />
+      <Route path="/bonus-tracker" component={BonusTracker} />
+      <Route path="/team-lead-track" component={TeamLeadTrack} />
+      <Route path="/leaderboard" component={Leaderboard} />
       <Route path="/company-brain" component={CompanyBrain} />
       <Route path="/account" component={Account} />
       <Route path="/employee-account" component={EmployeeAccount} />
