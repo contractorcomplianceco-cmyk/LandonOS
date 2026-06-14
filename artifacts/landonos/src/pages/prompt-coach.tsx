@@ -49,9 +49,39 @@ export default function PromptCoach() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">AI Prompt Coach</h1>
-        <p className="text-muted-foreground">Transform rough questions into disciplined, source-backed executive prompts.</p>
+      {/* Executive hero banner */}
+      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
+        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
+              <Sparkles className="h-3.5 w-3.5" />
+              Prompt engineering
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
+              AI Prompt Coach
+            </h1>
+            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
+              Transform rough questions into disciplined, source-backed executive prompts. Every rewrite keeps verification and human review in the loop.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 shrink-0">
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
+                <Target className="h-3.5 w-3.5" /> Strategies
+              </div>
+              <div className="mt-1 text-2xl font-bold text-white">6</div>
+            </div>
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
+                <ShieldAlert className="h-3.5 w-3.5" /> Output
+              </div>
+              <div className="mt-1 text-sm font-bold text-white">Draft until reviewed</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <Alert variant="default" className="bg-destructive/10 text-destructive border-destructive/20">
@@ -64,9 +94,14 @@ export default function PromptCoach() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-5 space-y-6">
-          <Card>
+          <Card className="border-t-4 border-t-blue-500">
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg">Prompt Context</CardTitle>
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-500 text-white shadow-md shadow-blue-500/30">
+                  <Sparkles className="h-5 w-5" />
+                </div>
+                <CardTitle className="text-lg">Prompt Context</CardTitle>
+              </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
@@ -118,7 +153,9 @@ export default function PromptCoach() {
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div>
+            <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Optimization strategies</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <Button variant="default" className="w-full justify-start" onClick={() => handleAction("improve")}>
               <Sparkles className="w-4 h-4 mr-2" /> Improve my prompt
             </Button>
@@ -137,6 +174,7 @@ export default function PromptCoach() {
             <Button variant="outline" className="w-full justify-start" onClick={() => handleAction("assumptions")}>
               <ShieldAlert className="w-4 h-4 mr-2" /> Check assumptions
             </Button>
+            </div>
           </div>
         </div>
 
