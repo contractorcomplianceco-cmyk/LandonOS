@@ -14,6 +14,9 @@ import { Idea, IdeaCategory, ConvertToType } from "@/lib/types";
 import { GPS_STEPS } from "@/lib/default-data";
 import { StatCard, type Accent } from "@/components/stat-card";
 import { cn } from "@/lib/utils";
+import { PageHeader } from "@/components/page-header";
+import { EmptyState } from "@/components/empty-state";
+import { ConfirmDeleteDialog } from "@/components/confirm-delete-dialog";
 
 const IDEA_CATEGORIES: IdeaCategory[] = [
   "Opportunity", "Risk", "Automation", "Sales Support", "Compliance Support", "Client Support", "Internal Process"
@@ -63,6 +66,8 @@ export default function BrainstormingStudio() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [filterCategory, setFilterCategory] = useState<string>("All");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   
   const [formData, setFormData] = useState<Partial<Idea>>({
     title: "",
@@ -135,6 +140,17 @@ export default function BrainstormingStudio() {
     toast({ title: "Idea deleted", description: "The idea has been removed from the studio." });
   };
 
+  const requestDelete = (id: string) => {
+    setDeletingId(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (deletingId) handleDelete(deletingId);
+    setIsDeleteDialogOpen(false);
+    setDeletingId(null);
+  };
+
   const handleConvert = (idea: Idea, targetType: ConvertToType) => {
     const id = crypto.randomUUID();
     
@@ -199,46 +215,23 @@ export default function BrainstormingStudio() {
 
   return (
     <div className="space-y-8">
-      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="space-y-3">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-50 ring-1 ring-white/15 backdrop-blur">
-              <Lightbulb className="h-3.5 w-3.5" />
-              Idea Pipeline
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold text-white">Brainstorming Studio</h1>
-            <p className="max-w-xl text-blue-100/80">
-              Capture, categorize, and convert ideas into actionable research and company decisions.
-            </p>
-            <Button
-              onClick={() => handleOpenDialog()}
-              className="bg-white text-slate-900 hover:bg-blue-50"
-            >
-              <Plus className="w-4 h-4 mr-2" /> Freeform Idea
-            </Button>
-          </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Total Ideas</div>
-              <div className="text-2xl font-bold text-white">{totalIdeas}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Converted</div>
-              <div className="text-2xl font-bold text-white">{convertedCount}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Opportunities</div>
-              <div className="text-2xl font-bold text-white">{opportunityCount}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Risks</div>
-              <div className="text-2xl font-bold text-white">{riskCount}</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        icon={Lightbulb}
+        eyebrow="Idea Pipeline"
+        title="Brainstorming Studio"
+        subtitle="Capture, categorize, and convert ideas into actionable research and company decisions."
+        action={
+          <Button onClick={() => handleOpenDialog()} className="bg-white text-slate-900 hover:bg-blue-50">
+            <Plus className="w-4 h-4 mr-2" /> Freeform Idea
+          </Button>
+        }
+        stats={[
+          { label: "Total Ideas", value: totalIdeas },
+          { label: "Converted", value: convertedCount },
+          { label: "Opportunities", value: opportunityCount },
+          { label: "Risks", value: riskCount },
+        ]}
+      />
 
       {/* Metrics strip — idea counts */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -290,13 +283,11 @@ export default function BrainstormingStudio() {
         </div>
 
         {filteredIdeas.length === 0 ? (
-          <Card className="border-dashed bg-muted/5">
-            <CardContent className="flex flex-col items-center justify-center p-12 text-center text-muted-foreground">
-              <Target className="w-12 h-12 mb-4 opacity-20" />
-              <p>No ideas found in this category.</p>
-              <p className="text-sm">Click an Idea Starter above to begin brainstorming.</p>
-            </CardContent>
-          </Card>
+          <EmptyState
+            icon={Target}
+            title="No ideas found in this category."
+            description="Click an Idea Starter above to begin brainstorming."
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredIdeas.map(idea => (
@@ -350,7 +341,7 @@ export default function BrainstormingStudio() {
                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleOpenDialog(idea)}>
                       <Edit className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => handleDelete(idea.id)}>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => requestDelete(idea.id)}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
@@ -426,6 +417,13 @@ export default function BrainstormingStudio() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDeleteDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        onConfirm={handleConfirmDelete}
+        description="This will permanently delete this idea. This action cannot be undone."
+      />
     </div>
   );
 }

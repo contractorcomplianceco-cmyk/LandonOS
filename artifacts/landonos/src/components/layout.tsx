@@ -259,7 +259,7 @@ function StatusChip({
   tone: "online" | "synced" | "review";
 }) {
   const dot =
-    tone === "review" ? "bg-amber-400" : "bg-emerald-400";
+    tone === "review" ? "bg-sky-400" : "bg-emerald-400";
   return (
     <div className="flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium text-blue-50 ring-1 ring-white/15 backdrop-blur">
       <span className={cn("h-1.5 w-1.5 rounded-full", dot)} />

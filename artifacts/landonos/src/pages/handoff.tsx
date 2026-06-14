@@ -14,6 +14,9 @@ import { useToast } from "@/hooks/use-toast";
 import { Handoff, HandoffStatus } from "@/lib/types";
 import { StatCard, type Accent } from "@/components/stat-card";
 import { cn } from "@/lib/utils";
+import { PageHeader } from "@/components/page-header";
+import { EmptyState } from "@/components/empty-state";
+import { ConfirmDeleteDialog } from "@/components/confirm-delete-dialog";
 
 const HANDOFF_STATUSES: HandoffStatus[] = [
   "Draft", "Ready for Rose", "Ready for Carmen", "Ready for Gregg", "Needs More Research", "Approved", "Archived"
@@ -44,6 +47,8 @@ export default function HandoffPage() {
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   
   const [formData, setFormData] = useState<Partial<Handoff>>({
     title: "",
@@ -125,12 +130,15 @@ export default function HandoffPage() {
     toast({ title: "Handoff deleted", description: "The handoff has been removed." });
   };
 
-  const handleArchive = (id: string) => {
-    updateData(prev => ({
-      ...prev,
-      handoffs: prev.handoffs.map(h => h.id === id ? { ...h, status: "Archived" } : h)
-    }));
-    toast({ title: "Handoff archived", description: "The handoff has been moved to the archive." });
+  const requestDelete = (id: string) => {
+    setDeletingId(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (deletingId) handleDelete(deletingId);
+    setIsDeleteDialogOpen(false);
+    setDeletingId(null);
   };
 
   const handleStatusChange = (id: string, newStatus: HandoffStatus) => {
@@ -183,46 +191,23 @@ FLAGS:
 
   return (
     <div className="space-y-6">
-      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="space-y-3">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-50 ring-1 ring-white/15 backdrop-blur">
-              <Send className="h-3.5 w-3.5" />
-              Leadership Handoff
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold text-white">Research Completed Handoff</h1>
-            <p className="max-w-xl text-blue-100/80">
-              Structure and submit your research for leadership review — self-contained, source-checked, and decision-ready.
-            </p>
-            <Button
-              onClick={() => handleOpenDialog()}
-              className="bg-white text-slate-900 hover:bg-blue-50"
-            >
-              <Plus className="w-4 h-4 mr-2" /> New Handoff
-            </Button>
-          </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Active</div>
-              <div className="text-2xl font-bold text-white">{activeHandoffs.length}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Ready for Review</div>
-              <div className="text-2xl font-bold text-white">{readyCount}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Approved</div>
-              <div className="text-2xl font-bold text-white">{approvedCount}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="text-[11px] uppercase tracking-wide text-blue-100/70">Needs Research</div>
-              <div className="text-2xl font-bold text-white">{needsResearchCount}</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        icon={Send}
+        eyebrow="Leadership Handoff"
+        title="Research Completed Handoff"
+        subtitle="Structure and submit your research for leadership review — self-contained, source-checked, and decision-ready."
+        action={
+          <Button onClick={() => handleOpenDialog()} className="bg-white text-slate-900 hover:bg-blue-50">
+            <Plus className="w-4 h-4 mr-2" /> New Handoff
+          </Button>
+        }
+        stats={[
+          { label: "Active", value: activeHandoffs.length },
+          { label: "Ready for Review", value: readyCount },
+          { label: "Approved", value: approvedCount },
+          { label: "Needs Research", value: needsResearchCount },
+        ]}
+      />
 
       {/* Metrics strip — handoffs by status */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -239,13 +224,11 @@ FLAGS:
       </div>
 
       {activeHandoffs.length === 0 ? (
-        <Card className="border-dashed bg-muted/5">
-          <CardContent className="flex flex-col items-center justify-center p-12 text-center text-muted-foreground">
-            <FileText className="w-12 h-12 mb-4 opacity-20" />
-            <p>No active handoffs found.</p>
-            <p className="text-sm">Create a new handoff when your research is ready for review.</p>
-          </CardContent>
-        </Card>
+        <EmptyState
+          icon={FileText}
+          title="No active handoffs found."
+          description="Create a new handoff when your research is ready for review."
+        />
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {activeHandoffs.map(handoff => (
@@ -306,7 +289,7 @@ FLAGS:
                   <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleOpenDialog(handoff)}>
                     <Edit className="w-4 h-4" />
                   </Button>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => handleArchive(handoff.id)}>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => requestDelete(handoff.id)}>
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
@@ -463,6 +446,13 @@ FLAGS:
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDeleteDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        onConfirm={handleConfirmDelete}
+        description="This will permanently delete this handoff. This action cannot be undone."
+      />
     </div>
   );
 }

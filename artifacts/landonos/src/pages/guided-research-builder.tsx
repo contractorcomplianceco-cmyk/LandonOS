@@ -17,6 +17,9 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Progress } from "@/components/ui/progress";
 import { Target, Search, Plus, Trash2, Edit2, Play, Archive, ClipboardList, Clock, ShieldAlert, Sparkles } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PageHeader } from "@/components/page-header";
+import { EmptyState } from "@/components/empty-state";
+import { ConfirmDeleteDialog } from "@/components/confirm-delete-dialog";
 
 export default function GuidedResearchBuilder() {
   const { data, updateData } = useStore();
@@ -34,6 +37,8 @@ export default function GuidedResearchBuilder() {
   
   const [editingId, setEditingId] = useState<string | null>(null);
   const [generatedOutput, setGeneratedOutput] = useState<any>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState<Partial<ResearchRequest>>({
@@ -147,6 +152,17 @@ export default function GuidedResearchBuilder() {
     toast({ title: "Deleted", description: "Request removed." });
   };
 
+  const requestDelete = (id: string) => {
+    setDeletingId(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (deletingId) handleDelete(deletingId);
+    setIsDeleteDialogOpen(false);
+    setDeletingId(null);
+  };
+
   const handleArchive = (id: string) => {
     updateData(prev => ({ ...prev, requests: prev.requests.map(r => r.id === id ? { ...r, status: 'Archived' } : r) }));
     toast({ title: "Archived", description: "Request archived." });
@@ -209,51 +225,25 @@ export default function GuidedResearchBuilder() {
 
   return (
     <div className="space-y-6">
-      {/* Executive hero banner */}
-      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="min-w-0">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
-              <Target className="h-3.5 w-3.5" />
-              Structured intake
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
-              Research Builder
-            </h1>
-            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
-              Scope the question, lock the required sources, and define what not to assume before involving AI. Disciplined intake keeps the whole workflow defensible.
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                resetForm();
-                setActiveTab("builder");
-              }}
-              className="mt-4 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-900"
-            >
-              <Plus className="h-4 w-4" /> New Request
-            </button>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3 shrink-0">
-            {kpis.map((k) => (
-              <div
-                key={k.label}
-                className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur"
-              >
-                <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                  <k.icon className="h-3.5 w-3.5" /> {k.label}
-                </div>
-                <div className="mt-1 text-2xl font-bold text-white">
-                  {k.value}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        icon={Target}
+        eyebrow="Structured intake"
+        title="Research Builder"
+        subtitle="Scope the question, lock the required sources, and define what not to assume before involving AI. Disciplined intake keeps the whole workflow defensible."
+        action={
+          <Button
+            onClick={() => {
+              resetForm();
+              setActiveTab("builder");
+            }}
+            className="bg-white text-slate-900 hover:bg-blue-50"
+          >
+            <Plus className="h-4 w-4 mr-2" /> New Request
+          </Button>
+        }
+        statsClassName="grid grid-cols-3 gap-3 shrink-0"
+        stats={kpis.map((k) => ({ label: k.label, value: k.value, icon: k.icon }))}
+      />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="mb-4">
@@ -310,11 +300,11 @@ export default function GuidedResearchBuilder() {
             </CardHeader>
             <CardContent>
               {filteredRequests.length === 0 ? (
-                <div className="text-center py-12">
-                  <Target className="mx-auto h-12 w-12 text-muted-foreground/50 mb-4" />
-                  <h3 className="text-lg font-medium text-foreground">No requests found</h3>
-                  <p className="text-muted-foreground">Adjust filters or create a new request.</p>
-                </div>
+                <EmptyState
+                  icon={Target}
+                  title="No requests found"
+                  description="Adjust filters or create a new request."
+                />
               ) : (
                 <div className="space-y-4">
                   {filteredRequests.map(req => (
@@ -358,7 +348,7 @@ export default function GuidedResearchBuilder() {
                                 <Archive className="h-4 w-4" />
                               </Button>
                             )}
-                            <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => handleDelete(req.id)}>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => requestDelete(req.id)}>
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
@@ -575,6 +565,13 @@ export default function GuidedResearchBuilder() {
           </div>
         </TabsContent>
       </Tabs>
+
+      <ConfirmDeleteDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        onConfirm={handleConfirmDelete}
+        description="This will permanently delete this research request. This action cannot be undone."
+      />
     </div>
   );
 }

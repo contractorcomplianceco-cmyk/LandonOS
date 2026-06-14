@@ -11,9 +11,13 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle, Plus, Database, ExternalLink, ShieldCheck, ShieldAlert, FileSearch, HelpCircle } from "lucide-react";
+import { AlertTriangle, Plus, Database, ExternalLink, ShieldCheck, ShieldAlert, Trash2, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { StatCard, ACCENT, type Accent } from "@/components/stat-card";
+import { PageHeader } from "@/components/page-header";
+import { Toolbar } from "@/components/toolbar";
+import { EmptyState } from "@/components/empty-state";
+import { ConfirmDeleteDialog } from "@/components/confirm-delete-dialog";
 
 const SOURCE_TYPES: SourceType[] = [
   'Official Source', 
@@ -34,6 +38,8 @@ export default function SourceVault() {
   const [formData, setFormData] = useState<Partial<Source>>({});
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("All");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const filteredSources = data.sources.filter(s => {
     const matchesSearch = !searchQuery || 
@@ -93,6 +99,20 @@ export default function SourceVault() {
     setIsDialogOpen(false);
   };
 
+  const requestDelete = (id: string) => {
+    setDeletingId(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (deletingId) {
+      updateData(prev => ({ ...prev, sources: prev.sources.filter(s => s.id !== deletingId) }));
+      toast({ title: "Deleted", description: "Source removed." });
+    }
+    setIsDeleteDialogOpen(false);
+    setDeletingId(null);
+  };
+
   const sourceAccent = (type: SourceType): Accent => {
     if (type === 'Official Source') return 'emerald';
     if (type === 'AI Draft') return 'rose';
@@ -139,46 +159,19 @@ export default function SourceVault() {
 
   return (
     <div className="space-y-6">
-      {/* Executive hero banner */}
-      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="min-w-0">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
-              <Database className="h-3.5 w-3.5" />
-              Verified intelligence
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
-              Source Vault
-            </h1>
-            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
-              A single repository for every source — graded for quality and flagged when intelligence leans on AI drafts instead of official records.
-            </p>
-            <button
-              type="button"
-              onClick={handleCreate}
-              className="mt-4 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-900"
-            >
-              <Plus className="h-4 w-4" /> Add Source
-            </button>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3 shrink-0">
-            {vaultKpis.map((k) => (
-              <div
-                key={k.label}
-                className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur"
-              >
-                <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                  <k.icon className="h-3.5 w-3.5" /> {k.label}
-                </div>
-                <div className="mt-1 text-2xl font-bold text-white">{k.value}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        icon={Database}
+        eyebrow="Verified intelligence"
+        title="Source Vault"
+        subtitle="A single repository for every source — graded for quality and flagged when intelligence leans on AI drafts instead of official records."
+        action={
+          <Button onClick={handleCreate} className="bg-white text-slate-900 hover:bg-blue-50">
+            <Plus className="h-4 w-4 mr-2" /> Add Source
+          </Button>
+        }
+        statsClassName="grid grid-cols-3 gap-3 shrink-0"
+        stats={vaultKpis.map((k) => ({ label: k.label, value: k.value, icon: k.icon }))}
+      />
 
       {/* Source metrics strip */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -189,16 +182,11 @@ export default function SourceVault() {
 
       {risksWarning(riskyResearchIds, data.requests)}
 
-      <div className="flex flex-col sm:flex-row items-center gap-4 bg-card p-4 rounded-lg border shadow-sm">
-        <div className="relative flex-1 w-full">
-          <FileSearch className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search by title, summary, key facts, tags..." 
-            className="pl-9"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
+      <Toolbar
+        searchValue={searchQuery}
+        onSearchChange={setSearchQuery}
+        searchPlaceholder="Search by title, summary, key facts, tags..."
+      >
         <Select value={typeFilter} onValueChange={setTypeFilter}>
           <SelectTrigger className="w-full sm:w-[200px]">
             <SelectValue placeholder="Filter by type" />
@@ -208,14 +196,11 @@ export default function SourceVault() {
             {SOURCE_TYPES.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
           </SelectContent>
         </Select>
-      </div>
+      </Toolbar>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredSources.length === 0 ? (
-          <div className="col-span-full text-center p-12 border border-dashed rounded-lg text-muted-foreground bg-muted/10">
-            <Database className="w-12 h-12 mx-auto mb-4 opacity-50" />
-            <p>No sources found. Adjust filters or add a new source.</p>
-          </div>
+          <EmptyState icon={Database} description="No sources found. Adjust filters or add a new source." />
         ) : (
           filteredSources.map(source => {
             const req = data.requests.find(r => r.id === source.relatedResearchId);
@@ -259,7 +244,12 @@ export default function SourceVault() {
                     
                     <div className="text-xs text-muted-foreground border-t pt-3 flex justify-between items-center">
                       <span className="truncate pr-2">Req: {req?.title || 'None'}</span>
-                      <Button variant="ghost" size="sm" className="h-7 px-2" onClick={() => handleEdit(source)}>Edit</Button>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <Button variant="ghost" size="sm" className="h-7 px-2" onClick={() => handleEdit(source)}>Edit</Button>
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => requestDelete(source.id)}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -348,6 +338,13 @@ export default function SourceVault() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDeleteDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        onConfirm={handleConfirmDelete}
+        description="This will permanently delete this source from the vault. This action cannot be undone."
+      />
 
     </div>
   );

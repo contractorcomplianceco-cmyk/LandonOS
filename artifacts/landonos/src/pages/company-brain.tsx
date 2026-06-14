@@ -11,20 +11,14 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { BrainCircuit, Plus, ShieldAlert, FileSearch, Trash2, Edit2, Database, CheckCircle2, AlertCircle } from "lucide-react";
+import { BrainCircuit, Plus, ShieldAlert, Trash2, Edit2, Database, CheckCircle2, AlertCircle } from "lucide-react";
 import { StatCard } from "@/components/stat-card";
 import { cn } from "@/lib/utils";
 import { RoseOSBrainChat } from "@/components/roseos-brain-chat";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { PageHeader } from "@/components/page-header";
+import { Toolbar } from "@/components/toolbar";
+import { EmptyState } from "@/components/empty-state";
+import { ConfirmDeleteDialog } from "@/components/confirm-delete-dialog";
 
 const RECORD_TYPES = [
   "Active Projects Tracker",
@@ -141,56 +135,25 @@ export default function CompanyBrain() {
 
   return (
     <div className="space-y-6">
-      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="min-w-0">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
-              <BrainCircuit className="h-3.5 w-3.5" />
-              Institutional Memory
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">RoseOS</h1>
-            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
-              The company's brain — a reviewed system of record for decisions, projects, and SOPs. Ask it what's on file, or file a suggestion. Nothing is recorded until a human signs off.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4 shrink-0">
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <Database className="h-3.5 w-3.5" /> Suggestions
-              </div>
-              <div className="mt-1 text-2xl font-bold text-white">{totalUpdates}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <CheckCircle2 className="h-3.5 w-3.5" /> Recorded
-              </div>
-              <div className="mt-1 text-2xl font-bold text-white">{recordedCount}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <AlertCircle className="h-3.5 w-3.5" /> Needs Review
-              </div>
-              <div className="mt-1 text-2xl font-bold text-white">{needsReviewCount}</div>
-            </div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
-                <BrainCircuit className="h-3.5 w-3.5" /> Record Types
-              </div>
-              <div className="mt-1 text-2xl font-bold text-white">{RECORD_TYPES.length}</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="relative mt-6">
+      <PageHeader
+        icon={BrainCircuit}
+        eyebrow="Institutional Memory"
+        title="RoseOS"
+        subtitle="The company's brain — a reviewed system of record for decisions, projects, and SOPs. Ask it what's on file, or file a suggestion. Nothing is recorded until a human signs off."
+        action={
           <Button onClick={handleCreate} className="bg-white text-slate-900 hover:bg-blue-50">
             <Plus className="w-4 h-4 mr-2" />
             New Suggestion
           </Button>
-        </div>
-      </div>
+        }
+        statsClassName="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4 shrink-0"
+        stats={[
+          { label: "Suggestions", value: totalUpdates, icon: Database },
+          { label: "Recorded", value: recordedCount, icon: CheckCircle2 },
+          { label: "Needs Review", value: needsReviewCount, icon: AlertCircle },
+          { label: "Record Types", value: RECORD_TYPES.length, icon: BrainCircuit },
+        ]}
+      />
 
       <Alert className="bg-primary/5 border-primary/20 text-foreground">
         <ShieldAlert className="h-4 w-4 text-primary" />
@@ -209,16 +172,11 @@ export default function CompanyBrain() {
 
       <RoseOSBrainChat />
 
-      <div className="flex flex-col sm:flex-row items-center gap-4 bg-card p-4 rounded-lg border shadow-sm">
-        <div className="relative flex-1 w-full">
-          <FileSearch className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search updates..." 
-            className="pl-9"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
+      <Toolbar
+        searchValue={searchQuery}
+        onSearchChange={setSearchQuery}
+        searchPlaceholder="Search updates..."
+      >
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="w-full sm:w-[200px]">
             <SelectValue placeholder="Filter by status" />
@@ -228,14 +186,11 @@ export default function CompanyBrain() {
             {STATUSES.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
           </SelectContent>
         </Select>
-      </div>
+      </Toolbar>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredUpdates.length === 0 ? (
-          <div className="col-span-full text-center p-12 border border-dashed rounded-lg text-muted-foreground bg-muted/10">
-            <BrainCircuit className="w-12 h-12 mx-auto mb-4 opacity-50" />
-            <p>No brain updates found. Create a new suggestion.</p>
-          </div>
+          <EmptyState icon={BrainCircuit} description="No brain updates found. Create a new suggestion." />
         ) : (
           filteredUpdates.map(update => {
             const req = data.requests.find(r => r.id === update.relatedResearchId);
@@ -351,20 +306,12 @@ export default function CompanyBrain() {
         </DialogContent>
       </Dialog>
 
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will permanently delete this update suggestion. This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Delete</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmDeleteDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        onConfirm={handleConfirmDelete}
+        description="This will permanently delete this update suggestion. This action cannot be undone."
+      />
 
     </div>
   );
