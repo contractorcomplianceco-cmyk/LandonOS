@@ -6,8 +6,22 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Compass, CheckCircle2, Circle, Clock, AlertTriangle, ArrowRight } from "lucide-react";
+import { Compass, CheckCircle2, Circle, Clock, AlertTriangle, ArrowRight, ListChecks } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+const STEP_BORDER: Record<Status, string> = {
+  "Complete": "border-l-emerald-500 bg-emerald-500/5",
+  "In Progress": "border-l-blue-500 bg-blue-500/5",
+  "Needs Help": "border-l-rose-500 bg-rose-500/5",
+  "Not Started": "border-l-slate-300 bg-card",
+};
+
+const STEP_CHIP: Record<Status, string> = {
+  "Complete": "bg-emerald-500 text-white shadow-sm shadow-emerald-500/30",
+  "In Progress": "bg-blue-500 text-white shadow-sm shadow-blue-500/30",
+  "Needs Help": "bg-rose-500 text-white shadow-sm shadow-rose-500/30",
+  "Not Started": "bg-slate-100 text-slate-500",
+};
 
 export default function ResearchGPS() {
   const { data, updateData } = useStore();
@@ -17,19 +31,10 @@ export default function ResearchGPS() {
 
   const getStatusIcon = (status: Status) => {
     switch (status) {
-      case "Complete": return <CheckCircle2 className="w-5 h-5 text-green-500" />;
-      case "In Progress": return <Clock className="w-5 h-5 text-primary" />;
-      case "Needs Help": return <AlertTriangle className="w-5 h-5 text-destructive" />;
+      case "Complete": return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
+      case "In Progress": return <Clock className="w-5 h-5 text-blue-500" />;
+      case "Needs Help": return <AlertTriangle className="w-5 h-5 text-rose-500" />;
       default: return <Circle className="w-5 h-5 text-muted-foreground/30" />;
-    }
-  };
-
-  const getStatusColor = (status: Status) => {
-    switch (status) {
-      case "Complete": return "border-green-500/50 bg-green-500/10";
-      case "In Progress": return "border-primary/50 bg-primary/10";
-      case "Needs Help": return "border-destructive/50 bg-destructive/10";
-      default: return "border-border bg-card";
     }
   };
 
@@ -128,6 +133,33 @@ export default function ResearchGPS() {
         </div>
       ) : (
         <div className="space-y-8 animate-in fade-in duration-300">
+          {(() => {
+            const completedCount = GPS_STEPS.filter(s => activeRequest.gpsSteps[s] === "Complete").length;
+            const pct = calculateProgress(activeRequest);
+            return (
+              <Card className="border-t-4 border-t-emerald-500 bg-gradient-to-br from-emerald-500/10 to-transparent">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-md bg-emerald-500 text-white shadow-sm shadow-emerald-500/30">
+                      <ListChecks className="w-4 h-4" />
+                    </span>
+                    Mission Progress
+                  </CardTitle>
+                  <CardDescription>How far this research has moved through the 10-step path</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-end justify-between">
+                    <div className="text-3xl font-bold tabular-nums text-emerald-700">
+                      {completedCount} <span className="text-base font-medium text-muted-foreground">of {GPS_STEPS.length} complete</span>
+                    </div>
+                    <div className="text-sm font-semibold tabular-nums text-emerald-700">{pct}%</div>
+                  </div>
+                  <Progress value={pct} className="h-2" />
+                </CardContent>
+              </Card>
+            );
+          })()}
+
           <Card className="relative overflow-hidden border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 text-white shadow-lg">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.25),transparent_55%)]" />
             <CardContent className="relative p-6 flex flex-col md:flex-row items-center gap-6">
@@ -156,9 +188,9 @@ export default function ResearchGPS() {
               {GPS_STEPS.map((step, index) => {
                 const currentStatus = activeRequest.gpsSteps[step] || "Not Started";
                 return (
-                  <Card key={step} className={cn("transition-colors duration-200", getStatusColor(currentStatus))}>
+                  <Card key={step} className={cn("border-l-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md", STEP_BORDER[currentStatus])}>
                     <div className="flex items-center p-4">
-                      <div className="hidden sm:flex shrink-0 w-8 h-8 rounded-full bg-background border items-center justify-center mr-4 z-10 font-mono text-xs text-muted-foreground">
+                      <div className={cn("hidden sm:flex shrink-0 w-8 h-8 rounded-full items-center justify-center mr-4 z-10 font-mono text-xs font-semibold", STEP_CHIP[currentStatus])}>
                         {index + 1}
                       </div>
                       

@@ -8,14 +8,36 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { Lightbulb, Plus, Trash2, Edit, ArrowRight, Filter, Target } from "lucide-react";
+import { Lightbulb, Plus, Trash2, Edit, ArrowRight, Filter, Target, TrendingUp, AlertTriangle, Repeat, type LucideIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Idea, IdeaCategory, ConvertToType } from "@/lib/types";
 import { GPS_STEPS } from "@/lib/default-data";
+import { StatCard, type Accent } from "@/components/stat-card";
+import { cn } from "@/lib/utils";
 
 const IDEA_CATEGORIES: IdeaCategory[] = [
   "Opportunity", "Risk", "Automation", "Sales Support", "Compliance Support", "Client Support", "Internal Process"
 ];
+
+const CATEGORY_BORDER_L: Record<IdeaCategory, string> = {
+  "Opportunity": "border-l-emerald-500",
+  "Risk": "border-l-rose-500",
+  "Automation": "border-l-teal-500",
+  "Sales Support": "border-l-blue-500",
+  "Compliance Support": "border-l-indigo-500",
+  "Client Support": "border-l-sky-500",
+  "Internal Process": "border-l-slate-400",
+};
+
+const CATEGORY_BADGE: Record<IdeaCategory, string> = {
+  "Opportunity": "bg-emerald-500/10 text-emerald-700 border-emerald-500/30",
+  "Risk": "bg-rose-500/10 text-rose-700 border-rose-500/30",
+  "Automation": "bg-teal-500/10 text-teal-700 border-teal-500/30",
+  "Sales Support": "bg-blue-500/10 text-blue-700 border-blue-500/30",
+  "Compliance Support": "bg-indigo-500/10 text-indigo-700 border-indigo-500/30",
+  "Client Support": "bg-sky-500/10 text-sky-700 border-sky-500/30",
+  "Internal Process": "bg-slate-500/10 text-slate-700 border-slate-500/30",
+};
 
 const CONVERT_OPTIONS: ConvertToType[] = [
   "Research Request", "Automation Idea", "Leadership Question", "Company Brain Update Suggestion"
@@ -166,14 +188,14 @@ export default function BrainstormingStudio() {
     }
   };
 
-  const getCategoryColor = (category: string) => {
-    switch(category) {
-      case "Risk": return "bg-red-100 text-red-800 border-red-200";
-      case "Opportunity": return "bg-green-100 text-green-800 border-green-200";
-      case "Automation": return "bg-purple-100 text-purple-800 border-purple-200";
-      default: return "bg-blue-100 text-blue-800 border-blue-200";
-    }
-  };
+  const getCategoryColor = (category: IdeaCategory) => CATEGORY_BADGE[category];
+
+  const ideaStats: { label: string; value: number; icon: LucideIcon; color: Accent }[] = [
+    { label: "Total Ideas", value: totalIdeas, icon: Lightbulb, color: "blue" },
+    { label: "Opportunities", value: opportunityCount, icon: TrendingUp, color: "emerald" },
+    { label: "Risks", value: riskCount, icon: AlertTriangle, color: "rose" },
+    { label: "Converted", value: convertedCount, icon: Repeat, color: "indigo" },
+  ];
 
   return (
     <div className="space-y-8">
@@ -216,6 +238,13 @@ export default function BrainstormingStudio() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Metrics strip — idea counts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {ideaStats.map((s) => (
+          <StatCard key={s.label} label={s.label} value={s.value} icon={s.icon} color={s.color} />
+        ))}
       </div>
 
       <div className="space-y-4">
@@ -271,7 +300,14 @@ export default function BrainstormingStudio() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredIdeas.map(idea => (
-              <Card key={idea.id} className={`flex flex-col relative overflow-hidden ${idea.convertTo ? 'opacity-70 grayscale-[30%]' : ''}`}>
+              <Card
+                key={idea.id}
+                className={cn(
+                  "flex flex-col relative overflow-hidden border-l-4 transition-all hover:-translate-y-0.5 hover:shadow-lg",
+                  CATEGORY_BORDER_L[idea.category],
+                  idea.convertTo ? "opacity-70 grayscale-[30%]" : ""
+                )}
+              >
                 {idea.convertTo && (
                   <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-[10px] px-2 py-1 rounded-bl-md font-medium shadow-sm z-10">
                     Converted: {idea.convertTo}
@@ -281,7 +317,7 @@ export default function BrainstormingStudio() {
                   <div className="flex justify-between items-start gap-4">
                     <CardTitle className="text-base font-semibold leading-tight">{idea.title}</CardTitle>
                   </div>
-                  <Badge variant="outline" className={`w-fit mt-2 ${getCategoryColor(idea.category)}`}>
+                  <Badge variant="outline" className={cn("w-fit mt-2 border", getCategoryColor(idea.category))}>
                     {idea.category}
                   </Badge>
                 </CardHeader>

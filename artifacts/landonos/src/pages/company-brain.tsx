@@ -12,6 +12,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { BrainCircuit, Plus, ShieldAlert, FileSearch, Trash2, Edit2, Database, CheckCircle2, AlertCircle } from "lucide-react";
+import { StatCard } from "@/components/stat-card";
+import { cn } from "@/lib/utils";
 import { RoseOSBrainChat } from "@/components/roseos-brain-chat";
 import {
   AlertDialog,
@@ -126,16 +128,16 @@ export default function CompanyBrain() {
     setDeletingId(null);
   };
 
-  const getStatusBadgeVariant = (status: CompanyBrainUpdateStatus) => {
-    switch (status) {
-      case 'Recorded': return 'default';
-      case 'Approved to Record': return 'secondary';
-      case 'Needs Review': return 'destructive';
-      case 'Suggested': return 'outline';
-      case 'Archived': return 'secondary';
-      default: return 'outline';
-    }
+  const STATUS_STYLE: Record<CompanyBrainUpdateStatus, { border: string; badge: string }> = {
+    "Recorded": { border: "border-l-emerald-500", badge: "bg-emerald-500/10 text-emerald-700 border-emerald-500/30" },
+    "Approved to Record": { border: "border-l-emerald-500", badge: "bg-emerald-500/10 text-emerald-700 border-emerald-500/30" },
+    "Needs Review": { border: "border-l-rose-500", badge: "bg-rose-500/10 text-rose-700 border-rose-500/30" },
+    "Suggested": { border: "border-l-blue-500", badge: "bg-blue-500/10 text-blue-700 border-blue-500/30" },
+    "Archived": { border: "border-l-slate-400", badge: "bg-slate-500/10 text-slate-700 border-slate-400/40" },
   };
+
+  const getStatusStyle = (status: CompanyBrainUpdateStatus) =>
+    STATUS_STYLE[status] ?? { border: "border-l-slate-400", badge: "bg-slate-500/10 text-slate-700 border-slate-400/40" };
 
   return (
     <div className="space-y-6">
@@ -198,6 +200,13 @@ export default function CompanyBrain() {
         </AlertDescription>
       </Alert>
 
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard label="Suggestions" value={totalUpdates} icon={Database} color="blue" hint="Total on file" />
+        <StatCard label="Recorded" value={recordedCount} icon={CheckCircle2} color="emerald" hint="Signed off by a human" />
+        <StatCard label="Needs Review" value={needsReviewCount} icon={AlertCircle} color="rose" hint="Awaiting a reviewer" />
+        <StatCard label="Record Types" value={RECORD_TYPES.length} icon={BrainCircuit} color="indigo" hint="System of record" />
+      </div>
+
       <RoseOSBrainChat />
 
       <div className="flex flex-col sm:flex-row items-center gap-4 bg-card p-4 rounded-lg border shadow-sm">
@@ -230,12 +239,19 @@ export default function CompanyBrain() {
         ) : (
           filteredUpdates.map(update => {
             const req = data.requests.find(r => r.id === update.relatedResearchId);
+            const style = getStatusStyle(update.status);
             return (
-              <Card key={update.id} className="flex flex-col">
+              <Card
+                key={update.id}
+                className={cn(
+                  "flex flex-col border-l-4 transition-all hover:-translate-y-0.5 hover:shadow-lg",
+                  style.border
+                )}
+              >
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start mb-2">
                     <Badge variant="secondary" className="bg-muted text-muted-foreground">{update.recommendedRecord}</Badge>
-                    <Badge variant={getStatusBadgeVariant(update.status)}>{update.status}</Badge>
+                    <Badge variant="outline" className={style.badge}>{update.status}</Badge>
                   </div>
                   <CardTitle className="text-lg">{update.title}</CardTitle>
                   <CardDescription>From: {req?.title || 'No related request'}</CardDescription>

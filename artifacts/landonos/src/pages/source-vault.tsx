@@ -11,7 +11,9 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle, Plus, Database, ExternalLink, ShieldCheck, ShieldAlert, FileSearch } from "lucide-react";
+import { AlertTriangle, Plus, Database, ExternalLink, ShieldCheck, ShieldAlert, FileSearch, HelpCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { StatCard, ACCENT, type Accent } from "@/components/stat-card";
 
 const SOURCE_TYPES: SourceType[] = [
   'Official Source', 
@@ -91,10 +93,16 @@ export default function SourceVault() {
     setIsDialogOpen(false);
   };
 
+  const sourceAccent = (type: SourceType): Accent => {
+    if (type === 'Official Source') return 'emerald';
+    if (type === 'AI Draft') return 'rose';
+    if (type === 'Unknown') return 'slate';
+    return 'blue';
+  };
+
   const getSourceStyle = (type: SourceType) => {
-    if (type === 'Official Source') return 'bg-green-500/10 text-green-700 border-green-500/20';
-    if (type === 'AI Draft' || type === 'Unknown') return 'bg-destructive/10 text-destructive border-destructive/20';
-    return 'bg-muted text-muted-foreground border-border';
+    const c = ACCENT[sourceAccent(type)];
+    return cn(c.soft, c.text);
   };
 
   // Find risky research requests (only AI Draft/Unknown sources attached)
@@ -120,6 +128,13 @@ export default function SourceVault() {
       value: data.sources.filter((s) => s.type === "AI Draft" || s.type === "Unknown").length,
       icon: ShieldAlert,
     },
+  ];
+
+  const sourceMetrics: { label: string; value: number; icon: typeof Database; color: Accent }[] = [
+    { label: "Total Sources", value: data.sources.length, icon: Database, color: "blue" },
+    { label: "Official", value: data.sources.filter((s) => s.type === "Official Source").length, icon: ShieldCheck, color: "emerald" },
+    { label: "AI Drafts", value: data.sources.filter((s) => s.type === "AI Draft").length, icon: ShieldAlert, color: "rose" },
+    { label: "Unknown", value: data.sources.filter((s) => s.type === "Unknown").length, icon: HelpCircle, color: "slate" },
   ];
 
   return (
@@ -165,6 +180,13 @@ export default function SourceVault() {
         </div>
       </div>
 
+      {/* Source metrics strip */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {sourceMetrics.map((m) => (
+          <StatCard key={m.label} label={m.label} value={m.value} icon={m.icon} color={m.color} />
+        ))}
+      </div>
+
       {risksWarning(riskyResearchIds, data.requests)}
 
       <div className="flex flex-col sm:flex-row items-center gap-4 bg-card p-4 rounded-lg border shadow-sm">
@@ -199,9 +221,17 @@ export default function SourceVault() {
             const req = data.requests.find(r => r.id === source.relatedResearchId);
             const isOfficial = source.type === 'Official Source';
             const isRisky = source.type === 'AI Draft' || source.type === 'Unknown';
-            
+            const accent = ACCENT[sourceAccent(source.type)];
+
             return (
-              <Card key={source.id} className={`flex flex-col hover:border-primary/50 transition-colors ${isOfficial ? 'border-green-500/30' : ''} ${isRisky ? 'border-destructive/30' : ''}`}>
+              <Card
+                key={source.id}
+                className={cn(
+                  "flex flex-col border-t-4 bg-gradient-to-br transition-all hover:-translate-y-0.5 hover:shadow-lg",
+                  accent.borderT,
+                  accent.grad
+                )}
+              >
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start mb-2">
                     <Badge variant="outline" className={getSourceStyle(source.type)}>

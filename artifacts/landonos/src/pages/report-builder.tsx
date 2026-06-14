@@ -11,8 +11,10 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle, Plus, FileText, CheckCircle2, ClipboardCopy, Search, Trash2, ShieldAlert } from "lucide-react";
+import { AlertTriangle, Plus, FileText, CheckCircle2, ClipboardCopy, Search, Trash2, ShieldAlert, Files, FileClock } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { cn } from "@/lib/utils";
+import { StatCard, ACCENT, type Accent } from "@/components/stat-card";
 
 const REPORT_STATUSES: ReportStatus[] = ['Draft', 'Needs Sources', 'Ready for Review', 'Needs More Research', 'Reviewed', 'Approved', 'Archived'];
 
@@ -216,11 +218,11 @@ ${report.sourcesReviewed.map(id => {
             {report.sourceBackedFacts && (<div><h3 className="font-semibold text-primary mb-1 uppercase text-xs">Source-Backed Facts</h3><p className="whitespace-pre-wrap">{report.sourceBackedFacts}</p></div>)}
             
             <div className="grid grid-cols-2 gap-4">
-              {report.risks && (<div><h3 className="font-semibold text-destructive mb-1 uppercase text-xs">Risks</h3><p className="whitespace-pre-wrap">{report.risks}</p></div>)}
-              {report.opportunities && (<div><h3 className="font-semibold text-green-600 mb-1 uppercase text-xs">Opportunities</h3><p className="whitespace-pre-wrap">{report.opportunities}</p></div>)}
+              {report.risks && (<div><h3 className="font-semibold text-rose-600 mb-1 uppercase text-xs">Risks</h3><p className="whitespace-pre-wrap">{report.risks}</p></div>)}
+              {report.opportunities && (<div><h3 className="font-semibold text-emerald-600 mb-1 uppercase text-xs">Opportunities</h3><p className="whitespace-pre-wrap">{report.opportunities}</p></div>)}
             </div>
 
-            {report.unknowns && (<div><h3 className="font-semibold text-yellow-600 mb-1 uppercase text-xs">Unknowns</h3><p className="whitespace-pre-wrap">{report.unknowns}</p></div>)}
+            {report.unknowns && (<div><h3 className="font-semibold text-rose-600 mb-1 uppercase text-xs">Unknowns</h3><p className="whitespace-pre-wrap">{report.unknowns}</p></div>)}
             {report.recommendation && (<div><h3 className="font-semibold text-primary mb-1 uppercase text-xs">Recommendation</h3><p className="whitespace-pre-wrap font-medium">{report.recommendation}</p></div>)}
             {report.nextSteps && (<div><h3 className="font-semibold text-primary mb-1 uppercase text-xs">Next Steps</h3><p className="whitespace-pre-wrap">{report.nextSteps}</p></div>)}
             
@@ -282,6 +284,19 @@ ${report.sourcesReviewed.map(id => {
     }
   };
 
+  const readinessAccent = (score: number): Accent => {
+    if (score >= 80) return "emerald";
+    if (score >= 50) return "blue";
+    return "rose";
+  };
+
+  const reportMetrics: { label: string; value: number; icon: typeof FileText; color: Accent }[] = [
+    { label: "Total Reports", value: nonArchivedReports.length, icon: Files, color: "blue" },
+    { label: "Drafts", value: nonArchivedReports.filter((r) => r.status === "Draft").length, icon: FileClock, color: "slate" },
+    { label: "Needs Sources", value: nonArchivedReports.filter((r) => r.status === "Needs Sources" || r.status === "Needs More Research").length, icon: ShieldAlert, color: "rose" },
+    { label: "Approved", value: nonArchivedReports.filter((r) => r.status === "Approved").length, icon: CheckCircle2, color: "emerald" },
+  ];
+
   return (
     <div className="space-y-6">
       {/* Executive hero banner */}
@@ -325,6 +340,20 @@ ${report.sourcesReviewed.map(id => {
         </div>
       </div>
 
+      {/* Report metrics strip */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {reportMetrics.map((m) => (
+          <StatCard key={m.label} label={m.label} value={m.value} icon={m.icon} color={m.color} />
+        ))}
+      </div>
+
+      <div className="flex items-center gap-2">
+        <span className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-500 text-white shadow-sm shadow-blue-500/30">
+          <FileText className="w-4 h-4" />
+        </span>
+        <h2 className="text-lg font-semibold tracking-tight">Active Reports</h2>
+      </div>
+
       <div className="flex items-center space-x-2">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -347,9 +376,10 @@ ${report.sourcesReviewed.map(id => {
           activeReports.map(report => {
             const readiness = calculateReadiness(report);
             const warnings = getWarnings(report);
-            
+            const rAccent = ACCENT[readinessAccent(readiness)];
+
             return (
-              <Card key={report.id} className={`border-l-4 ${statusAccent(report.status)} hover:border-primary/50 transition-colors`}>
+              <Card key={report.id} className={cn("border-l-4 transition-all hover:-translate-y-0.5 hover:shadow-lg", statusAccent(report.status))}>
                 <CardContent className="p-6 flex flex-col md:flex-row gap-6">
                   <div className="flex-1 space-y-4">
                     <div className="flex items-start justify-between">
@@ -363,7 +393,7 @@ ${report.sourcesReviewed.map(id => {
                     {warnings.length > 0 && (
                       <div className="flex flex-wrap gap-2">
                         {warnings.map(w => (
-                          <Badge key={w} variant="secondary" className="bg-destructive/10 text-destructive border-destructive/20 text-xs">
+                          <Badge key={w} variant="outline" className="bg-rose-500/10 text-rose-600 border-rose-500/20 text-xs">
                             <ShieldAlert className="w-3 h-3 mr-1" />
                             {w}
                           </Badge>
@@ -374,14 +404,16 @@ ${report.sourcesReviewed.map(id => {
                   
                   <div className="md:w-64 flex flex-col items-end justify-between border-l pl-6">
                     <div className="w-full mb-4">
-                      <div className="flex justify-between text-xs mb-1">
+                      <div className="flex items-center justify-between text-xs mb-2">
                         <span className="font-medium text-muted-foreground">Readiness Score</span>
-                        <span className={readiness > 80 ? "text-green-600 font-bold" : "font-bold"}>{readiness}/100</span>
+                        <span className={cn("inline-flex items-center rounded-md px-2 py-0.5 text-sm font-bold tabular-nums", rAccent.soft, rAccent.value)}>
+                          {readiness}/100
+                        </span>
                       </div>
-                      <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                        <div 
-                          className={`h-full ${readiness > 80 ? 'bg-green-500' : readiness > 50 ? 'bg-yellow-500' : 'bg-destructive'}`} 
-                          style={{ width: `${readiness}%` }} 
+                      <div className="h-2.5 w-full bg-muted rounded-full overflow-hidden">
+                        <div
+                          className={cn("h-full rounded-full transition-all", rAccent.iconSolid)}
+                          style={{ width: `${readiness}%` }}
                         />
                       </div>
                     </div>

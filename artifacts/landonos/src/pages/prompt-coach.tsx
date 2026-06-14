@@ -8,8 +8,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { generatePromptImprovement } from "@/lib/prompt-coach-templates";
-import { Sparkles, Target, Database, FileText, CheckCircle2, ShieldAlert, ArrowRight, AlertTriangle } from "lucide-react";
+import { Sparkles, Target, Database, FileText, CheckCircle2, ShieldAlert, AlertTriangle, ListChecks } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
+const QUALITY_CHECKLIST: { title: string; detail: string }[] = [
+  { title: "Define the role", detail: "Tell the AI who it is (e.g. compliance analyst) so tone and rigor match the task." },
+  { title: "Give context", detail: "State the decision the research supports and what is already known." },
+  { title: "Set constraints", detail: "Spell out what must not be assumed and any scope limits." },
+  { title: "Require sources", detail: "Demand citations to official, verifiable sources for every claim." },
+  { title: "Specify output format", detail: "Ask for the exact structure — executive summary, table, or outline." },
+];
 
 export default function PromptCoach() {
   const { data } = useStore();
@@ -176,16 +184,41 @@ export default function PromptCoach() {
             </Button>
             </div>
           </div>
+
+          <Card className="border-l-4 border-l-indigo-500 bg-gradient-to-r from-indigo-500/10 to-transparent">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-indigo-500 text-white shadow-sm shadow-indigo-500/30">
+                  <ListChecks className="w-4 h-4" />
+                </span>
+                Prompt Quality Checklist
+              </CardTitle>
+              <CardDescription>What a strong, source-disciplined prompt always includes</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2.5">
+              {QUALITY_CHECKLIST.map((item) => (
+                <div key={item.title} className="flex items-start gap-2.5">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                  <div>
+                    <div className="text-sm font-semibold text-foreground">{item.title}</div>
+                    <div className="text-xs text-muted-foreground">{item.detail}</div>
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
         </div>
 
         <div className="lg:col-span-7">
           {result ? (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
-              <Card className="border-primary/50 shadow-md">
-                <CardHeader className="bg-primary/5 border-b border-primary/10 pb-4">
+              <Card className="border-t-4 border-t-indigo-500 shadow-md">
+                <CardHeader className="bg-indigo-500/5 border-b border-indigo-500/10 pb-4">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-primary flex items-center">
-                      <Sparkles className="w-5 h-5 mr-2" />
+                    <CardTitle className="flex items-center gap-2">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-md bg-indigo-500 text-white shadow-sm shadow-indigo-500/30">
+                        <Sparkles className="w-4 h-4" />
+                      </span>
                       Optimized Prompt
                     </CardTitle>
                     <Button size="sm" variant="outline" onClick={copyToClipboard}>Copy</Button>
@@ -198,7 +231,7 @@ export default function PromptCoach() {
                 </CardContent>
                 <CardFooter className="bg-muted/50 border-t flex flex-col items-start gap-2">
                   <div className="flex items-center text-sm font-semibold text-foreground">
-                    <CheckCircle2 className="w-4 h-4 mr-2 text-green-500" />
+                    <CheckCircle2 className="w-4 h-4 mr-2 text-emerald-500" />
                     Why this is better:
                   </div>
                   <p className="text-sm text-muted-foreground">{result.why}</p>

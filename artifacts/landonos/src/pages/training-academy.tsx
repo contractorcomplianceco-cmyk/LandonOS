@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { levelForPoints } from "@/lib/rewards";
+import { StatCard } from "@/components/stat-card";
+import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { GraduationCap, CheckCircle2, Circle, ArrowRight, PlayCircle } from "lucide-react";
+import { GraduationCap, CheckCircle2, Circle, PlayCircle, BookOpen, Star, ListChecks } from "lucide-react";
 import { TrainingLesson } from "@/lib/types";
 
 export default function TrainingAcademy() {
@@ -122,34 +124,62 @@ export default function TrainingAcademy() {
         </div>
       </div>
       
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex justify-between text-sm mb-2">
-            <span className="font-medium">Overall Progress</span>
-            <span>{completedLessons} of {allLessons.length} lessons completed</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard label="Tracks" value={tracks.length} icon={BookOpen} color="blue" />
+        <StatCard label="Total Lessons" value={allLessons.length} icon={GraduationCap} color="sky" />
+        <StatCard label="Lessons Completed" value={completedLessons} icon={CheckCircle2} color="emerald" />
+        <StatCard label="Points Earned" value={data.rewardState.points} icon={Star} color="indigo" />
+      </div>
+
+      <Card className="border-t-4 border-t-emerald-500 bg-gradient-to-br from-emerald-500/10 to-transparent">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <span className="flex h-8 w-8 items-center justify-center rounded-md bg-emerald-500 text-white shadow-sm shadow-emerald-500/30">
+              <ListChecks className="w-4 h-4" />
+            </span>
+            Overall Progress
+          </CardTitle>
+          <CardDescription>{completedLessons} of {allLessons.length} lessons completed</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <div className="flex justify-between text-sm">
+            <span className="font-medium">Curriculum completion</span>
+            <span className="font-semibold tabular-nums text-emerald-700">{progressPercent}%</span>
           </div>
           <Progress value={progressPercent} className="h-3" />
         </CardContent>
       </Card>
       
       <div className="space-y-8">
-        {tracks.map(track => (
+        {tracks.map(track => {
+          const trackTotal = track.lessons.length;
+          const trackDone = track.lessons.filter(l => l.completed).length;
+          const trackPercent = trackTotal > 0 ? Math.round((trackDone / trackTotal) * 100) : 0;
+          return (
           <div key={track.id} className="space-y-4">
-            <h2 className="text-xl font-bold flex items-center border-b pb-2">
-              <GraduationCap className="w-5 h-5 mr-2 text-primary" />
-              {track.title}
-            </h2>
+            <div className="border-b pb-3 space-y-2">
+              <div className="flex items-center justify-between gap-3">
+                <h2 className="text-xl font-bold flex items-center gap-2">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-500 text-white shadow-sm shadow-blue-500/30">
+                    <GraduationCap className="w-4 h-4" />
+                  </span>
+                  {track.title}
+                </h2>
+                <span className="text-sm font-semibold tabular-nums text-blue-700 shrink-0">{trackDone}/{trackTotal}</span>
+              </div>
+              <Progress value={trackPercent} className="h-2" />
+            </div>
             
             <div className="grid grid-cols-1 gap-4">
               {track.lessons.map(lesson => (
-                <Card key={lesson.id} className={`overflow-hidden transition-colors ${lesson.completed ? 'border-primary/30 bg-primary/5' : ''}`}>
+                <Card key={lesson.id} className={cn("overflow-hidden border-l-4 transition-all hover:-translate-y-0.5 hover:shadow-md", lesson.completed ? "border-l-emerald-500 bg-emerald-500/5" : "border-l-slate-300")}>
                   <div className="flex flex-col md:flex-row">
                     <div className="p-6 flex-1 space-y-4">
                       <div className="flex justify-between items-start">
                         <div>
                           <h3 className="text-lg font-semibold flex items-center">
                             {lesson.completed ? (
-                              <CheckCircle2 className="w-5 h-5 mr-2 text-primary" />
+                              <CheckCircle2 className="w-5 h-5 mr-2 text-emerald-500" />
                             ) : (
                               <Circle className="w-5 h-5 mr-2 text-muted-foreground" />
                             )}
@@ -200,7 +230,8 @@ export default function TrainingAcademy() {
               ))}
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

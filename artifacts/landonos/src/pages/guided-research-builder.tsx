@@ -14,7 +14,8 @@ import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Target, Search, Plus, Trash2, Edit2, Play, Archive, AlertTriangle, ClipboardList, Clock, ShieldAlert } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { Target, Search, Plus, Trash2, Edit2, Play, Archive, ClipboardList, Clock, ShieldAlert, Sparkles } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function GuidedResearchBuilder() {
@@ -183,6 +184,21 @@ export default function GuidedResearchBuilder() {
       icon: ShieldAlert,
     },
   ];
+
+  const builderFields = [
+    formData.title,
+    formData.requester,
+    formData.reviewer,
+    formData.dueDate,
+    formData.whatTryingToFindOut,
+    formData.decisionSupported,
+    formData.whatWeKnow,
+    formData.requiredSources,
+    formData.whatNotToAssume,
+    formData.completionCriteria,
+  ];
+  const builderFilled = builderFields.filter((f) => f && String(f).trim()).length;
+  const builderCompleteness = Math.round((builderFilled / builderFields.length) * 100);
 
   const priorityAccent = (priority: Priority) =>
     priority === "Executive" || priority === "High"
@@ -371,6 +387,15 @@ export default function GuidedResearchBuilder() {
                 </div>
               </CardHeader>
               <CardContent>
+                <div className="mb-4 space-y-1.5 rounded-lg border bg-blue-500/5 p-3">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-medium text-muted-foreground">Intake completeness</span>
+                    <span className="font-semibold tabular-nums text-blue-700">
+                      {builderFilled} of {builderFields.length} fields
+                    </span>
+                  </div>
+                  <Progress value={builderCompleteness} />
+                </div>
                 <form id="builder-form" onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="title">Research Title *</Label>
@@ -466,13 +491,19 @@ export default function GuidedResearchBuilder() {
             <div className="space-y-6">
               {generatedOutput ? (
                 <>
-                  <div className="bg-primary/10 border border-primary/20 p-4 rounded-lg flex items-start gap-3">
-                    <AlertTriangle className="text-primary h-5 w-5 shrink-0 mt-0.5" />
-                    <div className="text-sm">
-                      <p className="font-semibold text-primary">Initial Output Generated</p>
-                      <p className="text-muted-foreground mt-1">Review the suggested approach below. AI output is draft only until source-checked and human-reviewed.</p>
-                    </div>
-                  </div>
+                  <Card className="border-t-4 border-t-indigo-500 bg-gradient-to-br from-indigo-500/10 to-transparent">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center gap-2 text-base">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-md bg-indigo-500 text-white shadow-sm shadow-indigo-500/30">
+                          <Sparkles className="w-4 h-4" />
+                        </span>
+                        Initial Output Generated
+                      </CardTitle>
+                      <CardDescription>
+                        Review the suggested approach below. AI output is draft only until source-checked and human-reviewed.
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
 
                   <Accordion type="multiple" defaultValue={["plan", "prompt"]} className="w-full">
                     <AccordionItem value="plan">

@@ -9,13 +9,35 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogT
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Send, Plus, Trash2, Edit, Copy, AlertTriangle, FileText, CheckCircle2 } from "lucide-react";
+import { Send, Plus, Trash2, Edit, Copy, AlertTriangle, FileText, CheckCircle2, Clock, type LucideIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Handoff, HandoffStatus } from "@/lib/types";
+import { StatCard, type Accent } from "@/components/stat-card";
+import { cn } from "@/lib/utils";
 
 const HANDOFF_STATUSES: HandoffStatus[] = [
   "Draft", "Ready for Rose", "Ready for Carmen", "Ready for Gregg", "Needs More Research", "Approved", "Archived"
 ];
+
+const STATUS_BORDER_T: Record<HandoffStatus, string> = {
+  "Draft": "border-t-slate-400",
+  "Ready for Rose": "border-t-sky-500",
+  "Ready for Carmen": "border-t-sky-500",
+  "Ready for Gregg": "border-t-sky-500",
+  "Needs More Research": "border-t-rose-500",
+  "Approved": "border-t-emerald-500",
+  "Archived": "border-t-slate-400",
+};
+
+const STATUS_BADGE: Record<HandoffStatus, string> = {
+  "Draft": "bg-slate-500/10 text-slate-700 border-slate-500/30",
+  "Ready for Rose": "bg-sky-500/10 text-sky-700 border-sky-500/30",
+  "Ready for Carmen": "bg-sky-500/10 text-sky-700 border-sky-500/30",
+  "Ready for Gregg": "bg-sky-500/10 text-sky-700 border-sky-500/30",
+  "Needs More Research": "bg-rose-500/10 text-rose-700 border-rose-500/30",
+  "Approved": "bg-emerald-500/10 text-emerald-700 border-emerald-500/30",
+  "Archived": "bg-slate-500/10 text-slate-700 border-slate-500/30",
+};
 
 export default function HandoffPage() {
   const { data, updateData } = useStore();
@@ -150,14 +172,14 @@ FLAGS:
     toast({ title: "Copied to clipboard", description: "Handoff preview copied to clipboard." });
   };
 
-  const getStatusColor = (status: HandoffStatus) => {
-    switch (status) {
-      case "Approved": return "bg-green-100 text-green-800 border-green-200";
-      case "Draft": return "bg-gray-100 text-gray-800 border-gray-200";
-      case "Needs More Research": return "bg-red-100 text-red-800 border-red-200";
-      default: return "bg-blue-100 text-blue-800 border-blue-200";
-    }
-  };
+  const getStatusColor = (status: HandoffStatus) => STATUS_BADGE[status];
+
+  const handoffStats: { label: string; value: number; icon: LucideIcon; color: Accent }[] = [
+    { label: "Approved", value: data.handoffs.filter((h) => h.status === "Approved").length, icon: CheckCircle2, color: "emerald" },
+    { label: "Ready for Review", value: readyCount, icon: Send, color: "sky" },
+    { label: "Drafts", value: data.handoffs.filter((h) => h.status === "Draft").length, icon: FileText, color: "slate" },
+    { label: "Total", value: data.handoffs.length, icon: Clock, color: "blue" },
+  ];
 
   return (
     <div className="space-y-6">
@@ -202,6 +224,13 @@ FLAGS:
         </div>
       </div>
 
+      {/* Metrics strip — handoffs by status */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {handoffStats.map((s) => (
+          <StatCard key={s.label} label={s.label} value={s.value} icon={s.icon} color={s.color} />
+        ))}
+      </div>
+
       <div className="bg-primary/5 border border-primary/10 p-4 rounded-md flex items-start gap-3">
         <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
         <div className="text-sm">
@@ -220,14 +249,20 @@ FLAGS:
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {activeHandoffs.map(handoff => (
-            <Card key={handoff.id} className="flex flex-col">
+            <Card
+              key={handoff.id}
+              className={cn(
+                "flex flex-col border-t-4 transition-all hover:-translate-y-0.5 hover:shadow-lg",
+                STATUS_BORDER_T[handoff.status]
+              )}
+            >
               <CardHeader className="pb-3 border-b border-border/50">
                 <div className="flex justify-between items-start gap-4">
                   <div>
                     <CardTitle className="text-lg">{handoff.title}</CardTitle>
                     <CardDescription className="mt-1">Reviewer: {handoff.whoReviews || "Unassigned"}</CardDescription>
                   </div>
-                  <Badge variant="outline" className={getStatusColor(handoff.status)}>
+                  <Badge variant="outline" className={cn("border", getStatusColor(handoff.status))}>
                     {handoff.status}
                   </Badge>
                 </div>

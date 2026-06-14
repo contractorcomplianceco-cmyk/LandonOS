@@ -10,7 +10,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { AlertTriangle, Plus, LifeBuoy, Filter, CheckCircle2 } from "lucide-react";
+import { AlertTriangle, Plus, LifeBuoy, Filter, CheckCircle2, Clock, Hourglass, type LucideIcon } from "lucide-react";
+import { StatCard, type Accent } from "@/components/stat-card";
+import { cn } from "@/lib/utils";
 
 const BLOCKER_TYPES = [
   "I don't know where to start",
@@ -27,6 +29,22 @@ const BLOCKER_TYPES = [
 
 const PRIORITIES: Priority[] = ['Low', 'Medium', 'High', 'Executive'];
 const STATUSES: BlockerStatus[] = ['Open', 'In Review', 'Waiting on Landon', 'Resolved', 'Archived'];
+
+const STATUS_BORDER_L: Record<BlockerStatus, string> = {
+  'Open': 'border-l-blue-500',
+  'In Review': 'border-l-sky-500',
+  'Waiting on Landon': 'border-l-indigo-500',
+  'Resolved': 'border-l-emerald-500',
+  'Archived': 'border-l-slate-400',
+};
+
+const STATUS_BADGE: Record<BlockerStatus, string> = {
+  'Open': 'bg-blue-500/10 text-blue-700 border-blue-500/30',
+  'In Review': 'bg-sky-500/10 text-sky-700 border-sky-500/30',
+  'Waiting on Landon': 'bg-indigo-500/10 text-indigo-700 border-indigo-500/30',
+  'Resolved': 'bg-emerald-500/10 text-emerald-700 border-emerald-500/30',
+  'Archived': 'bg-slate-500/10 text-slate-700 border-slate-500/30',
+};
 
 export default function Blocked() {
   const { data, updateData } = useStore();
@@ -97,9 +115,9 @@ export default function Blocked() {
   };
 
   const getUrgencyBadge = (urgency: Priority) => {
-    if (urgency === 'Executive') return <Badge variant="destructive" className="bg-purple-600 hover:bg-purple-700 text-white border-none shadow-sm shadow-purple-900/20">{urgency}</Badge>;
-    if (urgency === 'High') return <Badge variant="destructive">{urgency}</Badge>;
-    if (urgency === 'Medium') return <Badge variant="default" className="bg-yellow-500 hover:bg-yellow-600 text-white border-none">{urgency}</Badge>;
+    if (urgency === 'Executive') return <Badge className="bg-rose-600 hover:bg-rose-700 text-white border-none shadow-sm shadow-rose-900/20">{urgency}</Badge>;
+    if (urgency === 'High') return <Badge className="bg-rose-500 hover:bg-rose-600 text-white border-none">{urgency}</Badge>;
+    if (urgency === 'Medium') return <Badge className="bg-blue-500 hover:bg-blue-600 text-white border-none">{urgency}</Badge>;
     return <Badge variant="secondary">{urgency}</Badge>;
   };
 
@@ -122,6 +140,13 @@ export default function Blocked() {
       value: data.blockers.filter((b) => b.status === "Resolved").length,
       icon: CheckCircle2,
     },
+  ];
+
+  const blockerStats: { label: string; value: number; icon: LucideIcon; color: Accent }[] = [
+    { label: "Open", value: data.blockers.filter((b) => b.status === "Open").length, icon: LifeBuoy, color: "blue" },
+    { label: "In Review", value: data.blockers.filter((b) => b.status === "In Review").length, icon: Clock, color: "sky" },
+    { label: "Waiting on Landon", value: data.blockers.filter((b) => b.status === "Waiting on Landon").length, icon: Hourglass, color: "indigo" },
+    { label: "Resolved", value: data.blockers.filter((b) => b.status === "Resolved").length, icon: CheckCircle2, color: "emerald" },
   ];
 
   return (
@@ -167,6 +192,13 @@ export default function Blocked() {
         </div>
       </div>
 
+      {/* Metrics strip — blockers by status */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {blockerStats.map((s) => (
+          <StatCard key={s.label} label={s.label} value={s.value} icon={s.icon} color={s.color} />
+        ))}
+      </div>
+
       <div className="flex items-center space-x-2 bg-card p-2 rounded-lg border w-fit">
         <Filter className="w-4 h-4 text-muted-foreground ml-2" />
         <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -191,7 +223,13 @@ export default function Blocked() {
           filteredBlockers.map(blocker => {
             const req = data.requests.find(r => r.id === blocker.relatedResearchId);
             return (
-              <Card key={blocker.id} className="border-l-4" style={{ borderLeftColor: blocker.status === 'Resolved' ? 'hsl(var(--muted-foreground))' : 'hsl(var(--destructive))' }}>
+              <Card
+                key={blocker.id}
+                className={cn(
+                  "border-l-4 transition-all hover:-translate-y-0.5 hover:shadow-lg",
+                  STATUS_BORDER_L[blocker.status]
+                )}
+              >
                 <CardContent className="p-6 flex flex-col md:flex-row gap-6">
                   <div className="flex-1 space-y-3">
                     <div className="flex items-start justify-between">
@@ -202,7 +240,7 @@ export default function Blocked() {
                         </div>
                         <p className="text-sm font-medium text-primary">Req: {req?.title || 'General / Unlinked'}</p>
                       </div>
-                      <Badge variant="outline">{blocker.status}</Badge>
+                      <Badge variant="outline" className={cn("border", STATUS_BADGE[blocker.status])}>{blocker.status}</Badge>
                     </div>
                     
                     <div className="text-sm bg-muted/30 p-3 rounded-md border">
@@ -230,7 +268,7 @@ export default function Blocked() {
                     <div className="flex flex-col space-y-2 w-full">
                       <Button variant="outline" size="sm" className="w-full" onClick={() => handleEdit(blocker)}>Edit</Button>
                       {blocker.status !== 'Resolved' && (
-                        <Button size="sm" className="w-full bg-green-600 hover:bg-green-700 text-white" onClick={() => handleResolve(blocker.id)}>Mark Resolved</Button>
+                        <Button size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => handleResolve(blocker.id)}>Mark Resolved</Button>
                       )}
                     </div>
                   </div>

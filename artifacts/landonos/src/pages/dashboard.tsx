@@ -1,6 +1,7 @@
 import { useStore } from "@/hooks/use-store";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { Link } from "wouter";
 import {
   FileText,
@@ -13,72 +14,21 @@ import {
   Award,
   ArrowRight,
   Activity,
+  TrendingUp,
+  Lightbulb,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ACCENT, StatCard, type Accent } from "@/components/stat-card";
+import { levelProgress } from "@/lib/rewards";
 
-type Accent = "blue" | "indigo" | "teal" | "sky" | "rose" | "emerald";
-
-const ACCENT: Record<
-  Accent,
-  {
-    value: string;
-    borderT: string;
-    grad: string;
-    iconSolid: string;
-    iconShadow: string;
-    hover: string;
-  }
-> = {
-  blue: {
-    value: "text-blue-700",
-    borderT: "border-t-blue-500",
-    grad: "from-blue-500/10 to-transparent",
-    iconSolid: "bg-blue-500",
-    iconShadow: "shadow-blue-500/30",
-    hover: "hover:border-blue-500/50 hover:bg-blue-500/5",
-  },
-  indigo: {
-    value: "text-indigo-700",
-    borderT: "border-t-indigo-500",
-    grad: "from-indigo-500/10 to-transparent",
-    iconSolid: "bg-indigo-500",
-    iconShadow: "shadow-indigo-500/30",
-    hover: "hover:border-indigo-500/50 hover:bg-indigo-500/5",
-  },
-  teal: {
-    value: "text-teal-700",
-    borderT: "border-t-teal-500",
-    grad: "from-teal-500/10 to-transparent",
-    iconSolid: "bg-teal-500",
-    iconShadow: "shadow-teal-500/30",
-    hover: "hover:border-teal-500/50 hover:bg-teal-500/5",
-  },
-  sky: {
-    value: "text-sky-700",
-    borderT: "border-t-sky-500",
-    grad: "from-sky-500/10 to-transparent",
-    iconSolid: "bg-sky-500",
-    iconShadow: "shadow-sky-500/30",
-    hover: "hover:border-sky-500/50 hover:bg-sky-500/5",
-  },
-  rose: {
-    value: "text-rose-700",
-    borderT: "border-t-rose-500",
-    grad: "from-rose-500/10 to-transparent",
-    iconSolid: "bg-rose-500",
-    iconShadow: "shadow-rose-500/30",
-    hover: "hover:border-rose-500/50 hover:bg-rose-500/5",
-  },
-  emerald: {
-    value: "text-emerald-700",
-    borderT: "border-t-emerald-500",
-    grad: "from-emerald-500/10 to-transparent",
-    iconSolid: "bg-emerald-500",
-    iconShadow: "shadow-emerald-500/30",
-    hover: "hover:border-emerald-500/50 hover:bg-emerald-500/5",
-  },
-};
+const COMPLIANCE_TIPS = [
+  "AI output is a draft, not a decision. Every claim needs a verifiable source before it reaches a reviewer.",
+  "Prefer official primary sources. Flag anything AI-generated or unknown until a human confirms it.",
+  "When you feel stuck, log a blocker early — a clear question gets a faster answer than a silent struggle.",
+  "A good brief states the decision it supports. Lead with the recommendation, then the evidence.",
+  "Never auto-record a company decision. RoseOS suggests; humans review and approve.",
+];
 
 const QUICK_ACTIONS: { href: string; label: string; icon: LucideIcon; color: Accent }[] = [
   { href: "/guided-research-builder?new=1", label: "New Research", icon: Target, color: "blue" },
@@ -113,6 +63,17 @@ export default function Dashboard() {
   const riskySources = data.sources.filter(
     (s) => s.type === "AI Draft" || s.type === "Unknown"
   );
+
+  const progress = levelProgress(data.rewardState.points);
+
+  const pipeline: { label: string; value: number; color: Accent }[] = [
+    { label: "Requests", value: data.requests.length, color: "blue" },
+    { label: "Reports", value: data.reports.length, color: "sky" },
+    { label: "Sources", value: data.sources.length, color: "teal" },
+    { label: "Handoffs", value: data.handoffs.length, color: "emerald" },
+  ];
+
+  const tip = COMPLIANCE_TIPS[new Date().getDate() % COMPLIANCE_TIPS.length];
 
   return (
     <div className="space-y-6">
@@ -192,42 +153,89 @@ export default function Dashboard() {
 
       {/* Stat cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((s) => {
-          const c = ACCENT[s.color];
-          return (
-            <Card
-              key={s.label}
-              className={cn(
-                "relative overflow-hidden border-t-4 bg-gradient-to-br transition-shadow hover:shadow-lg",
-                c.borderT,
-                c.grad
-              )}
-            >
-              <CardContent className="pt-5">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                      {s.label}
-                    </div>
-                    <div className={cn("mt-2 text-4xl font-bold tabular-nums", c.value)}>
-                      {s.value}
+        {stats.map((s) => (
+          <StatCard key={s.label} label={s.label} value={s.value} icon={s.icon} color={s.color} />
+        ))}
+      </div>
+
+      {/* Progress + Pipeline */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Level progress */}
+        <Card className="relative overflow-hidden border-t-4 border-t-indigo-500 bg-gradient-to-br from-indigo-500/10 to-transparent lg:col-span-1">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-indigo-500 text-white shadow-sm shadow-indigo-500/30">
+                <TrendingUp className="w-4 h-4" />
+              </span>
+              Your Progress
+            </CardTitle>
+            <CardDescription>{progress.current.level}</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex items-end justify-between">
+              <div className="text-3xl font-bold tabular-nums text-indigo-700">
+                {data.rewardState.points.toLocaleString()}
+              </div>
+              <div className="text-xs text-muted-foreground">points</div>
+            </div>
+            <Progress value={progress.percent} />
+            {progress.next ? (
+              <p className="text-xs text-muted-foreground">
+                {(progress.pointsForNext - progress.pointsIntoLevel).toLocaleString()} pts to{" "}
+                <span className="font-semibold text-foreground">{progress.next.level}</span>
+              </p>
+            ) : (
+              <p className="text-xs font-medium text-emerald-600">Top level reached. Outstanding work.</p>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Research pipeline */}
+        <Card className="relative overflow-hidden border-t-4 border-t-sky-500 bg-gradient-to-br from-sky-500/10 to-transparent lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-sky-500 text-white shadow-sm shadow-sky-500/30">
+                <Activity className="w-4 h-4" />
+              </span>
+              Research Pipeline
+            </CardTitle>
+            <CardDescription>Where your work stands across the workflow</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {pipeline.map((p) => {
+                const c = ACCENT[p.color];
+                return (
+                  <div
+                    key={p.label}
+                    className={cn("rounded-lg border p-3 text-center transition-colors", c.soft)}
+                  >
+                    <div className={cn("text-2xl font-bold tabular-nums", c.value)}>{p.value}</div>
+                    <div className="mt-0.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                      {p.label}
                     </div>
                   </div>
-                  <span
-                    className={cn(
-                      "flex h-12 w-12 items-center justify-center rounded-xl text-white shadow-md",
-                      c.iconSolid,
-                      c.iconShadow
-                    )}
-                  >
-                    <s.icon className="w-6 h-6" />
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
       </div>
+
+      {/* Compliance tip of the day */}
+      <Card className="border-l-4 border-l-blue-500 bg-gradient-to-r from-blue-500/10 to-transparent">
+        <CardContent className="flex items-start gap-3 py-4">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500 text-white shadow-sm shadow-blue-500/30">
+            <Lightbulb className="h-4.5 w-4.5" />
+          </span>
+          <div>
+            <div className="text-xs font-semibold uppercase tracking-wider text-blue-600">
+              Compliance Tip
+            </div>
+            <p className="mt-0.5 text-sm text-foreground">{tip}</p>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Today's Priorities */}
