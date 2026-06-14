@@ -10,6 +10,9 @@ import {
   MessageSquare,
   Send,
   ListChecks,
+  Award,
+  ArrowRight,
+  Activity,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -18,42 +21,61 @@ type Accent = "blue" | "indigo" | "teal" | "sky" | "rose" | "emerald";
 
 const ACCENT: Record<
   Accent,
-  { tile: string; value: string; borderL: string; hover: string }
+  {
+    value: string;
+    borderT: string;
+    grad: string;
+    iconSolid: string;
+    iconShadow: string;
+    hover: string;
+  }
 > = {
   blue: {
-    tile: "bg-blue-500/10 text-blue-600",
-    value: "text-blue-600",
-    borderL: "border-l-blue-500",
+    value: "text-blue-700",
+    borderT: "border-t-blue-500",
+    grad: "from-blue-500/10 to-transparent",
+    iconSolid: "bg-blue-500",
+    iconShadow: "shadow-blue-500/30",
     hover: "hover:border-blue-500/50 hover:bg-blue-500/5",
   },
   indigo: {
-    tile: "bg-indigo-500/10 text-indigo-600",
-    value: "text-indigo-600",
-    borderL: "border-l-indigo-500",
+    value: "text-indigo-700",
+    borderT: "border-t-indigo-500",
+    grad: "from-indigo-500/10 to-transparent",
+    iconSolid: "bg-indigo-500",
+    iconShadow: "shadow-indigo-500/30",
     hover: "hover:border-indigo-500/50 hover:bg-indigo-500/5",
   },
   teal: {
-    tile: "bg-teal-500/10 text-teal-600",
-    value: "text-teal-600",
-    borderL: "border-l-teal-500",
+    value: "text-teal-700",
+    borderT: "border-t-teal-500",
+    grad: "from-teal-500/10 to-transparent",
+    iconSolid: "bg-teal-500",
+    iconShadow: "shadow-teal-500/30",
     hover: "hover:border-teal-500/50 hover:bg-teal-500/5",
   },
   sky: {
-    tile: "bg-sky-500/10 text-sky-600",
-    value: "text-sky-600",
-    borderL: "border-l-sky-500",
+    value: "text-sky-700",
+    borderT: "border-t-sky-500",
+    grad: "from-sky-500/10 to-transparent",
+    iconSolid: "bg-sky-500",
+    iconShadow: "shadow-sky-500/30",
     hover: "hover:border-sky-500/50 hover:bg-sky-500/5",
   },
   rose: {
-    tile: "bg-rose-500/10 text-rose-600",
-    value: "text-rose-600",
-    borderL: "border-l-rose-500",
+    value: "text-rose-700",
+    borderT: "border-t-rose-500",
+    grad: "from-rose-500/10 to-transparent",
+    iconSolid: "bg-rose-500",
+    iconShadow: "shadow-rose-500/30",
     hover: "hover:border-rose-500/50 hover:bg-rose-500/5",
   },
   emerald: {
-    tile: "bg-emerald-500/10 text-emerald-600",
-    value: "text-emerald-600",
-    borderL: "border-l-emerald-500",
+    value: "text-emerald-700",
+    borderT: "border-t-emerald-500",
+    grad: "from-emerald-500/10 to-transparent",
+    iconSolid: "bg-emerald-500",
+    iconShadow: "shadow-emerald-500/30",
     hover: "hover:border-emerald-500/50 hover:bg-emerald-500/5",
   },
 };
@@ -94,18 +116,49 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Command Center</h1>
-          <p className="text-muted-foreground">AI-guided compliance and business research cockpit</p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Badge variant="outline" className="px-3 py-1 bg-primary/10 text-primary border-primary/20">
-            {data.rewardState.level}
-          </Badge>
-          <Badge variant="outline" className="px-3 py-1 bg-emerald-500/10 text-emerald-600 border-emerald-500/20">
-            {data.rewardState.points} pts
-          </Badge>
+      {/* Executive hero banner */}
+      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.18),transparent_50%)]" />
+        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+              </span>
+              All systems operational
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
+              Command Center
+            </h1>
+            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
+              AI-guided compliance and business research cockpit. Verify every source, keep humans in the loop.
+            </p>
+            <Link
+              href="/guided-research-builder"
+              className="mt-4 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-900"
+            >
+              Start New Research <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="flex shrink-0 items-stretch gap-3">
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
+                <Award className="h-3.5 w-3.5" /> Level
+              </div>
+              <div className="mt-1 text-lg font-bold text-white">{data.rewardState.level}</div>
+            </div>
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
+                <Activity className="h-3.5 w-3.5" /> Points
+              </div>
+              <div className="mt-1 text-lg font-bold text-white">
+                {data.rewardState.points.toLocaleString()}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -118,14 +171,20 @@ export default function Dashboard() {
               key={a.href}
               href={a.href}
               className={cn(
-                "h-24 flex flex-col items-center justify-center gap-2.5 rounded-lg border border-border bg-card transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                "group h-24 flex flex-col items-center justify-center gap-2.5 rounded-lg border border-border bg-card transition-all hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                 c.hover
               )}
             >
-              <span className={cn("flex h-10 w-10 items-center justify-center rounded-lg", c.tile)}>
+              <span
+                className={cn(
+                  "flex h-10 w-10 items-center justify-center rounded-lg text-white shadow-sm transition-transform group-hover:scale-110",
+                  c.iconSolid,
+                  c.iconShadow
+                )}
+              >
                 <a.icon className="w-5 h-5" />
               </span>
-              <span className="text-xs font-medium text-foreground">{a.label}</span>
+              <span className="text-xs font-semibold text-foreground">{a.label}</span>
             </Link>
           );
         })}
@@ -136,15 +195,32 @@ export default function Dashboard() {
         {stats.map((s) => {
           const c = ACCENT[s.color];
           return (
-            <Card key={s.label} className={cn("border-l-4", c.borderL)}>
+            <Card
+              key={s.label}
+              className={cn(
+                "relative overflow-hidden border-t-4 bg-gradient-to-br transition-shadow hover:shadow-lg",
+                c.borderT,
+                c.grad
+              )}
+            >
               <CardContent className="pt-5">
-                <div className="flex items-center justify-between">
+                <div className="flex items-start justify-between">
                   <div>
-                    <div className="text-sm font-medium text-muted-foreground">{s.label}</div>
-                    <div className={cn("text-3xl font-bold mt-1", c.value)}>{s.value}</div>
+                    <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {s.label}
+                    </div>
+                    <div className={cn("mt-2 text-4xl font-bold tabular-nums", c.value)}>
+                      {s.value}
+                    </div>
                   </div>
-                  <span className={cn("flex h-11 w-11 items-center justify-center rounded-lg", c.tile)}>
-                    <s.icon className="w-5 h-5" />
+                  <span
+                    className={cn(
+                      "flex h-12 w-12 items-center justify-center rounded-xl text-white shadow-md",
+                      c.iconSolid,
+                      c.iconShadow
+                    )}
+                  >
+                    <s.icon className="w-6 h-6" />
                   </span>
                 </div>
               </CardContent>
@@ -158,7 +234,7 @@ export default function Dashboard() {
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-500/10 text-blue-600">
+              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-500 text-white shadow-sm shadow-blue-500/30">
                 <ListChecks className="w-4 h-4" />
               </span>
               Today's Research Priorities
@@ -177,7 +253,7 @@ export default function Dashboard() {
                   <div
                     key={req.id}
                     className={cn(
-                      "flex flex-col space-y-2 p-3 border border-l-4 rounded-md",
+                      "flex flex-col space-y-2 p-3 border border-l-4 rounded-md transition-colors hover:bg-muted/40",
                       urgent ? "border-l-rose-500" : "border-l-blue-500"
                     )}
                   >
@@ -197,10 +273,12 @@ export default function Dashboard() {
         </Card>
 
         {/* Source Quality Warnings */}
-        <Card className="col-span-1 border-destructive/20 bg-destructive/5">
+        <Card className="col-span-1 border-destructive/30 bg-gradient-to-br from-rose-500/10 to-transparent">
           <CardHeader>
-            <CardTitle className="flex items-center text-destructive">
-              <AlertTriangle className="w-5 h-5 mr-2" />
+            <CardTitle className="flex items-center gap-2 text-destructive">
+              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-rose-500 text-white shadow-sm shadow-rose-500/30">
+                <AlertTriangle className="w-4 h-4" />
+              </span>
               Source Quality Warnings
             </CardTitle>
             <CardDescription>Sources requiring human review</CardDescription>
