@@ -38,7 +38,7 @@ A standalone, frontend-only web app: an AI-guided research training cockpit for 
 
 ## Product
 
-14 modules: Command Center dashboard, Guided Research Builder, AI Prompt Coach, Research GPS (10-step workflow), Report Builder (readiness score + warnings), Source Vault (official/AI-draft/unknown flagging), Blocked/Need Help, RoseOS Chat (mentor), Completed Handoff, Brainstorming Studio, Reward Center, Training Academy, Company Brain Updates, and Settings. Compliance guardrail throughout: AI output is draft only until source-checked and human-reviewed; company decisions are never auto-recorded.
+14 modules: Command Center dashboard, Guided Research Builder, AI Prompt Coach, Research GPS (10-step workflow), Report Builder (readiness score + warnings), Source Vault (official/AI-draft/unknown flagging), Blocked/Need Help, RoseOS Chat (mentor), Completed Handoff, Brainstorming Studio, Reward Center, Training Academy, RoseOS (the company brain — record-query chat + reviewed update suggestions; route `/company-brain`), and Settings. Compliance guardrail throughout: AI output is draft only until source-checked and human-reviewed; company decisions are never auto-recorded.
 
 ## User preferences
 

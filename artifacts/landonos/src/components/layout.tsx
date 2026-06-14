@@ -46,7 +46,7 @@ const NAV_ITEMS = [
   { href: "/brainstorming", label: "Brainstorming", icon: Lightbulb },
   { href: "/reward-center", label: "Rewards", icon: Award },
   { href: "/training-academy", label: "Training Academy", icon: GraduationCap },
-  { href: "/company-brain", label: "Company Brain", icon: BrainCircuit },
+  { href: "/company-brain", label: "RoseOS", icon: BrainCircuit },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 

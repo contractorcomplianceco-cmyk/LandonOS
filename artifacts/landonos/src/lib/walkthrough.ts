@@ -67,9 +67,9 @@ export const TOUR_STEPS: TourStep[] = [
   },
   {
     route: "/company-brain",
-    title: "Suggest records in Company Brain",
+    title: "Query and update RoseOS",
     narration:
-      "Propose updates to the decision log, requirements registry, or automation registry. These are suggestions only. Nothing is recorded to the company brain without human approval.",
+      "RoseOS is the company's brain. Ask it what's on record, or propose updates to the decision log, requirements registry, or automation registry. These are suggestions only. Nothing is recorded without human approval.",
   },
   {
     route: "/brainstorming",
@@ -154,8 +154,8 @@ export const PAGE_HELP: Record<string, PageHelpContent> = {
     body: "Work through each lesson and its checklist. Marking a lesson complete earns points; reopening it removes them, so progress always reflects real work.",
   },
   "/company-brain": {
-    title: "Suggest, don't auto-record",
-    body: "Draft proposed updates to core company records. These remain suggestions until a human approves them — nothing is recorded automatically.",
+    title: "RoseOS: ask first, suggest, don't auto-record",
+    body: "RoseOS is the company's brain. Ask it what's on record, then draft proposed updates to core records. These remain suggestions until a human approves them — nothing is recorded automatically.",
     tip: "This guardrail keeps company decisions under human control.",
   },
   "/settings": {

@@ -11,7 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { BrainCircuit, Plus, ShieldAlert, FileSearch, Trash2, Edit2 } from "lucide-react";
+import { BrainCircuit, Plus, ShieldAlert, FileSearch, Trash2, Edit2, Database, CheckCircle2, AlertCircle } from "lucide-react";
+import { RoseOSBrainChat } from "@/components/roseos-brain-chat";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -51,6 +52,10 @@ export default function CompanyBrain() {
   
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("All");
+
+  const totalUpdates = data.brainUpdates.length;
+  const recordedCount = data.brainUpdates.filter(u => u.status === "Recorded").length;
+  const needsReviewCount = data.brainUpdates.filter(u => u.status === "Needs Review").length;
 
   const filteredUpdates = data.brainUpdates.filter(u => {
     const matchesSearch = !searchQuery || 
@@ -134,15 +139,55 @@ export default function CompanyBrain() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Company Brain Updates</h1>
-          <p className="text-muted-foreground">Suggest changes to the organization's core records</p>
+      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
+        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
+              <BrainCircuit className="h-3.5 w-3.5" />
+              Institutional Memory
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">RoseOS</h1>
+            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
+              The company's brain — a reviewed system of record for decisions, projects, and SOPs. Ask it what's on file, or file a suggestion. Nothing is recorded until a human signs off.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4 shrink-0">
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
+                <Database className="h-3.5 w-3.5" /> Suggestions
+              </div>
+              <div className="mt-1 text-2xl font-bold text-white">{totalUpdates}</div>
+            </div>
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
+                <CheckCircle2 className="h-3.5 w-3.5" /> Recorded
+              </div>
+              <div className="mt-1 text-2xl font-bold text-white">{recordedCount}</div>
+            </div>
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
+                <AlertCircle className="h-3.5 w-3.5" /> Needs Review
+              </div>
+              <div className="mt-1 text-2xl font-bold text-white">{needsReviewCount}</div>
+            </div>
+            <div className="rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-100/70">
+                <BrainCircuit className="h-3.5 w-3.5" /> Record Types
+              </div>
+              <div className="mt-1 text-2xl font-bold text-white">{RECORD_TYPES.length}</div>
+            </div>
+          </div>
         </div>
-        <Button onClick={handleCreate}>
-          <Plus className="w-4 h-4 mr-2" />
-          New Suggestion
-        </Button>
+
+        <div className="relative mt-6">
+          <Button onClick={handleCreate} className="bg-white text-slate-900 hover:bg-blue-50">
+            <Plus className="w-4 h-4 mr-2" />
+            New Suggestion
+          </Button>
+        </div>
       </div>
 
       <Alert className="bg-primary/5 border-primary/20 text-foreground">
@@ -152,6 +197,8 @@ export default function CompanyBrain() {
           Company decisions are <strong>never auto-recorded</strong>. Everything stays "Suggested" until human-reviewed.
         </AlertDescription>
       </Alert>
+
+      <RoseOSBrainChat />
 
       <div className="flex flex-col sm:flex-row items-center gap-4 bg-card p-4 rounded-lg border shadow-sm">
         <div className="relative flex-1 w-full">
