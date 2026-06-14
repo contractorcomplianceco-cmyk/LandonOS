@@ -6,3 +6,57 @@ id = "eGigAtJu2XlgOSE5wVtK-"
 uri = "file://attached_assets/generated_audio/landonos_walkthrough_theme.mp3"
 type = "audio"
 title = "landonos walkthrough theme"
+
+[[outputs]]
+id = "f1k9y6xQNoc9f-bXKkNuA"
+uri = "file://artifacts/landonos/public/onboarding/welcome-1.mp3"
+type = "audio"
+title = "onboarding 1"
+
+[[outputs]]
+id = "iOkHuXMoqALi7tttsAosG"
+uri = "file://artifacts/landonos/public/onboarding/welcome-2.mp3"
+type = "audio"
+title = "onboarding 2"
+
+[[outputs]]
+id = "5V_CTfKT44cLG_jo-s0Mr"
+uri = "file://artifacts/landonos/public/onboarding/welcome-3.mp3"
+type = "audio"
+title = "onboarding 3"
+
+[[outputs]]
+id = "9i7hCW_t50Ds0P7f_lA-E"
+uri = "file://artifacts/landonos/public/onboarding/welcome-4.mp3"
+type = "audio"
+title = "onboarding 4"
+
+[[outputs]]
+id = "O_uqCTpDzu7_rQwvu3u2Y"
+uri = "file://artifacts/landonos/public/onboarding/welcome-5.mp3"
+type = "audio"
+title = "onboarding 5"
+
+[[outputs]]
+id = "uKumHX7Ts7FURNdXFklLi"
+uri = "file://artifacts/landonos/public/onboarding/welcome-6.mp3"
+type = "audio"
+title = "onboarding 6"
+
+[[outputs]]
+id = "lc43Wf6wmy5DpJx4_mdHe"
+uri = "file://artifacts/landonos/public/onboarding/welcome-7.mp3"
+type = "audio"
+title = "onboarding 7"
+
+[[outputs]]
+id = "J7O6S_D__B3noZRFcVmfA"
+uri = "file://artifacts/landonos/public/onboarding/welcome-music.mp3"
+type = "audio"
+title = "onboarding music bed"
+
+[[outputs]]
+id = "iwZxxzzJe-3LxUV01om57"
+uri = "file://artifacts/landonos/public/onboarding/landonos-user-guide.pdf"
+type = "pdf"
+title = "LandonOS User Guide (PDF)"

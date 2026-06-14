@@ -54,7 +54,10 @@ import {
 const NAV_SECTIONS = [
   {
     label: "Overview",
-    items: [{ href: "/", label: "Command Center", icon: LayoutDashboard }],
+    items: [
+      { href: "/welcome", label: "Welcome", icon: Sparkles },
+      { href: "/", label: "Command Center", icon: LayoutDashboard },
+    ],
   },
   {
     label: "Research",

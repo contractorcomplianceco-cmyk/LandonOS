@@ -9,6 +9,7 @@ import { GuidedTour } from "@/components/guided-tour";
 import { WalkthroughVideo } from "@/components/walkthrough-video";
 
 import NotFound from "@/pages/not-found";
+import Welcome from "@/pages/welcome";
 import Dashboard from "@/pages/dashboard";
 import GuidedResearchBuilder from "@/pages/guided-research-builder";
 import PromptCoach from "@/pages/prompt-coach";
@@ -35,6 +36,7 @@ const queryClient = new QueryClient();
 function Router() {
   return (
     <Switch>
+      <Route path="/welcome" component={Welcome} />
       <Route path="/" component={Dashboard} />
       <Route path="/guided-research-builder" component={GuidedResearchBuilder} />
       <Route path="/prompt-coach" component={PromptCoach} />
