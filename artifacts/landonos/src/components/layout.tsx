@@ -129,9 +129,9 @@ function StatusChip({
   tone: "online" | "synced" | "review";
 }) {
   const dot =
-    tone === "review" ? "bg-amber-500" : "bg-emerald-500";
+    tone === "review" ? "bg-amber-400" : "bg-emerald-400";
   return (
-    <div className="flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 text-xs font-medium text-foreground/80">
+    <div className="flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium text-blue-50 ring-1 ring-white/15 backdrop-blur">
       <span className={cn("h-1.5 w-1.5 rounded-full", dot)} />
       {label}
     </div>
@@ -187,7 +187,7 @@ function GlobalSearch() {
     <div className="relative w-full max-w-md">
       <Search
         size={16}
-        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-blue-100/60"
       />
       <Input
         ref={inputRef}
@@ -208,10 +208,10 @@ function GlobalSearch() {
           }
         }}
         placeholder="Search research, reports, sources..."
-        className="h-9 pl-9 pr-12 bg-secondary/60 border-border"
+        className="h-9 pl-9 pr-12 bg-white/10 border-white/15 text-white placeholder:text-blue-100/50 focus-visible:ring-white/30"
         aria-label="Search research, reports, and sources"
       />
-      <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 hidden items-center gap-0.5 rounded border border-border bg-card px-1.5 text-[10px] font-medium text-muted-foreground sm:flex">
+      <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 hidden items-center gap-0.5 rounded border border-white/20 bg-white/10 px-1.5 text-[10px] font-medium text-blue-100/70 sm:flex">
         ⌘K
       </kbd>
       {open && query.trim() && (
@@ -283,23 +283,23 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-full overflow-hidden min-w-0">
         {/* Topbar */}
-        <header className="border-b border-border bg-card shrink-0">
+        <header className="border-b border-slate-800 bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 shrink-0">
           <div className="flex h-16 items-center gap-3 px-3 md:px-6">
             {/* Left: mobile menu + branding */}
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden shrink-0"
+              className="md:hidden shrink-0 text-white hover:bg-white/10 hover:text-white"
               onClick={() => setMobileOpen(true)}
               aria-label="Open navigation"
             >
               <Menu size={20} />
             </Button>
             <div className="min-w-0 shrink-0">
-              <div className="font-semibold text-foreground leading-tight truncate">
+              <div className="font-semibold text-white leading-tight truncate">
                 Research Command Center
               </div>
-              <div className="text-xs text-primary leading-tight truncate hidden sm:block">
+              <div className="text-xs text-blue-200 leading-tight truncate hidden sm:block">
                 AI-Guided Research Training Cockpit
               </div>
             </div>
@@ -320,7 +320,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <button
                 type="button"
                 onClick={startTour}
-                className="rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
+                className="rounded-md p-2 text-blue-100/70 hover:bg-white/10 hover:text-white"
                 aria-label="Start narrated walkthrough"
                 title="Start narrated walkthrough"
               >
@@ -330,8 +330,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 type="button"
                 onClick={toggleHints}
                 className={cn(
-                  "rounded-md p-2 hover:bg-accent hover:text-foreground",
-                  hintsEnabled ? "text-primary" : "text-muted-foreground"
+                  "rounded-md p-2 hover:bg-white/10 hover:text-white",
+                  hintsEnabled ? "text-sky-300" : "text-blue-100/70"
                 )}
                 aria-label={hintsEnabled ? "Hide help hints" : "Show help hints"}
                 aria-pressed={hintsEnabled}
@@ -343,39 +343,39 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <button
                 type="button"
                 onClick={() => navigate("/blocked")}
-                className="relative rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
+                className="relative rounded-md p-2 text-blue-100/70 hover:bg-white/10 hover:text-white"
                 aria-label="Attention items"
               >
                 <Bell size={18} />
                 {attentionCount > 0 && (
-                  <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-destructive" />
+                  <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-rose-400 ring-2 ring-slate-900" />
                 )}
               </button>
               <button
                 type="button"
                 onClick={() => navigate("/roseos-chat")}
-                className="rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
+                className="rounded-md p-2 text-blue-100/70 hover:bg-white/10 hover:text-white"
                 aria-label="RoseOS Chat"
               >
                 <MessageSquare size={18} />
               </button>
 
-              <div className="mx-1 hidden h-8 w-px bg-border sm:block" />
+              <div className="mx-1 hidden h-8 w-px bg-white/15 sm:block" />
 
               <button
                 type="button"
                 onClick={() => navigate("/settings")}
-                className="flex items-center gap-2 rounded-md p-1 pr-2 hover:bg-accent"
+                className="flex items-center gap-2 rounded-md p-1 pr-2 hover:bg-white/10"
                 aria-label="Profile and settings"
               >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/15 text-sm font-bold text-white ring-1 ring-white/20">
                   {initials}
                 </div>
                 <div className="hidden text-left leading-tight md:block">
-                  <div className="text-sm font-medium text-foreground">
+                  <div className="text-sm font-medium text-white">
                     {data.settings.userName || "Landon"}
                   </div>
-                  <div className="text-[11px] text-muted-foreground">
+                  <div className="text-[11px] text-blue-200/70">
                     {data.settings.userRole || "Research Lead"}
                   </div>
                 </div>
@@ -383,7 +383,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
               <Button
                 onClick={() => navigate("/guided-research-builder?new=1")}
-                className="ml-1 hidden shrink-0 gap-1.5 sm:flex"
+                className="ml-1 hidden shrink-0 gap-1.5 bg-white text-slate-900 hover:bg-blue-50 sm:flex"
               >
                 <Plus size={16} />
                 <span className="hidden md:inline">New Research Request</span>
