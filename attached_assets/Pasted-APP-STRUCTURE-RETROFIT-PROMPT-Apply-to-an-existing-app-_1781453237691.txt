@@ -1,0 +1,146 @@
+APP STRUCTURE RETROFIT PROMPT - Apply to an existing app
+
+Refactor this existing app to adopt the structural and interaction patterns below. Preserve the app's current visual identity: keep its existing color palette, typography, spacing scale, iconography, brand wordmark, and its own domain-specific pages/sections and terminology.
+
+This is a structure-and-consistency pass, not a redesign or rebrand.
+
+Where the app already follows a pattern below, leave it. Only fill gaps and unify inconsistencies. Reuse the app's existing components, tokens, and naming conventions rather than introducing new ones.
+
+Before changing anything:
+
+- Inventory the current pages.
+- Inventory the current navigation.
+- Inventory the shared components.
+- Inventory the data sources.
+- Pick the app's best-built existing page as the canonical reference.
+- Bring other pages in line with that page.
+- Do not impose an external template.
+
+1. App Shell
+
+Ensure a persistent primary navigation using the app's existing nav pattern, such as a sidebar or existing primary navigation.
+
+Requirements:
+
+- Navigation must collapse to a mobile drawer.
+- Keep the app's current nav items and section groupings.
+- Only regroup items if they are clearly ungrouped or inconsistent.
+- Keep the existing wordmark/descriptor.
+- Keep any existing footer, status, or account block.
+- Ensure a persistent top header with the app's existing context, such as greeting or page title.
+- Add or preserve global search, status indicator, notifications, and account menu only if the app already has or clearly needs them.
+- Do not add features the app does not use.
+- Main content must scroll independently beneath a sticky header.
+
+2. Standard Page Template
+
+Apply this consistently to every list/management screen, using the app's existing components and styles:
+
+- Page header: title, subtitle, primary action aligned right.
+- Toolbar: search and filters.
+- Primary view: table on desktop and cards on mobile, with status badges and a real empty state.
+- Detail panel: row click opens a side sheet with edit/delete.
+- Create/Edit dialog.
+- Guarded confirm-delete dialog.
+
+3. Dashboard / Home Composition
+
+Apply this only if the app has a dashboard.
+
+Requirements:
+
+- KPI summary cards row.
+- Then a wide primary panel.
+- Then a right rail of smaller modules.
+- Make every panel data-derived from the live data source.
+- Replace hardcoded or placeholder values so dashboard panels stay truthful after edits.
+- Keep the app's chosen metrics and modules.
+
+4. Cross-Cutting Patterns To Unify
+
+Config-driven forms:
+
+- Consolidate per-entity field definitions into a central config.
+- Render the config through one shared form component.
+- Adding a field should mean editing config, not rebuilding a dialog.
+
+Shared building blocks:
+
+- Factor repeated UI into single reusable components.
+- Use the app's existing styling when creating shared components.
+- Recommended shared components include PageHeader, Toolbar, Table/List, DetailSheet, RecordFormDialog, ConfirmDelete, EmptyState, and Badges.
+- Replace ad-hoc duplicates with shared components.
+
+Responsive behavior:
+
+- Sidebar becomes drawer.
+- Tables become stacked cards.
+- Right rail moves below primary content.
+
+States and feedback:
+
+- Every screen handles loading, empty, and error states.
+- Actions show success and failure toasts.
+
+Consistency over novelty:
+
+- Align spacing rhythm, card treatment, and interaction patterns across pages using the app's own design language.
+- Do not change colors or fonts to achieve consistency.
+
+5. Guardrails
+
+Do not:
+
+- Alter the color scheme.
+- Alter typography.
+- Alter brand assets.
+- Remove domain-specific sections.
+- Rename domain-specific sections or terminology.
+- Introduce an external template.
+- Add features the app does not use.
+- Rebrand the app.
+
+Do:
+
+- Make incremental, reviewable changes.
+- Preserve the original look.
+- Preserve the app's domain-specific pages, sections, and terminology.
+- Reuse existing components, tokens, naming conventions, and styles.
+- Use the app's best-built existing page as the canonical reference.
+
+6. Quality Bar
+
+After each pass:
+
+- Typecheck passes.
+- Navigation works on all pages.
+- CRUD works on every entity.
+- Search/filter works on every entity.
+- The app is fully usable on mobile.
+- Loading, empty, and error states render correctly.
+- Success and failure toasts work.
+- The original visual identity remains intact.
+
+Final report requirements:
+
+- Summarize the original app structure you found.
+- Identify the page chosen as the canonical reference and explain why.
+- List files changed.
+- List shared components created or reused.
+- List commands run.
+- Confirm desktop and mobile navigation were tested.
+- Confirm CRUD, search, and filtering were tested for every entity.
+- Confirm the app's colors, typography, brand assets, and domain terminology were preserved.
+```
+
+## Usage Notes
+
+Use this prompt when an individual Command Center app already exists but feels inconsistent across pages, CRUD screens, navigation, responsive behavior, or shared component structure.
+
+Do not use this as the first prompt for a brand-new app unless the app already has a working structure to inventory.
+
+## Recommended Record Updates
+
+- Keep this prompt in the Individual Command Center Prompt Library.
+- If this prompt is used on a specific individual Command Center app, update that app's Build Registry record with the retrofit scope, canonical reference page, pages/components changed, and verification status.
+- If this retrofit structure becomes the required standard for all individual Command Centers, add it to the Requirements Registry as an approved reusable product requirement.
