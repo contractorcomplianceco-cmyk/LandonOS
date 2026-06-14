@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSearch, useLocation } from "wouter";
 import { useStore } from "@/hooks/use-store";
 import { GPS_STEPS, defaultData } from "@/lib/default-data";
 import { ResearchRequest, Status, Priority, ResearchType } from "@/lib/types";
@@ -19,8 +20,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export default function GuidedResearchBuilder() {
   const { data, updateData } = useStore();
   const { toast } = useToast();
-  
-  const [activeTab, setActiveTab] = useState("list");
+  const search = useSearch();
+  const [, navigate] = useLocation();
+
+  const [activeTab, setActiveTab] = useState(
+    new URLSearchParams(search).get("new") ? "builder" : "list"
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState<string>("all");
   const [filterPriority, setFilterPriority] = useState<string>("all");
@@ -67,6 +72,15 @@ export default function GuidedResearchBuilder() {
     setEditingId(null);
     setGeneratedOutput(null);
   };
+
+  useEffect(() => {
+    if (new URLSearchParams(search).get("new")) {
+      resetForm();
+      setActiveTab("builder");
+      navigate("/guided-research-builder", { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
 
   const handleInputChange = (field: keyof ResearchRequest, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));

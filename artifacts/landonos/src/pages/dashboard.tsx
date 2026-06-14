@@ -81,7 +81,7 @@ const ACCENT: Record<
 };
 
 const QUICK_ACTIONS: { href: string; label: string; icon: LucideIcon; color: Accent }[] = [
-  { href: "/guided-research-builder", label: "New Research", icon: Target, color: "blue" },
+  { href: "/guided-research-builder?new=1", label: "New Research", icon: Target, color: "blue" },
   { href: "/prompt-coach", label: "Prompt Coach", icon: MessageSquare, color: "indigo" },
   { href: "/roseos-chat", label: "Ask RoseOS", icon: ShieldCheck, color: "teal" },
   { href: "/report-builder", label: "Build Report", icon: FileText, color: "sky" },
@@ -136,7 +136,7 @@ export default function Dashboard() {
               AI-guided compliance and business research cockpit. Verify every source, keep humans in the loop.
             </p>
             <Link
-              href="/guided-research-builder"
+              href="/guided-research-builder?new=1"
               className="mt-4 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-900"
             >
               Start New Research <ArrowRight className="h-4 w-4" />

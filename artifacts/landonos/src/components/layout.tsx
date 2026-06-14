@@ -382,7 +382,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               </button>
 
               <Button
-                onClick={() => navigate("/guided-research-builder")}
+                onClick={() => navigate("/guided-research-builder?new=1")}
                 className="ml-1 hidden shrink-0 gap-1.5 sm:flex"
               >
                 <Plus size={16} />
