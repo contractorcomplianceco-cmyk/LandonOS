@@ -79,15 +79,8 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow={
-          <>
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-            </span>
-            All systems operational
-          </>
-        }
+        statusDot
+        eyebrow="All systems operational"
         title="Command Center"
         subtitle="AI-guided compliance and business research cockpit. Verify every source, keep humans in the loop."
         statsClassName="grid grid-cols-2 gap-3 shrink-0"

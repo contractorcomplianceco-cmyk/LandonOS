@@ -11,6 +11,8 @@ export interface PageHeaderStat {
 interface PageHeaderProps {
   icon?: LucideIcon;
   eyebrow: React.ReactNode;
+  /** When true, renders an animated "live" status dot before the eyebrow text. Off by default. */
+  statusDot?: boolean;
   title: string;
   subtitle?: string;
   action?: React.ReactNode;
@@ -25,6 +27,7 @@ const DEFAULT_STATS_CLASS =
 export function PageHeader({
   icon: Icon,
   eyebrow,
+  statusDot = false,
   title,
   subtitle,
   action,
@@ -41,6 +44,12 @@ export function PageHeader({
           {leading && <div className="shrink-0">{leading}</div>}
           <div className="min-w-0">
             <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
+              {statusDot && (
+                <span className="relative flex h-2 w-2" aria-hidden="true">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                </span>
+              )}
               {Icon && <Icon className="h-3.5 w-3.5" />}
               {eyebrow}
             </div>
