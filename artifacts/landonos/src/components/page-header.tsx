@@ -16,6 +16,7 @@ interface PageHeaderProps {
   action?: React.ReactNode;
   stats?: PageHeaderStat[];
   statsClassName?: string;
+  leading?: React.ReactNode;
 }
 
 const DEFAULT_STATS_CLASS =
@@ -29,26 +30,30 @@ export function PageHeader({
   action,
   stats,
   statsClassName,
+  leading,
 }: PageHeaderProps) {
   return (
     <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 p-6 md:p-8 shadow-xl">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.28),transparent_55%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.22),transparent_50%)]" />
       <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-        <div className="min-w-0">
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
-            {Icon && <Icon className="h-3.5 w-3.5" />}
-            {eyebrow}
+        <div className="flex min-w-0 items-center gap-4">
+          {leading && <div className="shrink-0">{leading}</div>}
+          <div className="min-w-0">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100 ring-1 ring-white/15 backdrop-blur">
+              {Icon && <Icon className="h-3.5 w-3.5" />}
+              {eyebrow}
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
+              {title}
+            </h1>
+            {subtitle && (
+              <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
+                {subtitle}
+              </p>
+            )}
+            {action && <div className="mt-4">{action}</div>}
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
-            {title}
-          </h1>
-          {subtitle && (
-            <p className="mt-1.5 max-w-xl text-sm md:text-base text-blue-100/80">
-              {subtitle}
-            </p>
-          )}
-          {action && <div className="mt-4">{action}</div>}
         </div>
 
         {stats && stats.length > 0 && (

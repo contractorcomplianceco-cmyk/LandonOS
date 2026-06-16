@@ -51,6 +51,12 @@ export default function EmployeeAccountPage() {
   const name = data.settings.userName || "Landon";
   const title = data.settings.userRole || "Research Lead";
   const email = `${name.split(" ")[0].toLowerCase()}@roseos.com`;
+  const initials = name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
 
   return (
     <div className="space-y-6">
@@ -59,6 +65,11 @@ export default function EmployeeAccountPage() {
         eyebrow="Employment Record"
         title={name}
         subtitle={`${title} · Compliance & Research`}
+        leading={
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-2xl font-bold text-white ring-2 ring-white/25 backdrop-blur">
+            {initials}
+          </div>
+        }
         statsClassName="grid grid-cols-2 gap-3 shrink-0"
         stats={[
           { label: "Employee ID", value: "RO-2041", icon: IdCard },
