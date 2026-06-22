@@ -1,10 +1,10 @@
 import { useLocation } from "wouter";
 import { useHelp } from "@/hooks/use-help";
 import { PAGE_HELP } from "@/lib/walkthrough";
-import { Info, X, Compass } from "lucide-react";
+import { Info, X, Compass, BookOpen } from "lucide-react";
 
 export function PageHelp() {
-  const { hintsEnabled, disableHints, startTour } = useHelp();
+  const { hintsEnabled, disableHints, startTour, openGuide } = useHelp();
   const [location] = useLocation();
 
   if (!hintsEnabled) return null;
@@ -24,13 +24,22 @@ export function PageHelp() {
           {help.tip && (
             <p className="mt-1.5 text-xs font-medium text-primary">{help.tip}</p>
           )}
-          <button
-            type="button"
-            onClick={startTour}
-            className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
-          >
-            <Compass size={13} /> Take the narrated walkthrough
-          </button>
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5">
+            <button
+              type="button"
+              onClick={openGuide}
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
+            >
+              <BookOpen size={13} /> Open the full guide
+            </button>
+            <button
+              type="button"
+              onClick={startTour}
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
+            >
+              <Compass size={13} /> Take the narrated walkthrough
+            </button>
+          </div>
         </div>
         <button
           type="button"

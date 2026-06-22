@@ -5,6 +5,7 @@ import { useStore } from "@/hooks/use-store";
 import { useHelp } from "@/hooks/use-help";
 import { useToast } from "@/hooks/use-toast";
 import { PageHelp } from "@/components/page-help";
+import { HelpPopup } from "@/components/help-popup";
 import ccaCrest from "@assets/cca-crest-inset_1781446966845.png";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -39,6 +40,7 @@ import {
   Plus,
   FileSearch,
   HelpCircle,
+  BookOpen,
   PlayCircle,
   UserCog,
   Briefcase,
@@ -384,7 +386,7 @@ function GlobalSearch() {
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { data } = useStore();
-  const { hintsEnabled, toggleHints, startTour } = useHelp();
+  const { hintsEnabled, toggleHints, startTour, openGuide } = useHelp();
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -460,6 +462,15 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 <StatusChip label="Source Check" tone="verify" />
               </div>
 
+              <button
+                type="button"
+                onClick={openGuide}
+                className="rounded-md p-2 text-slate-400 hover:bg-white/10 hover:text-white"
+                aria-label="Open page guide"
+                title="Open guide for this page"
+              >
+                <BookOpen size={18} />
+              </button>
               <button
                 type="button"
                 onClick={startTour}
@@ -581,6 +592,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </main>
+      <HelpPopup />
     </div>
   );
 }

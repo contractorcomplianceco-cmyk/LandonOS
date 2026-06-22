@@ -20,6 +20,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useHelp } from "@/hooks/use-help";
+import { Gauge } from "@/components/gauge";
 import themeUrl from "@assets/generated_audio/landonos_walkthrough_theme.mp3";
 import ccaCrest from "@assets/cca-crest-inset_1781446966845.png";
 
@@ -29,12 +30,13 @@ interface Scene {
 }
 
 const SCENES: Scene[] = [
-  { id: "intro", duration: 4200 },
-  { id: "tagline", duration: 3600 },
-  { id: "plan", duration: 4400 },
-  { id: "verify", duration: 4400 },
-  { id: "level", duration: 4800 },
-  { id: "outro", duration: 4400 },
+  { id: "intro", duration: 3800 },
+  { id: "tagline", duration: 3200 },
+  { id: "cockpit", duration: 4600 },
+  { id: "plan", duration: 3800 },
+  { id: "verify", duration: 3800 },
+  { id: "level", duration: 4200 },
+  { id: "outro", duration: 3600 },
 ];
 
 const TOTAL = SCENES.reduce((s, sc) => s + sc.duration, 0);
@@ -122,7 +124,7 @@ function renderScene(id: string) {
             initial={{ opacity: 0, scale: 0.3, rotate: -25 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             transition={{ ...spring, delay: 0.1 }}
-            className="mb-6 h-24 w-24 object-contain drop-shadow-[0_8px_24px_rgba(56,189,248,0.5)] md:h-28 md:w-28"
+            className="mb-6 h-24 w-24 object-contain drop-shadow-[0_8px_24px_rgba(239,68,68,0.55)] md:h-28 md:w-28"
           />
           <h1 className="text-5xl font-black tracking-tight text-white md:text-7xl">
             <Word delay={0.25}>Landon</Word>
@@ -136,7 +138,7 @@ function renderScene(id: string) {
             transition={{ delay: 0.7 }}
             className="mt-3 text-lg font-medium uppercase tracking-[0.3em] text-slate-300/80 md:text-xl"
           >
-            Research Command Center
+            Performance Research Cockpit
           </motion.p>
         </SceneShell>
       );
@@ -160,6 +162,43 @@ function renderScene(id: string) {
           </motion.p>
         </SceneShell>
       );
+    case "cockpit":
+      return (
+        <SceneShell>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={spring}
+            className="mb-6 text-3xl font-black tracking-tight text-white md:text-5xl"
+          >
+            One <span className="text-red-400">performance</span> cockpit
+          </motion.div>
+          <div className="flex flex-wrap items-end justify-center gap-6 md:gap-10">
+            {[
+              { value: 86, label: "Source Quality", tone: "steel" as const, delay: 0.15 },
+              { value: 72, label: "Report Readiness", tone: "emerald" as const, delay: 0.3 },
+              { value: 64, label: "Research Velocity", tone: "red" as const, delay: 0.45 },
+            ].map((g) => (
+              <motion.div
+                key={g.label}
+                initial={{ opacity: 0, y: 28, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ ...spring, delay: g.delay }}
+              >
+                <Gauge value={g.value} label={g.label} tone={g.tone} size={132} />
+              </motion.div>
+            ))}
+          </div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+            className="mt-6 text-base text-slate-300/80 md:text-lg"
+          >
+            Live instruments read your research at a glance.
+          </motion.p>
+        </SceneShell>
+      );
     case "plan":
       return (
         <SceneShell>
@@ -172,9 +211,9 @@ function renderScene(id: string) {
             Plan research <span className="text-sky-300">smarter</span>
           </motion.div>
           <div className="flex max-w-3xl flex-wrap items-center justify-center gap-3">
-            <FeatureChip icon={Target} label="Guided Builder" color="bg-red-600" delay={0.15} />
-            <FeatureChip icon={Sparkles} label="AI Prompt Coach" color="bg-slate-600" delay={0.3} />
-            <FeatureChip icon={Compass} label="Research GPS" color="bg-sky-500" delay={0.45} />
+            <FeatureChip icon={Target} label="Research Engine" color="bg-red-600" delay={0.15} />
+            <FeatureChip icon={Sparkles} label="Tuning Bay" color="bg-slate-600" delay={0.3} />
+            <FeatureChip icon={Compass} label="Track Map" color="bg-sky-500" delay={0.45} />
           </div>
         </SceneShell>
       );
@@ -190,8 +229,8 @@ function renderScene(id: string) {
             Verify <span className="text-emerald-300">everything</span>
           </motion.div>
           <div className="flex max-w-3xl flex-wrap items-center justify-center gap-3">
-            <FeatureChip icon={ShieldCheck} label="Source Vault" color="bg-teal-500" delay={0.15} />
-            <FeatureChip icon={FileCheck2} label="Report Readiness" color="bg-emerald-500" delay={0.3} />
+            <FeatureChip icon={ShieldCheck} label="Source Garage" color="bg-sky-500" delay={0.15} />
+            <FeatureChip icon={FileCheck2} label="Brief Builder" color="bg-emerald-500" delay={0.3} />
           </div>
           <motion.div
             initial={{ opacity: 0, y: 18 }}
@@ -225,10 +264,10 @@ function renderScene(id: string) {
             </span>
           </motion.div>
           <div className="flex max-w-3xl flex-wrap items-center justify-center gap-3">
-            <FeatureChip icon={Award} label="Rewards" color="bg-red-600" delay={0.2} />
+            <FeatureChip icon={Award} label="Garage Rewards" color="bg-red-600" delay={0.2} />
             <FeatureChip icon={Wallet} label="Bonus Tracker" color="bg-sky-500" delay={0.35} />
             <FeatureChip icon={Rocket} label="Team Lead Track" color="bg-slate-600" delay={0.5} />
-            <FeatureChip icon={Trophy} label="Leaderboard" color="bg-teal-500" delay={0.65} />
+            <FeatureChip icon={Trophy} label="Leaderboard" color="bg-slate-700" delay={0.65} />
           </div>
         </SceneShell>
       );
@@ -241,7 +280,7 @@ function renderScene(id: string) {
             initial={{ opacity: 0, scale: 0.4 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={spring}
-            className="mb-5 h-16 w-16 object-contain drop-shadow-[0_8px_24px_rgba(56,189,248,0.5)]"
+            className="mb-5 h-16 w-16 object-contain drop-shadow-[0_8px_24px_rgba(239,68,68,0.55)]"
           />
           <h2 className="text-4xl font-black tracking-tight text-white md:text-6xl">
             <Word delay={0.15}>Let's</Word> <Word delay={0.28}>get</Word>{" "}
@@ -255,7 +294,7 @@ function renderScene(id: string) {
             transition={{ delay: 0.7 }}
             className="mt-4 text-lg text-slate-300/80"
           >
-            Your research command center is ready, Landon.
+            Your performance research cockpit is ready, Landon.
           </motion.p>
         </SceneShell>
       );
@@ -410,10 +449,10 @@ function WalkthroughVideoInner({ open, onClose }: { open: boolean; onClose: () =
               className="absolute inset-0"
               animate={{
                 background: [
-                  "radial-gradient(circle at 20% 25%, rgba(56,189,248,0.35), transparent 45%)",
-                  "radial-gradient(circle at 80% 70%, rgba(99,102,241,0.4), transparent 45%)",
-                  "radial-gradient(circle at 30% 80%, rgba(45,212,191,0.3), transparent 45%)",
-                  "radial-gradient(circle at 20% 25%, rgba(56,189,248,0.35), transparent 45%)",
+                  "radial-gradient(circle at 20% 25%, rgba(239,68,68,0.34), transparent 45%)",
+                  "radial-gradient(circle at 80% 70%, rgba(190,18,60,0.32), transparent 45%)",
+                  "radial-gradient(circle at 30% 80%, rgba(148,163,184,0.20), transparent 45%)",
+                  "radial-gradient(circle at 20% 25%, rgba(239,68,68,0.34), transparent 45%)",
                 ],
               }}
               transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
@@ -423,7 +462,7 @@ function WalkthroughVideoInner({ open, onClose }: { open: boolean; onClose: () =
               <motion.span
                 key={i}
                 aria-hidden
-                className="absolute rounded-full bg-sky-300/30"
+                className="absolute rounded-full bg-red-400/30"
                 style={{ left: p.left, top: p.top, width: p.size, height: p.size }}
                 animate={{ y: [0, -28, 0], opacity: [0.15, 0.6, 0.15] }}
                 transition={{ duration: p.dur, repeat: Infinity, delay: p.delay, ease: "easeInOut" }}

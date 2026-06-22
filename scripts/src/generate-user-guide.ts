@@ -12,25 +12,28 @@ const OUTPUT = path.resolve(
 
 interface GuideSection {
   title: string;
+  module: string;
   intro: string;
   points: string[];
 }
 
 const SECTIONS: GuideSection[] = [
   {
-    title: "Command Center",
+    title: "Performance Cockpit",
+    module: "Command Center",
     intro:
-      "The Command Center is your daily cockpit. It surfaces live counts so you always know where work stands the moment you sign in.",
+      "The Performance Cockpit is your daily dashboard. A cluster of circular gauges reads out the health of your research at a glance, with live tiles below for everything in motion.",
     points: [
+      "Instrument gauges for source quality, report readiness, research velocity, and human-review risk.",
       "Live tiles for open requests, blocked items, reports in progress, and completed handoffs.",
-      "Today's priorities and any sources still awaiting human review.",
-      "Quick actions to jump straight into the most common tasks.",
+      "Today's priorities, review alerts, and quick actions to launch the most common tasks.",
     ],
   },
   {
-    title: "Research Builder",
+    title: "Research Engine",
+    module: "Guided Research Builder",
     intro:
-      "Every project starts here. Scoping the question before involving AI is what keeps the rest of the workflow disciplined.",
+      "Every project fires up here. Scoping the question before involving AI is what keeps the rest of the workflow disciplined.",
     points: [
       "Define the decision the research supports.",
       "List the sources the work requires.",
@@ -38,19 +41,21 @@ const SECTIONS: GuideSection[] = [
     ],
   },
   {
-    title: "Research GPS",
+    title: "Track Map",
+    module: "Research GPS",
     intro:
-      "The Research GPS guides you through the full ten-step workflow, from understanding the question all the way to a clean handoff.",
+      "The Track Map guides you through the full workflow, from understanding the question all the way to a clean handoff, with a progress gauge to keep you on the racing line.",
     points: [
-      "Pick an active mission and move through each step in order.",
+      "Pick an active mission and drive through each step in order.",
       "Mark steps Complete, In Progress, or Needs Help.",
-      "Your progress keeps the dashboard counts accurate.",
+      "Your progress keeps the cockpit gauges and counts accurate.",
     ],
   },
   {
-    title: "Source Vault",
+    title: "Source Garage",
+    module: "Source Vault",
     intro:
-      "The Source Vault is where evidence lives. Every source is captured and rated so trust is never assumed.",
+      "The Source Garage is where evidence is stored and rated, so trust is never assumed.",
     points: [
       "Official and internal records are treated as trusted.",
       "AI drafts and unknown sources are clearly flagged.",
@@ -58,9 +63,10 @@ const SECTIONS: GuideSection[] = [
     ],
   },
   {
-    title: "Report Builder",
+    title: "Brief Builder",
+    module: "Report Builder",
     intro:
-      "The Report Builder assembles a leadership-ready report and scores how ready it is to share.",
+      "The Brief Builder assembles a leadership-ready report and scores how ready it is to share.",
     points: [
       "Capture the objective, executive summary, findings, risks, and recommendation.",
       "Attach the sources that back each finding.",
@@ -68,9 +74,10 @@ const SECTIONS: GuideSection[] = [
     ],
   },
   {
-    title: "RoseOS",
+    title: "Company Brain Sync",
+    module: "RoseOS",
     intro:
-      "RoseOS is the company brain. Ask it what is on record, and propose updates that remain drafts until a human approves them.",
+      "RoseOS is the company brain and your research co-driver. Ask it what is on record, and propose updates that remain drafts until a human approves them.",
     points: [
       "Query the decision log, requirements registry, and automation registry.",
       "Draft proposed updates to core records.",
@@ -78,25 +85,30 @@ const SECTIONS: GuideSection[] = [
     ],
   },
   {
-    title: "Growth & Rewards",
+    title: "Garage Rewards & Driver Training",
+    module: "Growth & Rewards",
     intro:
-      "As you work, the Reward Center turns real research skill into points and badges so you can see your career progress.",
+      "As you work, Garage Rewards turns real research skill into points and badges, and Driver Training builds the skills behind them — both tracked on their own gauges.",
     points: [
       "Points and badges reflect genuine research milestones, from Source Finder upward.",
-      "The Training Academy builds skills in using AI responsibly and verifying sources.",
-      "A roadmap shows what each level represents.",
+      "Driver Training builds skills in using AI responsibly and verifying sources.",
+      "A level gauge and roadmap show how close you are to the next milestone.",
     ],
   },
 ];
 
-// Brand palette (matches the app's dark navy / electric blue identity).
-const NAVY = "#0f172a";
-const DEEP_BLUE = "#1e3a8a";
-const ELECTRIC = "#2563eb";
-const SKY = "#38bdf8";
+// Brand palette — luxury fast-car cockpit: deep graphite/black, performance red,
+// chrome/silver neutrals.
+const GRAPHITE = "#0b0d10";
+const RED = "#ef4444";
+const RED_DEEP = "#b91c1c";
+const SILVER = "#cbd1d9";
+const STEEL = "#94a3b8";
 const SLATE = "#475569";
+const INK = "#1f2937";
 const LIGHT = "#e2e8f0";
 const WHITE = "#ffffff";
+const RED_TINT = "#fef2f2";
 
 const COMPLIANCE =
   "Compliance guardrail: AI output is a draft only until it is source-checked and human-reviewed. Company decisions are never recorded automatically.";
@@ -104,14 +116,16 @@ const COMPLIANCE =
 function drawCover(doc: PDFKit.PDFDocument) {
   const { width, height } = doc.page;
   doc.save();
-  doc.rect(0, 0, width, height).fill(NAVY);
-  doc.rect(0, 0, width, 6).fill(ELECTRIC);
+  doc.rect(0, 0, width, height).fill(GRAPHITE);
+  // Performance-red top rail.
+  doc.rect(0, 0, width, 6).fill(RED);
 
-  // Accent band
-  doc.rect(0, height * 0.34, width, 2).fill(DEEP_BLUE);
+  // Chrome accent band.
+  doc.rect(0, height * 0.34, width, 2).fill(RED_DEEP);
+  doc.rect(0, height * 0.34 + 3, width * 0.45, 1).fill(SILVER);
 
   doc
-    .fillColor(SKY)
+    .fillColor(SILVER)
     .font("Helvetica-Bold")
     .fontSize(13)
     .text("LANDONOS", 64, height * 0.22, { characterSpacing: 4 });
@@ -120,7 +134,7 @@ function drawCover(doc: PDFKit.PDFDocument) {
     .fillColor(WHITE)
     .font("Helvetica-Bold")
     .fontSize(40)
-    .text("Research Command Center", 64, height * 0.24 + 18, {
+    .text("Performance Research Cockpit", 64, height * 0.24 + 18, {
       width: width - 128,
     });
 
@@ -131,18 +145,18 @@ function drawCover(doc: PDFKit.PDFDocument) {
     .text("User Guide", 64, height * 0.34 + 22);
 
   doc
-    .fillColor("#94a3b8")
+    .fillColor(STEEL)
     .font("Helvetica")
     .fontSize(11)
     .text(
-      "An AI-guided research training cockpit that teaches and structures responsible compliance and business research, with human review built in at every step.",
+      "An AI-guided research training cockpit that teaches and structures responsible compliance and business research. A luxury instrument cluster reads your work at a glance, with human review built in at every step.",
       64,
       height * 0.34 + 52,
       { width: width - 200, lineGap: 4 }
     );
 
   doc
-    .fillColor(SKY)
+    .fillColor(RED)
     .font("Helvetica-Bold")
     .fontSize(10)
     .text(COMPLIANCE, 64, height - 120, { width: width - 128, lineGap: 3 });
@@ -160,25 +174,29 @@ function drawSection(
   const left = doc.page.margins.left;
   const contentWidth = width - doc.page.margins.left - doc.page.margins.right;
 
-  // Header band
-  doc.rect(0, 0, width, 96).fill(NAVY);
-  doc.rect(0, 96, width, 3).fill(ELECTRIC);
+  // Header band — graphite with a red underline rail.
+  doc.rect(0, 0, width, 96).fill(GRAPHITE);
+  doc.rect(0, 96, width, 3).fill(RED);
 
   doc
-    .fillColor(SKY)
+    .fillColor(RED)
     .font("Helvetica-Bold")
     .fontSize(10)
-    .text(`SECTION ${String(index + 1).padStart(2, "0")}`, left, 34, {
+    .text(`INSTRUMENT ${String(index + 1).padStart(2, "0")}`, left, 30, {
       characterSpacing: 2,
     });
   doc
     .fillColor(WHITE)
     .font("Helvetica-Bold")
     .fontSize(24)
-    .text(section.title, left, 50);
+    .text(section.title, left, 44);
+  doc
+    .fillColor(STEEL)
+    .font("Helvetica")
+    .fontSize(10)
+    .text(section.module, left, 74);
 
   // Intro
-  doc.moveDown(2);
   doc.y = 130;
   doc
     .fillColor(SLATE)
@@ -190,7 +208,7 @@ function drawSection(
 
   // Key points
   doc
-    .fillColor(DEEP_BLUE)
+    .fillColor(RED_DEEP)
     .font("Helvetica-Bold")
     .fontSize(11)
     .text("WHAT YOU CAN DO", left, doc.y, { characterSpacing: 1.5 });
@@ -201,10 +219,10 @@ function drawSection(
     doc
       .save()
       .circle(left + 4, y + 6, 3)
-      .fill(ELECTRIC)
+      .fill(RED)
       .restore();
     doc
-      .fillColor("#1f2937")
+      .fillColor(INK)
       .font("Helvetica")
       .fontSize(11)
       .text(point, left + 18, y, { width: contentWidth - 18, lineGap: 4 });
@@ -218,15 +236,15 @@ function drawSection(
   doc
     .save()
     .roundedRect(left, calloutY, contentWidth, calloutHeight, 6)
-    .fill("#eff6ff")
+    .fill(RED_TINT)
     .restore();
   doc
     .save()
     .roundedRect(left, calloutY, 4, calloutHeight, 2)
-    .fill(ELECTRIC)
+    .fill(RED)
     .restore();
   doc
-    .fillColor(DEEP_BLUE)
+    .fillColor(RED_DEEP)
     .font("Helvetica-Bold")
     .fontSize(9)
     .text("HUMAN REVIEW REQUIRED", left + 16, calloutY + 12, {
@@ -248,15 +266,14 @@ function addFooters(doc: PDFKit.PDFDocument) {
     doc.switchToPage(i);
     const { width, height } = doc.page;
     const bottom = height - 40;
-    // Skip footer styling that would collide with the cover (page 0).
     doc
-      .fillColor("#94a3b8")
+      .fillColor(i === 0 ? STEEL : "#94a3b8")
       .font("Helvetica")
       .fontSize(8.5);
     if (i === 0) {
       doc.text("landonos.app", 64, bottom, { lineBreak: false });
     } else {
-      doc.text("LandonOS — Research Command Center", 72, bottom, {
+      doc.text("LandonOS — Performance Research Cockpit", 72, bottom, {
         lineBreak: false,
       });
       doc.text(`Page ${i + 1} of ${range.count}`, width - 150, bottom, {
@@ -277,7 +294,7 @@ function main() {
     bufferPages: true,
     info: {
       Title: "LandonOS User Guide",
-      Author: "LandonOS Research Command Center",
+      Author: "LandonOS Performance Research Cockpit",
       Subject: "Onboarding user guide",
     },
   });

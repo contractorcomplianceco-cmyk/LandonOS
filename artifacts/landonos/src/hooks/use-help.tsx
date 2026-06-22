@@ -23,6 +23,9 @@ interface HelpContextType {
   videoOpen: boolean;
   openVideo: () => void;
   closeVideo: () => void;
+  guideOpen: boolean;
+  openGuide: () => void;
+  closeGuide: () => void;
 }
 
 const HelpContext = createContext<HelpContextType | undefined>(undefined);
@@ -47,6 +50,7 @@ export function HelpProvider({ children }: { children: ReactNode }) {
   const [stepIndex, setStepIndex] = useState(0);
   const [narrationOn, setNarrationOn] = useState(true);
   const [videoOpen, setVideoOpen] = useState(false);
+  const [guideOpen, setGuideOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -77,6 +81,8 @@ export function HelpProvider({ children }: { children: ReactNode }) {
   const toggleNarration = useCallback(() => setNarrationOn((v) => !v), []);
   const openVideo = useCallback(() => setVideoOpen(true), []);
   const closeVideo = useCallback(() => setVideoOpen(false), []);
+  const openGuide = useCallback(() => setGuideOpen(true), []);
+  const closeGuide = useCallback(() => setGuideOpen(false), []);
 
   return (
     <HelpContext.Provider
@@ -95,6 +101,9 @@ export function HelpProvider({ children }: { children: ReactNode }) {
         videoOpen,
         openVideo,
         closeVideo,
+        guideOpen,
+        openGuide,
+        closeGuide,
       }}
     >
       {children}
