@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import revUrl from "@/assets/v8-rev.mp3";
 
 const STORAGE_KEY = "landonos_sound";
 
@@ -29,47 +30,56 @@ export function setSoundEnabled(enabled: boolean): void {
   listeners.forEach((fn) => fn(enabled));
 }
 
-let noiseBuffer: AudioBuffer | null = null;
-function getNoiseBuffer(ctx: AudioContext): AudioBuffer {
-  if (!noiseBuffer || noiseBuffer.sampleRate !== ctx.sampleRate) {
-    const len = Math.floor(ctx.sampleRate * 1.2);
-    const buf = ctx.createBuffer(1, len, ctx.sampleRate);
-    const data = buf.getChannelData(0);
-    for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
-    noiseBuffer = buf;
+// The real recording is a NASCAR startup + rev (~13s). We only want a punchy
+// rev blip on a click, so the bundled `revUrl` asset is a pre-trimmed ~1.9s rev
+// segment. We decode it once into an AudioBuffer and fire a fresh BufferSource
+// per click so rapid clicks can overlap cleanly without restarting one another.
+let revBuffer: AudioBuffer | null = null;
+let decoding: Promise<AudioBuffer | null> | null = null;
+
+function loadRevBuffer(ctx: AudioContext): Promise<AudioBuffer | null> {
+  if (revBuffer) return Promise.resolve(revBuffer);
+  if (!decoding) {
+    decoding = fetch(revUrl)
+      .then((r) => r.arrayBuffer())
+      .then((data) => ctx.decodeAudioData(data))
+      .then((buf) => {
+        revBuffer = buf;
+        return buf;
+      })
+      .catch(() => {
+        decoding = null; // allow a later retry
+        return null;
+      });
   }
-  return noiseBuffer;
+  return decoding;
 }
 
-let distortionCurve: Float32Array<ArrayBuffer> | null = null;
-function getDistortionCurve(): Float32Array<ArrayBuffer> {
-  if (!distortionCurve) {
-    const n = 1024;
-    const curve = new Float32Array(new ArrayBuffer(n * 4));
-    const k = 5;
-    for (let i = 0; i < n; i++) {
-      const x = (i / (n - 1)) * 2 - 1;
-      curve[i] = Math.tanh(k * x);
+let lastRevAt = 0;
+
+function startRev(ctx: AudioContext, buffer: AudioBuffer): void {
+  const src = ctx.createBufferSource();
+  src.buffer = buffer;
+  const gain = ctx.createGain();
+  gain.gain.value = 0.9;
+  src.connect(gain);
+  gain.connect(ctx.destination);
+  src.start();
+  src.onended = () => {
+    try {
+      src.disconnect();
+      gain.disconnect();
+    } catch {
+      /* already torn down */
     }
-    distortionCurve = curve;
-  }
-  return distortionCurve;
+  };
 }
 
 /**
- * Synthesize a short V8 stock-car throttle blip with the Web Audio API.
- * No audio asset required — keeps the app fully frontend-only.
- *
- * The note tracks the engine FIRING frequency (a V8 fires 4 times per crank
- * revolution) as RPM stabs up then falls back. Three ingredients give it the
- * V8 character a plain oscillator lacks: (1) sawtooth oscillators + a sub
- * octave run through a tanh WaveShaper for raspy exhaust grit, (2) a white-
- * noise roar amplitude-modulated by a pulse at the firing rate so you hear the
- * lumpy "blat-blat-blat" of the exhaust, and (3) a lowpass that opens as the
- * revs climb. Two engine voices are detuned for the cross-plane V8 lope.
+ * Play the V8 stock-car rev on a click. Uses the real bundled engine recording
+ * (the trimmed NASCAR rev at `src/assets/v8-rev.mp3`) rather than synthesis.
+ * Frontend-only — the audio ships with the app, no backend or asset server.
  */
-let lastRevAt = 0;
-
 export function playRev(): void {
   if (!isSoundEnabled()) return;
   const ctx = getCtx();
@@ -79,110 +89,24 @@ export function playRev(): void {
   lastRevAt = tNow;
   if (ctx.state === "suspended") ctx.resume().catch(() => {});
 
-  const now = ctx.currentTime;
-  const stab = now + 0.2; // throttle stabs up
-  const end = now + 0.95; // settles back to idle
+  if (revBuffer) {
+    startRev(ctx, revBuffer);
+    return;
+  }
+  // first use(s): decode, then play once ready (only if it decodes promptly so a
+  // long-past click doesn't fire a surprise rev)
+  const requestedAt = tNow;
+  loadRevBuffer(ctx).then((buf) => {
+    if (!buf || !isSoundEnabled()) return;
+    const elapsed = (typeof performance !== "undefined" ? performance.now() : Date.now()) - requestedAt;
+    if (elapsed < 1500) startRev(ctx, buf);
+  });
+}
 
-  // firing frequency = engine note: idle -> peak rev -> drop back toward idle
-  // kept deliberately low so it reads as a big-displacement V8, not a high-rev synth
-  const fIdle = 42;
-  const fPeak = 165;
-  const fSettle = 64;
-  const setSweep = (p: AudioParam, mult: number) => {
-    p.setValueAtTime(fIdle * mult, now);
-    p.exponentialRampToValueAtTime(fPeak * mult, stab);
-    p.exponentialRampToValueAtTime(fSettle * mult, end);
-  };
-
-  const master = ctx.createGain();
-  master.gain.setValueAtTime(0.0001, now);
-  master.gain.linearRampToValueAtTime(0.26, now + 0.04);
-  master.gain.linearRampToValueAtTime(0.2, stab);
-  master.gain.exponentialRampToValueAtTime(0.0001, end);
-  master.connect(ctx.destination);
-
-  // raspy exhaust grit
-  const shaper = ctx.createWaveShaper();
-  shaper.curve = getDistortionCurve();
-  shaper.oversample = "4x";
-
-  const lp = ctx.createBiquadFilter();
-  lp.type = "lowpass";
-  lp.Q.value = 1.1;
-  lp.frequency.setValueAtTime(320, now);
-  lp.frequency.exponentialRampToValueAtTime(2200, stab);
-  lp.frequency.exponentialRampToValueAtTime(620, end);
-  lp.connect(shaper);
-  shaper.connect(master);
-
-  const oscs: OscillatorNode[] = [];
-  const addOsc = (type: OscillatorType, mult: number, detune: number, gain: number) => {
-    const osc = ctx.createOscillator();
-    osc.type = type;
-    osc.detune.value = detune;
-    setSweep(osc.frequency, mult);
-    const g = ctx.createGain();
-    g.gain.value = gain;
-    osc.connect(g);
-    g.connect(lp);
-    osc.start(now);
-    osc.stop(end + 0.04);
-    oscs.push(osc);
-  };
-
-  // two engine voices, detuned for the cross-plane V8 lope, + sub octaves for the deep chest thump
-  addOsc("sawtooth", 1, -8, 0.34);
-  addOsc("sawtooth", 1, 11, 0.3);
-  addOsc("triangle", 0.5, 0, 0.95);
-  addOsc("sine", 0.25, 0, 0.7);
-
-  // exhaust roar: white noise gated by a pulse at the firing rate ("blat-blat")
-  const noise = ctx.createBufferSource();
-  noise.buffer = getNoiseBuffer(ctx);
-  noise.loop = true;
-
-  const noiseBand = ctx.createBiquadFilter();
-  noiseBand.type = "bandpass";
-  noiseBand.Q.value = 0.7;
-  noiseBand.frequency.setValueAtTime(360, now);
-  noiseBand.frequency.exponentialRampToValueAtTime(1200, stab);
-  noiseBand.frequency.exponentialRampToValueAtTime(520, end);
-
-  const noiseGate = ctx.createGain();
-  noiseGate.gain.value = 0.13;
-
-  const amOsc = ctx.createOscillator();
-  amOsc.type = "sawtooth";
-  setSweep(amOsc.frequency, 1);
-  const amDepth = ctx.createGain();
-  amDepth.gain.value = 0.14;
-  amOsc.connect(amDepth);
-  amDepth.connect(noiseGate.gain); // modulate the roar at the firing rate
-
-  noise.connect(noiseBand);
-  noiseBand.connect(noiseGate);
-  noiseGate.connect(lp);
-
-  noise.start(now);
-  noise.stop(end + 0.04);
-  amOsc.start(now);
-  amOsc.stop(end + 0.04);
-  oscs.push(amOsc);
-
-  window.setTimeout(() => {
-    try {
-      master.disconnect();
-      shaper.disconnect();
-      lp.disconnect();
-      noiseBand.disconnect();
-      noiseGate.disconnect();
-      amDepth.disconnect();
-      noise.disconnect();
-      oscs.forEach((o) => o.disconnect());
-    } catch {
-      /* nodes already torn down */
-    }
-  }, 1200);
+/** Warm the decode cache so the first click is instant. */
+export function preloadRev(): void {
+  const ctx = getCtx();
+  if (ctx) loadRevBuffer(ctx);
 }
 
 export function useSoundEnabled(): boolean {

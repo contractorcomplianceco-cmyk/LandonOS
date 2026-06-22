@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/hooks/use-store";
 import { useHelp } from "@/hooks/use-help";
-import { playRev, setSoundEnabled, useSoundEnabled } from "@/lib/sound";
+import { playRev, preloadRev, setSoundEnabled, useSoundEnabled } from "@/lib/sound";
 import { useToast } from "@/hooks/use-toast";
 import { PageHelp } from "@/components/page-help";
 import { HelpPopup } from "@/components/help-popup";
@@ -404,6 +404,10 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    preloadRev();
+  }, []);
 
   const attentionCount =
     data.blockers.filter((b) => b.status === "Open" || b.status === "In Review").length;
