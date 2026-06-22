@@ -38,7 +38,7 @@ function Kicker({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
       initial={{ opacity: 0, y: -16, scale: 0.8 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ ...pop, delay: 0.05 }}
-      className="relative mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-blue-100 backdrop-blur"
+      className="relative mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-slate-300 backdrop-blur"
     >
       {/* Pulsing energy ring around the kicker icon. */}
       <span className="relative flex h-3.5 w-3.5 items-center justify-center">
@@ -90,7 +90,7 @@ function Tile({
       >
         {value}
       </motion.span>
-      <span className="text-[11px] text-blue-100/70">{label}</span>
+      <span className="text-[11px] text-slate-300/70">{label}</span>
     </motion.div>
   );
 }
@@ -140,7 +140,7 @@ function Sub({ children }: { children: React.ReactNode }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ ...spring, delay: 0.3 }}
-      className="mt-3 max-w-xl text-sm text-blue-100/80 md:text-base"
+      className="mt-3 max-w-xl text-sm text-slate-300/80 md:text-base"
     >
       {children}
     </motion.p>
@@ -155,10 +155,10 @@ export function OnboardingScene({ id }: { id: string }) {
           <Kicker icon={LayoutDashboard} label="Command Center" />
           <Title>Your daily cockpit</Title>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <Tile icon={Target} label="Open requests" value="3" color="bg-blue-500" delay={0.18} />
+            <Tile icon={Target} label="Open requests" value="3" color="bg-red-600" delay={0.18} />
             <Tile icon={ShieldCheck} label="Need review" value="2" color="bg-teal-500" delay={0.28} />
             <Tile icon={FileText} label="Reports" value="4" color="bg-sky-500" delay={0.38} />
-            <Tile icon={Award} label="Handoffs" value="6" color="bg-indigo-500" delay={0.48} />
+            <Tile icon={Award} label="Handoffs" value="6" color="bg-slate-600" delay={0.48} />
           </div>
         </SceneShell>
       );
@@ -168,7 +168,7 @@ export function OnboardingScene({ id }: { id: string }) {
           <Kicker icon={Target} label="Research Builder" />
           <Title>Scope it before the AI</Title>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <Chip icon={Target} label="Decision it supports" color="bg-blue-500" delay={0.18} />
+            <Chip icon={Target} label="Decision it supports" color="bg-red-600" delay={0.18} />
             <Chip icon={Database} label="Required sources" color="bg-sky-500" delay={0.3} />
             <Chip icon={ShieldCheck} label="What not to assume" color="bg-teal-500" delay={0.42} />
           </div>
@@ -194,11 +194,11 @@ export function OnboardingScene({ id }: { id: string }) {
                   {i < 3 ? (
                     <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300" />
                   ) : (
-                    <Circle className="h-3.5 w-3.5 text-blue-200/70" />
+                    <Circle className="h-3.5 w-3.5 text-slate-300/70" />
                   )}
                   {s}
                 </span>
-                {i < steps.length - 1 && <ArrowRight className="h-3 w-3 text-blue-200/50" />}
+                {i < steps.length - 1 && <ArrowRight className="h-3 w-3 text-slate-300/50" />}
               </motion.div>
             ))}
           </div>
@@ -225,7 +225,7 @@ export function OnboardingScene({ id }: { id: string }) {
                 className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.07] px-4 py-2.5 backdrop-blur"
               >
                 <span className="flex items-center gap-2.5 text-sm font-medium text-white">
-                  <row.icon className="h-4 w-4 text-blue-200" />
+                  <row.icon className="h-4 w-4 text-slate-300" />
                   {row.label}
                 </span>
                 <span
@@ -234,7 +234,7 @@ export function OnboardingScene({ id }: { id: string }) {
                       ? "rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-200 ring-1 ring-emerald-400/30"
                       : row.tone === "sky"
                         ? "rounded-full bg-sky-500/20 px-2.5 py-0.5 text-[11px] font-semibold text-sky-200 ring-1 ring-sky-400/30"
-                        : "rounded-full bg-white/10 px-2.5 py-0.5 text-[11px] font-semibold text-blue-100/80 ring-1 ring-white/20"
+                        : "rounded-full bg-white/10 px-2.5 py-0.5 text-[11px] font-semibold text-slate-300/80 ring-1 ring-white/20"
                   }
                 >
                   {row.tag}
@@ -256,7 +256,7 @@ export function OnboardingScene({ id }: { id: string }) {
             className="mt-6 w-full max-w-md rounded-xl border border-white/10 bg-white/[0.07] p-4 backdrop-blur"
           >
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-blue-100/70">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-300/70">
                 Readiness score
               </span>
               <motion.span
@@ -273,10 +273,10 @@ export function OnboardingScene({ id }: { id: string }) {
                 initial={{ width: 0 }}
                 animate={{ width: "82%" }}
                 transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="h-full rounded-full bg-gradient-to-r from-sky-400 to-blue-500"
+                className="h-full rounded-full bg-gradient-to-r from-red-500 to-red-400"
               />
             </div>
-            <div className="mt-3 flex items-center gap-2 text-xs text-blue-100/75">
+            <div className="mt-3 flex items-center gap-2 text-xs text-slate-300/75">
               <ShieldCheck className="h-3.5 w-3.5 text-sky-300" />
               Warns you when official sources or answers are missing.
             </div>
@@ -320,7 +320,7 @@ export function OnboardingScene({ id }: { id: string }) {
             transition={{ ...pop, delay: 0.22 }}
             className="mt-6 text-5xl font-black md:text-6xl"
           >
-            <span className="bg-gradient-to-r from-sky-300 to-indigo-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-red-400 to-red-300 bg-clip-text text-transparent">
               1,250 pts
             </span>
           </motion.div>

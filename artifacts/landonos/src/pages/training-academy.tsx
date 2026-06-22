@@ -93,7 +93,7 @@ export default function TrainingAcademy() {
       <PageHeader
         icon={GraduationCap}
         eyebrow="Skill Curriculum"
-        title="Training Academy"
+        title="Driver Training"
         subtitle="Master the art of AI-guided, source-verified intelligence gathering — one lesson at a time."
         stats={[
           { label: "Completed", value: completedLessons, icon: CheckCircle2 },
@@ -123,7 +123,7 @@ export default function TrainingAcademy() {
         <CardContent className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="font-medium">Curriculum completion</span>
-            <span className="font-semibold tabular-nums text-emerald-700">{progressPercent}%</span>
+            <span className="font-semibold tabular-nums text-emerald-400">{progressPercent}%</span>
           </div>
           <Progress value={progressPercent} className="h-3" />
         </CardContent>
@@ -139,12 +139,12 @@ export default function TrainingAcademy() {
             <div className="border-b pb-3 space-y-2">
               <div className="flex items-center justify-between gap-3">
                 <h2 className="text-xl font-bold flex items-center gap-2">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-500 text-white shadow-sm shadow-blue-500/30">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-md bg-sky-500 text-white shadow-sm shadow-sky-500/30">
                     <GraduationCap className="w-4 h-4" />
                   </span>
                   {track.title}
                 </h2>
-                <span className="text-sm font-semibold tabular-nums text-blue-700 shrink-0">{trackDone}/{trackTotal}</span>
+                <span className="text-sm font-semibold tabular-nums text-sky-300 shrink-0">{trackDone}/{trackTotal}</span>
               </div>
               <Progress value={trackPercent} className="h-2" />
             </div>

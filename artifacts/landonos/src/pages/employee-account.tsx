@@ -79,7 +79,7 @@ export default function EmployeeAccountPage() {
 
       {/* Informational notice */}
       <div className="flex items-start gap-3 rounded-lg border border-sky-500/30 bg-sky-500/5 px-4 py-3">
-        <Info className="mt-0.5 h-4 w-4 shrink-0 text-sky-600" />
+        <Info className="mt-0.5 h-4 w-4 shrink-0 text-sky-300" />
         <p className="text-sm text-foreground">
           This is your employment record for reference. Any change request is{" "}
           <span className="font-medium">submitted to HR for review — informational only</span>. Records are
@@ -88,10 +88,10 @@ export default function EmployeeAccountPage() {
       </div>
 
       {/* Personal & employment details */}
-      <Card className="border-t-4 border-t-blue-500">
+      <Card className="border-t-4 border-t-sky-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <UserCircle2 className="h-5 w-5 text-blue-600" /> Personal & Employment Details
+            <UserCircle2 className="h-5 w-5 text-sky-300" /> Personal & Employment Details
           </CardTitle>
           <CardDescription>On file with HR. Submit corrections for review.</CardDescription>
         </CardHeader>
@@ -121,10 +121,10 @@ export default function EmployeeAccountPage() {
       </Card>
 
       {/* Documents */}
-      <Card className="border-t-4 border-t-indigo-500">
+      <Card className="border-t-4 border-t-slate-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-indigo-600" /> Documents
+            <FileText className="h-5 w-5 text-slate-300" /> Documents
           </CardTitle>
           <CardDescription>Employment paperwork available to you.</CardDescription>
         </CardHeader>
@@ -133,10 +133,10 @@ export default function EmployeeAccountPage() {
             {DOCUMENTS.map((doc) => (
               <div
                 key={doc.id}
-                className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3 transition-colors hover:border-indigo-500/40 hover:bg-indigo-500/5"
+                className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3 transition-colors hover:border-slate-500/40 hover:bg-slate-500/5"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-indigo-500/10 text-indigo-600">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-500/10 text-slate-300">
                     <doc.icon className="h-4 w-4" />
                   </div>
                   <div className="min-w-0">
@@ -147,7 +147,7 @@ export default function EmployeeAccountPage() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="gap-1.5 text-indigo-600 hover:bg-indigo-500/10 hover:text-indigo-700"
+                  className="gap-1.5 text-slate-300 hover:bg-slate-500/10 hover:text-slate-300"
                   onClick={() => toast({ title: "Opening document", description: `${doc.name} would open in a secure viewer.` })}
                 >
                   <Download className="h-3.5 w-3.5" /> View
@@ -162,7 +162,7 @@ export default function EmployeeAccountPage() {
       <Card className="border-t-4 border-t-rose-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <ShieldAlert className="h-5 w-5 text-rose-600" /> Compensation, Payroll & Tax
+            <ShieldAlert className="h-5 w-5 text-rose-400" /> Compensation, Payroll & Tax
           </CardTitle>
           <CardDescription>
             Sensitive records are managed by HR and Payroll. They are never shown inline here.
@@ -177,9 +177,9 @@ export default function EmployeeAccountPage() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                    <Lock className="h-4 w-4 text-rose-600" /> {g.label}
+                    <Lock className="h-4 w-4 text-rose-400" /> {g.label}
                   </div>
-                  <Badge className="border-rose-500/30 bg-rose-500/10 text-rose-700">Restricted</Badge>
+                  <Badge className="border-rose-500/30 bg-rose-500/10 text-rose-400">Restricted</Badge>
                 </div>
                 <div className="mt-1 text-xs text-muted-foreground">{g.note}</div>
                 <div className="mt-3 select-none font-mono text-lg tracking-widest text-muted-foreground/70">

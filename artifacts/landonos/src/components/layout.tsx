@@ -18,19 +18,19 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import {
-  LayoutDashboard,
-  Compass,
+  Gauge as GaugeIcon,
+  Route,
   MessageSquare,
   FileText,
-  Database,
-  AlertTriangle,
-  Send,
+  Warehouse,
+  Wrench,
+  FlagTriangleRight,
   Lightbulb,
   Award,
   GraduationCap,
   BrainCircuit,
   Settings,
-  Target,
+  Settings2,
   Sparkles,
   Bot,
   Menu,
@@ -56,34 +56,34 @@ const NAV_SECTIONS = [
     label: "Overview",
     items: [
       { href: "/welcome", label: "Welcome", icon: Sparkles },
-      { href: "/", label: "Command Center", icon: LayoutDashboard },
+      { href: "/", label: "Performance Cockpit", icon: GaugeIcon },
     ],
   },
   {
     label: "Research",
     items: [
-      { href: "/guided-research-builder", label: "Research Builder", icon: Target },
-      { href: "/prompt-coach", label: "Prompt Coach", icon: Sparkles },
-      { href: "/research-gps", label: "Research GPS", icon: Compass },
-      { href: "/source-vault", label: "Source Vault", icon: Database },
-      { href: "/report-builder", label: "Report Builder", icon: FileText },
-      { href: "/handoff", label: "Handoff", icon: Send },
+      { href: "/guided-research-builder", label: "Research Engine", icon: Settings2 },
+      { href: "/prompt-coach", label: "Tuning Bay", icon: Wrench },
+      { href: "/research-gps", label: "Track Map", icon: Route },
+      { href: "/source-vault", label: "Source Garage", icon: Warehouse },
+      { href: "/report-builder", label: "Brief Builder", icon: FileText },
+      { href: "/handoff", label: "Finish Line Handoff", icon: FlagTriangleRight },
     ],
   },
   {
     label: "Collaborate",
     items: [
-      { href: "/roseos-chat", label: "RoseOS Chat", icon: Bot },
-      { href: "/blocked", label: "Blocked Help", icon: AlertTriangle },
-      { href: "/brainstorming", label: "Brainstorming", icon: Lightbulb },
-      { href: "/company-brain", label: "RoseOS", icon: BrainCircuit },
+      { href: "/roseos-chat", label: "RoseOS Co-Driver", icon: Bot },
+      { href: "/blocked", label: "Pit Stop", icon: Wrench },
+      { href: "/brainstorming", label: "Idea Garage", icon: Lightbulb },
+      { href: "/company-brain", label: "Company Brain Sync", icon: BrainCircuit },
     ],
   },
   {
     label: "Growth & Rewards",
     items: [
-      { href: "/training-academy", label: "Training Academy", icon: GraduationCap },
-      { href: "/reward-center", label: "Rewards", icon: Award },
+      { href: "/training-academy", label: "Driver Training", icon: GraduationCap },
+      { href: "/reward-center", label: "Garage Rewards", icon: Award },
       { href: "/bonus-tracker", label: "Bonus Tracker", icon: Wallet },
       { href: "/team-lead-track", label: "Team Lead Track", icon: Rocket },
       { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
@@ -112,12 +112,12 @@ function SidebarBrand() {
             <h1 className="font-bold text-base leading-tight text-sidebar-foreground tracking-tight">
               LandonOS
             </h1>
-            <span className="rounded bg-sidebar-primary/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-sky-300 ring-1 ring-sidebar-primary/30">
-              Enterprise
+            <span className="rounded bg-red-500/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-red-400 ring-1 ring-red-500/40">
+              Cockpit
             </span>
           </div>
           <p className="text-[11px] text-sidebar-foreground/55 leading-tight truncate">
-            Research Command Center
+            Performance Research Cockpit
           </p>
         </div>
       </div>
@@ -138,9 +138,9 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
         }}
         className="group relative block w-full overflow-hidden rounded-xl border border-sidebar-border/60 shadow-md transition-all hover:border-sidebar-primary/50 hover:shadow-lg"
       >
-        <div className="relative aspect-video w-full bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.35),transparent_60%)]" />
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.3),transparent_55%)]" />
+        <div className="carbon relative aspect-video w-full">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.40),transparent_60%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(120,120,130,0.25),transparent_55%)]" />
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/30 backdrop-blur transition-transform group-hover:scale-110">
               <Play className="h-5 w-5 translate-x-[1px] fill-white text-white" />
@@ -151,7 +151,7 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
           </span>
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-3 pb-2 pt-6 text-left">
             <div className="text-xs font-semibold text-white">Watch the Hype Reel</div>
-            <div className="text-[11px] text-blue-100/80">Tour LandonOS with music</div>
+            <div className="text-[11px] text-slate-300/80">Tour LandonOS with music</div>
           </div>
         </div>
       </button>
@@ -177,13 +177,13 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
                     )}
                   >
                     {isActive && (
-                      <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-gradient-to-b from-sky-400 to-sidebar-primary" />
+                      <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-gradient-to-b from-red-400 to-red-600" />
                     )}
                     <span
                       className={cn(
                         "flex h-7 w-7 shrink-0 items-center justify-center rounded-md transition-colors",
                         isActive
-                          ? "bg-sidebar-primary/25 text-sky-300 ring-1 ring-sidebar-primary/30"
+                          ? "bg-red-500/20 text-red-400 ring-1 ring-red-500/40"
                           : "text-sidebar-foreground/55 group-hover:text-white"
                       )}
                     >
@@ -233,7 +233,7 @@ function SidebarFooter() {
           </div>
           <div className="w-px self-stretch bg-white/10" />
           <div className="flex-1">
-            <div className="text-2xl font-bold leading-none tabular-nums text-sky-300">
+            <div className="text-2xl font-bold leading-none tabular-nums text-red-400">
               {needAttention}
             </div>
             <div className="mt-1 text-[10px] text-sidebar-foreground/55">Need attention</div>
@@ -256,12 +256,23 @@ function StatusChip({
   tone,
 }: {
   label: string;
-  tone: "online" | "synced" | "review";
+  tone: "alert" | "neutral" | "verify";
 }) {
+  const styles =
+    tone === "alert"
+      ? "bg-red-500/15 text-red-300 ring-red-500/40"
+      : tone === "verify"
+        ? "bg-emerald-500/15 text-emerald-300 ring-emerald-500/30"
+        : "bg-white/[0.06] text-slate-300 ring-white/15";
   const dot =
-    tone === "review" ? "bg-amber-400" : "bg-emerald-400";
+    tone === "alert" ? "bg-red-400" : tone === "verify" ? "bg-emerald-400" : "bg-slate-400";
   return (
-    <div className="flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium text-blue-50 ring-1 ring-white/15 backdrop-blur">
+    <div
+      className={cn(
+        "flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ring-1 backdrop-blur",
+        styles
+      )}
+    >
       <span className={cn("h-1.5 w-1.5 rounded-full", dot)} />
       {label}
     </div>
@@ -317,7 +328,7 @@ function GlobalSearch() {
     <div className="relative w-full max-w-md">
       <Search
         size={16}
-        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-blue-100/60"
+        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
       />
       <Input
         ref={inputRef}
@@ -338,10 +349,10 @@ function GlobalSearch() {
           }
         }}
         placeholder="Search research, reports, sources..."
-        className="h-9 pl-9 pr-12 bg-white/10 border-white/15 text-white placeholder:text-blue-100/50 focus-visible:ring-white/30"
+        className="h-9 pl-9 pr-12 bg-white/[0.06] border-white/15 text-white placeholder:text-slate-500 focus-visible:ring-red-500/40"
         aria-label="Search research, reports, and sources"
       />
-      <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 hidden items-center gap-0.5 rounded border border-white/20 bg-white/10 px-1.5 text-[10px] font-medium text-blue-100/70 sm:flex">
+      <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 hidden items-center gap-0.5 rounded border border-white/20 bg-white/10 px-1.5 text-[10px] font-medium text-slate-400 sm:flex">
         ⌘K
       </kbd>
       {open && query.trim() && (
@@ -414,7 +425,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-full overflow-hidden min-w-0">
         {/* Topbar */}
-        <header className="border-b border-slate-800 bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 shrink-0">
+        <header className="carbon relative border-b border-white/10 shrink-0">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-red-500/50 to-transparent" />
           <div className="flex h-16 items-center gap-3 px-3 md:px-6">
             {/* Left: mobile menu + branding */}
             <Button
@@ -428,10 +440,10 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </Button>
             <div className="min-w-0 shrink-0">
               <div className="font-semibold text-white leading-tight truncate">
-                Research Command Center
+                Performance Research Cockpit
               </div>
-              <div className="text-xs text-blue-200 leading-tight truncate hidden sm:block">
-                AI-Guided Research Training Cockpit
+              <div className="text-xs text-slate-400 leading-tight truncate hidden sm:block">
+                Compliance / Business Research
               </div>
             </div>
 
@@ -443,15 +455,15 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             {/* Right: status + actions */}
             <div className="flex flex-1 lg:flex-none items-center justify-end gap-2 md:gap-3">
               <div className="hidden xl:flex items-center gap-2">
-                <StatusChip label="AI Online" tone="online" />
-                <StatusChip label="Sources Synced" tone="synced" />
-                <StatusChip label="Human Review Required" tone="review" />
+                <StatusChip label="Human Review Required" tone="alert" />
+                <StatusChip label="AI Draft Only" tone="neutral" />
+                <StatusChip label="Source Check" tone="verify" />
               </div>
 
               <button
                 type="button"
                 onClick={startTour}
-                className="rounded-md p-2 text-blue-100/70 hover:bg-white/10 hover:text-white"
+                className="rounded-md p-2 text-slate-400 hover:bg-white/10 hover:text-white"
                 aria-label="Start narrated walkthrough"
                 title="Start narrated walkthrough"
               >
@@ -462,7 +474,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 onClick={toggleHints}
                 className={cn(
                   "rounded-md p-2 hover:bg-white/10 hover:text-white",
-                  hintsEnabled ? "text-sky-300" : "text-blue-100/70"
+                  hintsEnabled ? "text-red-400" : "text-slate-400"
                 )}
                 aria-label={hintsEnabled ? "Hide help hints" : "Show help hints"}
                 aria-pressed={hintsEnabled}
@@ -474,19 +486,19 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <button
                 type="button"
                 onClick={() => navigate("/blocked")}
-                className="relative rounded-md p-2 text-blue-100/70 hover:bg-white/10 hover:text-white"
+                className="relative rounded-md p-2 text-slate-400 hover:bg-white/10 hover:text-white"
                 aria-label="Attention items"
               >
                 <Bell size={18} />
                 {attentionCount > 0 && (
-                  <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-rose-400 ring-2 ring-slate-900" />
+                  <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-red-500 ring-2 ring-black" />
                 )}
               </button>
               <button
                 type="button"
                 onClick={() => navigate("/roseos-chat")}
-                className="rounded-md p-2 text-blue-100/70 hover:bg-white/10 hover:text-white"
-                aria-label="RoseOS Chat"
+                className="rounded-md p-2 text-slate-400 hover:bg-white/10 hover:text-white"
+                aria-label="RoseOS Co-Driver"
               >
                 <MessageSquare size={18} />
               </button>
@@ -507,11 +519,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                       <div className="text-sm font-medium text-white">
                         {data.settings.userName || "Landon"}
                       </div>
-                      <div className="text-[11px] text-blue-200/70">
+                      <div className="text-[11px] text-slate-400">
                         {data.settings.userRole || "Research Lead"}
                       </div>
                     </div>
-                    <ChevronDown size={15} className="hidden text-blue-100/70 md:block" />
+                    <ChevronDown size={15} className="hidden text-slate-400 md:block" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
@@ -536,7 +548,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                     <Settings className="mr-2 h-4 w-4" /> Settings
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    className="text-rose-600 focus:text-rose-700"
+                    className="text-rose-400 focus:text-rose-400"
                     onClick={() =>
                       toast({
                         title: "Signed out",
@@ -551,7 +563,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
               <Button
                 onClick={() => navigate("/guided-research-builder?new=1")}
-                className="ml-1 hidden shrink-0 gap-1.5 bg-white text-slate-900 hover:bg-blue-50 sm:flex"
+                className="ml-1 hidden shrink-0 gap-1.5 bg-white text-slate-900 hover:bg-slate-200 sm:flex"
               >
                 <Plus size={16} />
                 <span className="hidden md:inline">New Research Request</span>

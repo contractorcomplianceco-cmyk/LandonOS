@@ -33,13 +33,13 @@ const STATUS_BORDER_T: Record<HandoffStatus, string> = {
 };
 
 const STATUS_BADGE: Record<HandoffStatus, string> = {
-  "Draft": "bg-slate-500/10 text-slate-700 border-slate-500/30",
-  "Ready for Rose": "bg-sky-500/10 text-sky-700 border-sky-500/30",
-  "Ready for Carmen": "bg-sky-500/10 text-sky-700 border-sky-500/30",
-  "Ready for Gregg": "bg-sky-500/10 text-sky-700 border-sky-500/30",
-  "Needs More Research": "bg-rose-500/10 text-rose-700 border-rose-500/30",
-  "Approved": "bg-emerald-500/10 text-emerald-700 border-emerald-500/30",
-  "Archived": "bg-slate-500/10 text-slate-700 border-slate-500/30",
+  "Draft": "bg-slate-500/10 text-slate-300 border-slate-500/30",
+  "Ready for Rose": "bg-sky-500/10 text-sky-300 border-sky-500/30",
+  "Ready for Carmen": "bg-sky-500/10 text-sky-300 border-sky-500/30",
+  "Ready for Gregg": "bg-sky-500/10 text-sky-300 border-sky-500/30",
+  "Needs More Research": "bg-rose-500/10 text-rose-400 border-rose-500/30",
+  "Approved": "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+  "Archived": "bg-slate-500/10 text-slate-300 border-slate-500/30",
 };
 
 export default function HandoffPage() {
@@ -193,11 +193,11 @@ FLAGS:
     <div className="space-y-6">
       <PageHeader
         icon={Send}
-        eyebrow="Leadership Handoff"
-        title="Research Completed Handoff"
+        eyebrow="Cross the line"
+        title="Finish Line Handoff"
         subtitle="Structure and submit your research for leadership review — self-contained, source-checked, and decision-ready."
         action={
-          <Button onClick={() => handleOpenDialog()} className="bg-white text-slate-900 hover:bg-blue-50">
+          <Button onClick={() => handleOpenDialog()} className="bg-white text-slate-900 hover:bg-slate-200">
             <Plus className="w-4 h-4 mr-2" /> New Handoff
           </Button>
         }

@@ -1,6 +1,8 @@
-# LandonOS Research Command Center
+# LandonOS: Performance Research Cockpit
 
 A standalone, frontend-only web app: an AI-guided research training cockpit for "Landon" that teaches and structures responsible compliance/business research, with built-in human-review guardrails. All data lives in the browser (localStorage) and survives refresh — there is no backend.
+
+Visual theme: a luxury fast-car cockpit — deep black/graphite foundation, carbon-fiber texture, performance-RED hero accent, chrome/silver borders, and circular gauge instruments. Module names use cockpit metaphors (see Product). The theme is token-driven (dark via `:root` tokens — there is NO `.dark` class toggled, so `dark:` variant classes do NOT apply; style the base classes instead).
 
 ## Run & Operate
 
@@ -21,7 +23,8 @@ A standalone, frontend-only web app: an AI-guided research training cockpit for 
 - `src/lib/types.ts` — the full data model (source of truth for all entities)
 - `src/lib/default-data.ts` — seeded sample data + exported constants (`RESEARCH_TYPES`, `SOURCE_TYPES`, `GPS_STEPS`)
 - `src/lib/rewards.ts` — level thresholds + progress helpers (`LEVELS`, `levelForPoints`, `levelProgress`)
-- `src/components/stat-card.tsx` — shared `ACCENT` color map (blue/indigo/teal/sky/rose/emerald/slate — all static Tailwind class sets) + `StatCard` component; single source of truth for colored metric tiles across all pages
+- `src/components/stat-card.tsx` — shared `ACCENT` color map (red/blue/indigo/teal/sky/rose/emerald/slate — all static Tailwind class sets, dark-readable) + `StatCard` component; single source of truth for colored metric tiles across all pages. `red` is the hero/alert accent.
+- `src/components/gauge.tsx` — circular SVG ring gauge (`value` 0-100, `label`, `tone` red/steel/emerald/amber); used on the Performance Cockpit dashboard. The `amber` tone is mapped to red (no orange in branding).
 - Shared page primitives (use these for every page — do not hand-roll hero banners, toolbars, empty states, or delete dialogs):
   - `src/components/page-header.tsx` — `PageHeader` hero banner (props: `icon?` (LucideIcon, optional), `eyebrow` (ReactNode — pass a string, or a node like the dashboard's live-status ping dot), `title`, `subtitle?`, `action?`, `stats?: {label,value,icon?}[]`, `statsClassName?`). Canonical page hero used by EVERY page's hero banner (do not hand-roll the gradient banner). For 3-KPI pages pass `statsClassName="grid grid-cols-3 gap-3 shrink-0"`, for 2-stat pages `statsClassName="grid grid-cols-2 gap-3 shrink-0"`, default is a responsive 2/4-col grid. Stat values render at `text-2xl font-bold`; wrap a small/text value in `<span className="text-sm">…</span>`. Exception: `employee-account.tsx` keeps a bespoke profile hero (avatar/initials slot PageHeader doesn't support).
   - `src/components/toolbar.tsx` — `Toolbar` search/filter row
@@ -56,12 +59,12 @@ A standalone, frontend-only web app: an AI-guided research training cockpit for 
 
 ## Product
 
-17 modules, grouped in the sidebar under labeled sections (Overview, Research, Collaborate, Growth & Rewards, Workspace): Command Center dashboard, Guided Research Builder, AI Prompt Coach, Research GPS (10-step workflow), Report Builder (readiness score + warnings), Source Vault (official/AI-draft/unknown flagging), Blocked/Need Help, RoseOS Chat (mentor), Completed Handoff, Brainstorming Studio, Reward Center, Training Academy, Bonus Tracker (incentive earnings — informational, managed by Finance/Payroll), Team Lead Track (leadership competency progression toward promotion, manager sign-off), Leaderboard (gamified team standings), RoseOS (the company brain — record-query chat + reviewed update suggestions; route `/company-brain`), and Settings. Plus three personal pages reachable only from the header profile dropdown (not the sidebar): My Account (`/account` — sign-in/security, preferences, notifications), Employee Profile (`/employee-account` — read-only employment record; compensation/payroll/tax gated to HR/Payroll), My Benefits (`/benefits` — time-off, insurance, retirement/perks; changes managed by HR/Payroll). Compliance guardrail throughout: AI output is draft only until source-checked and human-reviewed; company decisions are never auto-recorded.
+17 modules, grouped in the sidebar under labeled sections (Overview, Research, Collaborate, Growth & Rewards, Workspace). The cockpit display name is shown first, with the underlying module/route in parentheses (only display labels changed in the facelift — routes are unchanged): Performance Cockpit (Command Center dashboard, `/`), Research Engine (Guided Research Builder), Tuning Bay (AI Prompt Coach), Track Map (Research GPS 10-step workflow), Brief Builder (Report Builder — readiness score + warnings), Source Garage (Source Vault — official/AI-draft/unknown flagging), Pit Stop (Blocked/Need Help), RoseOS Co-Driver (RoseOS Chat mentor), Finish Line Handoff (Completed Handoff), Idea Garage (Brainstorming Studio), Garage Rewards (Reward Center), Driver Training (Training Academy), Bonus Tracker (incentive earnings — informational, managed by Finance/Payroll), Team Lead Track (leadership competency progression toward promotion, manager sign-off), Leaderboard (gamified team standings), Company Brain Sync (RoseOS company brain — record-query chat + reviewed update suggestions; route `/company-brain`), and Settings. Plus three personal pages reachable only from the header profile dropdown (not the sidebar): My Account (`/account` — sign-in/security, preferences, notifications), Employee Profile (`/employee-account` — read-only employment record; compensation/payroll/tax gated to HR/Payroll), My Benefits (`/benefits` — time-off, insurance, retirement/perks; changes managed by HR/Payroll). Compliance guardrail throughout: AI output is draft only until source-checked and human-reviewed; company decisions are never auto-recorded.
 
 ## User preferences
 
-- Visual identity: dark navy/rich blue foundation, white work surfaces, silver/steel borders, electric blue primary actions, executive typography, subtle shadows, professional status badges.
-- Avoid: yellow/beige/tan/brown/orange palettes, purple SaaS gradients, decorative blobs, student visuals, clutter, lorem ipsum, emojis.
+- Visual identity: luxury fast-car cockpit — deep black/graphite foundation, carbon-fiber texture, performance-RED hero/primary/alert accent, chrome/silver-steel borders, circular gauge instruments, executive typography, subtle shadows, professional status badges. Palette mapping: RED = hero/primary/alert; sky = steel/info; slate = silver/neutral; emerald = ok.
+- Avoid: purple/violet/fuchsia, yellow/amber/orange/gold branding, beige/tan/brown palettes, decorative blobs, childish/cartoon racing visuals, emojis, red backgrounds behind long body text, low-contrast text on dark surfaces, clutter, lorem ipsum.
 
 ## Gotchas
 

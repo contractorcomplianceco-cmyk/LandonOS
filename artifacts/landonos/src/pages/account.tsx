@@ -93,10 +93,10 @@ export default function AccountPage() {
       />
 
       {/* Sign-in & security */}
-      <Card className="border-t-4 border-t-blue-500">
+      <Card className="border-t-4 border-t-sky-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <KeyRound className="h-5 w-5 text-blue-600" /> Sign-in & Security
+            <KeyRound className="h-5 w-5 text-sky-300" /> Sign-in & Security
           </CardTitle>
           <CardDescription>Your login credentials and account protection.</CardDescription>
         </CardHeader>
@@ -129,8 +129,8 @@ export default function AccountPage() {
           <div className="flex items-center justify-between rounded-lg border border-emerald-500/30 bg-emerald-500/5 px-4 py-3">
             <div className="min-w-0">
               <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                <ShieldCheck className="h-4 w-4 text-emerald-600" /> Two-Factor Authentication
-                <Badge className="border-emerald-500/30 bg-emerald-500/10 text-emerald-700">
+                <ShieldCheck className="h-4 w-4 text-emerald-400" /> Two-Factor Authentication
+                <Badge className="border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
                   {twoFactor ? "Enabled" : "Disabled"}
                 </Badge>
               </div>
@@ -152,14 +152,14 @@ export default function AccountPage() {
                   className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-sky-500/10 text-sky-600">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-sky-500/10 text-sky-300">
                       <Monitor className="h-4 w-4" />
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 text-sm font-medium text-foreground">
                         <span className="truncate">{s.device}</span>
                         {s.current && (
-                          <Badge className="border-blue-500/30 bg-blue-500/10 text-blue-700">This device</Badge>
+                          <Badge className="border-sky-500/30 bg-sky-500/10 text-sky-300">This device</Badge>
                         )}
                       </div>
                       <div className="truncate text-xs text-muted-foreground">
@@ -168,7 +168,7 @@ export default function AccountPage() {
                     </div>
                   </div>
                   {!s.current && (
-                    <Button variant="ghost" size="sm" className="text-rose-600 hover:bg-rose-500/10 hover:text-rose-700" onClick={() => endSession(s.id)}>
+                    <Button variant="ghost" size="sm" className="text-rose-400 hover:bg-rose-500/10 hover:text-rose-400" onClick={() => endSession(s.id)}>
                       Sign out
                     </Button>
                   )}
@@ -180,10 +180,10 @@ export default function AccountPage() {
       </Card>
 
       {/* Preferences */}
-      <Card className="border-t-4 border-t-indigo-500">
+      <Card className="border-t-4 border-t-slate-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Globe className="h-5 w-5 text-indigo-600" /> Preferences
+            <Globe className="h-5 w-5 text-slate-300" /> Preferences
           </CardTitle>
           <CardDescription>How the workspace looks and behaves for you.</CardDescription>
         </CardHeader>
@@ -248,7 +248,7 @@ export default function AccountPage() {
       <Card className="border-t-4 border-t-sky-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Bell className="h-5 w-5 text-sky-600" /> Notification Preferences
+            <Bell className="h-5 w-5 text-sky-300" /> Notification Preferences
           </CardTitle>
           <CardDescription>Choose what you want to be notified about.</CardDescription>
         </CardHeader>
@@ -278,7 +278,7 @@ export default function AccountPage() {
       <Card className="border-t-4 border-t-slate-400">
         <CardContent className="flex flex-col gap-3 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-500/10 text-slate-600">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-500/10 text-slate-400">
               <CheckCircle2 className="h-4 w-4" />
             </div>
             <div>
@@ -286,7 +286,7 @@ export default function AccountPage() {
               <div className="text-xs text-muted-foreground">Ends your session on this device.</div>
             </div>
           </div>
-          <Button variant="outline" className="gap-2 text-rose-600 hover:bg-rose-500/10 hover:text-rose-700" onClick={signOut}>
+          <Button variant="outline" className="gap-2 text-rose-400 hover:bg-rose-500/10 hover:text-rose-400" onClick={signOut}>
             <LogOut className="h-4 w-4" /> Sign Out
           </Button>
         </CardContent>

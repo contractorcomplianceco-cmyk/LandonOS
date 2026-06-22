@@ -39,16 +39,16 @@ const ENTRIES: BonusEntry[] = [
 ];
 
 const STATUS_BADGE: Record<BonusStatus, string> = {
-  Paid: "border-emerald-500/30 bg-emerald-500/10 text-emerald-700",
-  Pending: "border-sky-500/30 bg-sky-500/10 text-sky-700",
-  "Under Review": "border-rose-500/30 bg-rose-500/10 text-rose-700",
+  Paid: "border-emerald-500/30 bg-emerald-500/10 text-emerald-400",
+  Pending: "border-sky-500/30 bg-sky-500/10 text-sky-300",
+  "Under Review": "border-rose-500/30 bg-rose-500/10 text-rose-400",
 };
 
 const CATEGORIES: { label: string; amount: number; bar: string }[] = [
-  { label: "Milestone", amount: 850, bar: "bg-blue-500" },
+  { label: "Milestone", amount: 850, bar: "bg-sky-500" },
   { label: "Quality", amount: 700, bar: "bg-teal-500" },
   { label: "Speed", amount: 250, bar: "bg-sky-500" },
-  { label: "Recognition", amount: 150, bar: "bg-indigo-500" },
+  { label: "Recognition", amount: 150, bar: "bg-slate-500" },
 ];
 
 export default function BonusTrackerPage() {
@@ -87,10 +87,10 @@ export default function BonusTrackerPage() {
       </div>
 
       {/* Annual target progress */}
-      <Card className="border-t-4 border-t-blue-500">
+      <Card className="border-t-4 border-t-sky-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Target className="h-5 w-5 text-blue-600" /> Annual Incentive Target
+            <Target className="h-5 w-5 text-sky-300" /> Annual Incentive Target
           </CardTitle>
           <CardDescription>Progress toward your {fmt(target)} potential for the year.</CardDescription>
         </CardHeader>
@@ -100,7 +100,7 @@ export default function BonusTrackerPage() {
             <div className="text-sm text-muted-foreground">of {fmt(target)} · {pct}%</div>
           </div>
           <div className="h-3 w-full overflow-hidden rounded-full bg-muted">
-            <div className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500" style={{ width: `${pct}%` }} />
+            <div className="h-full rounded-full bg-gradient-to-r from-sky-500 to-slate-500" style={{ width: `${pct}%` }} />
           </div>
         </CardContent>
       </Card>
@@ -109,7 +109,7 @@ export default function BonusTrackerPage() {
       <Card className="border-t-4 border-t-teal-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-teal-600" /> Earnings by Category
+            <TrendingUp className="h-5 w-5 text-teal-400" /> Earnings by Category
           </CardTitle>
           <CardDescription>Where your incentives came from.</CardDescription>
         </CardHeader>
@@ -129,10 +129,10 @@ export default function BonusTrackerPage() {
       </Card>
 
       {/* Bonus log */}
-      <Card className="border-t-4 border-t-indigo-500">
+      <Card className="border-t-4 border-t-slate-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Wallet className="h-5 w-5 text-indigo-600" /> Bonus Activity
+            <Wallet className="h-5 w-5 text-slate-300" /> Bonus Activity
           </CardTitle>
           <CardDescription>Every incentive event and its payout status.</CardDescription>
         </CardHeader>
@@ -141,7 +141,7 @@ export default function BonusTrackerPage() {
             {ENTRIES.map((e) => (
               <div
                 key={e.id}
-                className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3 transition-colors hover:border-indigo-500/40 hover:bg-indigo-500/5"
+                className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3 transition-colors hover:border-slate-500/40 hover:bg-slate-500/5"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-md ${ACCENT_SOFT[e.accent]}`}>
@@ -160,7 +160,7 @@ export default function BonusTrackerPage() {
             ))}
           </div>
           <div className="mt-4 flex items-start gap-3 rounded-lg border border-sky-500/30 bg-sky-500/5 px-4 py-3">
-            <Lock className="mt-0.5 h-4 w-4 shrink-0 text-sky-600" />
+            <Lock className="mt-0.5 h-4 w-4 shrink-0 text-sky-300" />
             <p className="text-sm text-foreground">
               <span className="font-medium">Managed by Finance &amp; Payroll.</span> Bonus calculations and
               payout dates are set by HR/Finance — this view is informational and not self-editable.
@@ -173,11 +173,12 @@ export default function BonusTrackerPage() {
 }
 
 const ACCENT_SOFT: Record<Accent, string> = {
-  blue: "bg-blue-500/10 text-blue-600",
-  indigo: "bg-indigo-500/10 text-indigo-600",
-  teal: "bg-teal-500/10 text-teal-600",
-  sky: "bg-sky-500/10 text-sky-600",
-  rose: "bg-rose-500/10 text-rose-600",
-  emerald: "bg-emerald-500/10 text-emerald-600",
-  slate: "bg-slate-500/10 text-slate-600",
+  red: "bg-red-500/15 text-red-400",
+  blue: "bg-slate-500/15 text-slate-300",
+  indigo: "bg-slate-500/15 text-slate-300",
+  teal: "bg-teal-500/15 text-teal-300",
+  sky: "bg-slate-500/15 text-slate-300",
+  rose: "bg-red-500/15 text-red-400",
+  emerald: "bg-emerald-500/15 text-emerald-300",
+  slate: "bg-slate-500/15 text-slate-300",
 };

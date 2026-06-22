@@ -21,7 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 
 type TimeOff = { id: string; label: string; used: number; total: number; bar: string };
 const TIME_OFF: TimeOff[] = [
-  { id: "pto", label: "Paid Time Off", used: 9, total: 20, bar: "bg-blue-500" },
+  { id: "pto", label: "Paid Time Off", used: 9, total: 20, bar: "bg-sky-500" },
   { id: "sick", label: "Sick Leave", used: 2, total: 10, bar: "bg-teal-500" },
   { id: "personal", label: "Personal Days", used: 1, total: 5, bar: "bg-sky-500" },
 ];
@@ -42,9 +42,9 @@ const PLANS: Plan[] = [
 
 type Perk = { id: string; label: string; value: string; note: string; icon: LucideIcon; accent: string };
 const PERKS: Perk[] = [
-  { id: "retire", label: "401(k) Match", value: "6% match", note: "Managed by Payroll", icon: PiggyBank, accent: "text-indigo-600 bg-indigo-500/10" },
-  { id: "learn", label: "Learning Stipend", value: "$1,500 / yr", note: "$640 used", icon: GraduationCap, accent: "text-blue-600 bg-blue-500/10" },
-  { id: "wellness", label: "Wellness Credit", value: "$600 / yr", note: "$200 used", icon: Dumbbell, accent: "text-teal-600 bg-teal-500/10" },
+  { id: "retire", label: "401(k) Match", value: "6% match", note: "Managed by Payroll", icon: PiggyBank, accent: "text-slate-300 bg-slate-500/10" },
+  { id: "learn", label: "Learning Stipend", value: "$1,500 / yr", note: "$640 used", icon: GraduationCap, accent: "text-sky-300 bg-sky-500/10" },
+  { id: "wellness", label: "Wellness Credit", value: "$600 / yr", note: "$200 used", icon: Dumbbell, accent: "text-teal-400 bg-teal-500/10" },
 ];
 
 export default function BenefitsPage() {
@@ -67,10 +67,10 @@ export default function BenefitsPage() {
       />
 
       {/* Time-off balances */}
-      <Card className="border-t-4 border-t-blue-500">
+      <Card className="border-t-4 border-t-sky-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Plane className="h-5 w-5 text-blue-600" /> Time-Off Balances
+            <Plane className="h-5 w-5 text-sky-300" /> Time-Off Balances
           </CardTitle>
           <CardDescription>Used versus remaining for the current year.</CardDescription>
         </CardHeader>
@@ -108,7 +108,7 @@ export default function BenefitsPage() {
       <Card className="border-t-4 border-t-teal-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Stethoscope className="h-5 w-5 text-teal-600" /> Health & Insurance
+            <Stethoscope className="h-5 w-5 text-teal-400" /> Health & Insurance
           </CardTitle>
           <CardDescription>
             Your current coverage. Premiums and deductions are managed by Payroll.
@@ -124,7 +124,7 @@ export default function BenefitsPage() {
                   className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-teal-500/10 text-teal-600">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-teal-500/10 text-teal-400">
                       <p.icon className="h-5 w-5" />
                     </div>
                     <div className="min-w-0">
@@ -135,8 +135,8 @@ export default function BenefitsPage() {
                   <Badge
                     className={
                       enrolled
-                        ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700"
-                        : "border-slate-500/30 bg-slate-500/10 text-slate-700"
+                        ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                        : "border-slate-500/30 bg-slate-500/10 text-slate-300"
                     }
                   >
                     {p.status}
@@ -147,7 +147,7 @@ export default function BenefitsPage() {
           </div>
           <div className="mt-4 flex items-center justify-between gap-3 rounded-lg border border-sky-500/30 bg-sky-500/5 px-4 py-3">
             <div className="flex items-center gap-2 text-sm text-foreground">
-              <Lock className="h-4 w-4 text-sky-600" />
+              <Lock className="h-4 w-4 text-sky-300" />
               Premiums &amp; deductions are managed by Payroll.
             </div>
             <Button variant="outline" size="sm" onClick={() => managed("Plan changes")}>
@@ -158,10 +158,10 @@ export default function BenefitsPage() {
       </Card>
 
       {/* Retirement & perks */}
-      <Card className="border-t-4 border-t-indigo-500">
+      <Card className="border-t-4 border-t-slate-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <PiggyBank className="h-5 w-5 text-indigo-600" /> Retirement & Perks
+            <PiggyBank className="h-5 w-5 text-slate-300" /> Retirement & Perks
           </CardTitle>
           <CardDescription>Contributions and stipends available to you.</CardDescription>
         </CardHeader>
@@ -178,8 +178,8 @@ export default function BenefitsPage() {
               </div>
             ))}
           </div>
-          <div className="flex items-start gap-3 rounded-lg border border-indigo-500/25 bg-indigo-500/5 px-4 py-3">
-            <Info className="mt-0.5 h-4 w-4 shrink-0 text-indigo-600" />
+          <div className="flex items-start gap-3 rounded-lg border border-slate-500/25 bg-slate-500/5 px-4 py-3">
+            <Info className="mt-0.5 h-4 w-4 shrink-0 text-slate-300" />
             <p className="text-sm text-foreground">
               Your 401(k) balance and contribution rate are{" "}
               <span className="font-medium">managed by Payroll</span>. Plan changes are submitted to HR

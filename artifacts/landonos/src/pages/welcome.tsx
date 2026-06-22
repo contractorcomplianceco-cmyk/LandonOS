@@ -238,7 +238,7 @@ export default function Welcome() {
           <a
             href={USER_GUIDE_PDF}
             download
-            className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-md transition-colors hover:bg-blue-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-md transition-colors hover:bg-slate-200"
           >
             <Download className="h-4 w-4" />
             User Guide (PDF)
@@ -260,7 +260,7 @@ export default function Welcome() {
             className={cn(
               "flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors",
               mode === "video"
-                ? "bg-blue-600 text-white shadow"
+                ? "bg-red-600 text-white shadow"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
@@ -274,7 +274,7 @@ export default function Welcome() {
             className={cn(
               "flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors",
               mode === "guided"
-                ? "bg-blue-600 text-white shadow"
+                ? "bg-red-600 text-white shadow"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
@@ -293,12 +293,13 @@ export default function Welcome() {
       <section className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 shadow-xl">
         <div className="relative aspect-video w-full">
           {/* Animated background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950" />
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(56,189,248,0.22),transparent_50%)]" />
+          <div className="absolute inset-0 carbon" />
+          <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-950 to-black" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(239,68,68,0.18),transparent_50%)]" />
           {/* Pulsing accent glow for energy */}
           <motion.div
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_72%_82%,rgba(37,99,235,0.22),transparent_55%)]"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_72%_82%,rgba(239,68,68,0.22),transparent_55%)]"
             animate={{ opacity: [0.45, 0.95, 0.45] }}
             transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -308,7 +309,7 @@ export default function Welcome() {
               <motion.span
                 key={i}
                 aria-hidden
-                className="absolute rounded-full bg-sky-400/40 blur-[1px]"
+                className="absolute rounded-full bg-red-400/40 blur-[1px]"
                 style={{ left: p.left, top: p.top, width: p.size, height: p.size }}
                 animate={{ y: [0, -22, 0], opacity: [0.15, 0.7, 0.15] }}
                 transition={{ duration: p.dur, repeat: Infinity, ease: "easeInOut", delay: p.delay }}
@@ -335,13 +336,13 @@ export default function Welcome() {
                 type="button"
                 onClick={() => playSection(0)}
                 aria-label="Start narrated tour"
-                className="flex h-20 w-20 items-center justify-center rounded-full bg-blue-600 text-white shadow-[0_0_40px_rgba(37,99,235,0.6)] ring-4 ring-blue-400/30 transition-transform hover:scale-105"
+                className="flex h-20 w-20 items-center justify-center rounded-full bg-red-600 text-white shadow-[0_0_40px_rgba(239,68,68,0.6)] ring-4 ring-red-400/30 transition-transform hover:scale-105"
               >
                 <Play className="h-8 w-8 translate-x-[2px] fill-white" />
               </button>
               <div className="text-center">
                 <div className="text-lg font-bold text-white">Start the narrated tour</div>
-                <div className="text-sm text-blue-100/75">
+                <div className="text-sm text-slate-300">
                   {SECTIONS.length} chapters with audio narration and music
                 </div>
               </div>
@@ -356,12 +357,12 @@ export default function Welcome() {
               </span>
               <div className="text-center">
                 <div className="text-lg font-bold text-white">You're all set</div>
-                <div className="text-sm text-blue-100/75">That's the full tour of LandonOS.</div>
+                <div className="text-sm text-slate-300">That's the full tour of LandonOS.</div>
               </div>
               <button
                 type="button"
                 onClick={() => playSection(0)}
-                className="flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105"
+                className="flex items-center gap-2 rounded-full bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105"
               >
                 <RotateCcw className="h-4 w-4" /> Replay
               </button>
@@ -371,7 +372,7 @@ export default function Welcome() {
           {/* Caption */}
           <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent px-4 pb-16 pt-10">
             <div className="text-base font-bold text-white md:text-lg">{section.title}</div>
-            <div className="mt-0.5 line-clamp-2 max-w-2xl text-xs text-blue-100/75 md:text-sm">
+            <div className="mt-0.5 line-clamp-2 max-w-2xl text-xs text-slate-300 md:text-sm">
               {section.blurb}
             </div>
           </div>
@@ -384,7 +385,7 @@ export default function Welcome() {
             {SECTIONS.map((s, i) => (
               <div key={s.id} className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/10">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-sky-400 to-blue-500 transition-[width] duration-150"
+                  className="h-full rounded-full bg-gradient-to-r from-red-500 to-red-400 transition-[width] duration-150"
                   style={{ width: `${segFill(i) * 100}%` }}
                 />
               </div>
@@ -397,7 +398,7 @@ export default function Welcome() {
                 type="button"
                 onClick={togglePlay}
                 aria-label={playing ? "Pause" : "Play"}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-white transition-colors hover:bg-blue-500"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-red-600 text-white transition-colors hover:bg-red-500"
               >
                 {playing ? (
                   <Pause className="h-4 w-4" />
@@ -415,7 +416,7 @@ export default function Welcome() {
               >
                 {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
               </button>
-              <span className="ml-auto text-xs font-medium text-blue-100/70">
+              <span className="ml-auto text-xs font-medium text-slate-400">
                 Chapter {current + 1} of {SECTIONS.length}
               </span>
             </div>
@@ -433,7 +434,7 @@ export default function Welcome() {
                 <button
                   type="button"
                   onClick={guidedNext}
-                  className="flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-500"
+                  className="flex items-center gap-1.5 rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-500"
                 >
                   Next <ChevronRight className="h-4 w-4" />
                 </button>
@@ -441,12 +442,12 @@ export default function Welcome() {
                 <button
                   type="button"
                   onClick={guidedRestart}
-                  className="flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-500"
+                  className="flex items-center gap-1.5 rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-500"
                 >
                   <RotateCcw className="h-4 w-4" /> Restart
                 </button>
               )}
-              <span className="ml-auto text-xs font-medium text-blue-100/70">
+              <span className="ml-auto text-xs font-medium text-slate-400">
                 Step {current + 1} of {SECTIONS.length}
               </span>
             </div>
@@ -471,22 +472,22 @@ export default function Welcome() {
                 className={cn(
                   "group flex items-start gap-3 rounded-xl border p-3 text-left transition-all",
                   isActive
-                    ? "border-blue-500/60 bg-blue-50 shadow-sm ring-1 ring-blue-500/30 dark:bg-blue-950/40"
-                    : "border-border bg-card hover:border-blue-500/40 hover:shadow-sm"
+                    ? "border-red-500/60 bg-red-500/10 shadow-sm ring-1 ring-red-500/30"
+                    : "border-border bg-card hover:border-red-500/40 hover:shadow-sm"
                 )}
               >
                 <span
                   className={cn(
                     "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg",
                     isActive
-                      ? "bg-blue-600 text-white"
+                      ? "bg-red-600 text-white"
                       : "bg-muted text-muted-foreground group-hover:text-foreground"
                   )}
                 >
                   <s.icon className="h-5 w-5" />
                 </span>
                 <div className="min-w-0">
-                  <div className="text-[11px] font-semibold uppercase tracking-wider text-blue-600 dark:text-sky-400">
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-red-400">
                     {mode === "video" ? "Chapter" : "Step"} {i + 1}
                   </div>
                   <div className="truncate text-sm font-semibold text-foreground">{s.title}</div>
@@ -501,7 +502,7 @@ export default function Welcome() {
       {/* User-guide card */}
       <section className="flex flex-col items-start gap-4 rounded-2xl border border-border bg-card p-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-start gap-4">
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600 ring-1 ring-blue-600/20 dark:text-sky-400">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-600/10 text-red-400 ring-1 ring-red-600/20">
             <FileText className="h-6 w-6" />
           </span>
           <div>
@@ -515,7 +516,7 @@ export default function Welcome() {
         <a
           href={USER_GUIDE_PDF}
           download
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-colors hover:bg-blue-500"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-colors hover:bg-red-500"
         >
           <Download className="h-4 w-4" />
           Download PDF

@@ -43,9 +43,9 @@ const COMPETENCIES: Competency[] = [
 ];
 
 const STATUS_BADGE: Record<CompStatus, string> = {
-  Complete: "border-emerald-500/30 bg-emerald-500/10 text-emerald-700",
-  "In Progress": "border-sky-500/30 bg-sky-500/10 text-sky-700",
-  "Not Started": "border-slate-500/30 bg-slate-500/10 text-slate-700",
+  Complete: "border-emerald-500/30 bg-emerald-500/10 text-emerald-400",
+  "In Progress": "border-sky-500/30 bg-sky-500/10 text-sky-300",
+  "Not Started": "border-slate-500/30 bg-slate-500/10 text-slate-300",
 };
 
 const COMP_BAR: Record<CompStatus, string> = {
@@ -99,10 +99,10 @@ export default function TeamLeadTrackPage() {
       </div>
 
       {/* Overall readiness */}
-      <Card className="border-t-4 border-t-blue-500">
+      <Card className="border-t-4 border-t-sky-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Target className="h-5 w-5 text-blue-600" /> Promotion Readiness
+            <Target className="h-5 w-5 text-sky-300" /> Promotion Readiness
           </CardTitle>
           <CardDescription>Average across all leadership competencies.</CardDescription>
         </CardHeader>
@@ -112,16 +112,16 @@ export default function TeamLeadTrackPage() {
             <div className="text-sm text-muted-foreground">Team Lead readiness</div>
           </div>
           <div className="h-3 w-full overflow-hidden rounded-full bg-muted">
-            <div className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500" style={{ width: `${overall}%` }} />
+            <div className="h-full rounded-full bg-gradient-to-r from-sky-500 to-slate-500" style={{ width: `${overall}%` }} />
           </div>
         </CardContent>
       </Card>
 
       {/* Milestones timeline */}
-      <Card className="border-t-4 border-t-indigo-500">
+      <Card className="border-t-4 border-t-slate-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Flag className="h-5 w-5 text-indigo-600" /> Career Milestones
+            <Flag className="h-5 w-5 text-slate-300" /> Career Milestones
           </CardTitle>
           <CardDescription>Your progression from researcher to team lead.</CardDescription>
         </CardHeader>
@@ -136,7 +136,7 @@ export default function TeamLeadTrackPage() {
                   className={
                     "rounded-lg border px-4 py-4 " +
                     (current
-                      ? "border-blue-500/40 bg-blue-500/5 ring-1 ring-blue-500/20"
+                      ? "border-sky-500/40 bg-sky-500/5 ring-1 ring-sky-500/20"
                       : done
                       ? "border-emerald-500/30 bg-emerald-500/5"
                       : "border-border bg-card")
@@ -144,9 +144,9 @@ export default function TeamLeadTrackPage() {
                 >
                   <div className="mb-2 flex items-center gap-2">
                     {done ? (
-                      <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                      <CheckCircle2 className="h-5 w-5 text-emerald-400" />
                     ) : current ? (
-                      <Rocket className="h-5 w-5 text-blue-600" />
+                      <Rocket className="h-5 w-5 text-sky-300" />
                     ) : (
                       <Circle className="h-5 w-5 text-slate-400" />
                     )}
@@ -154,7 +154,7 @@ export default function TeamLeadTrackPage() {
                   </div>
                   <p className="text-xs text-muted-foreground">{m.note}</p>
                   {current && (
-                    <Badge className="mt-2 border-blue-500/30 bg-blue-500/10 text-blue-700">You are here</Badge>
+                    <Badge className="mt-2 border-sky-500/30 bg-sky-500/10 text-sky-300">You are here</Badge>
                   )}
                 </div>
               );
@@ -167,7 +167,7 @@ export default function TeamLeadTrackPage() {
       <Card className="border-t-4 border-t-teal-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <ClipboardCheck className="h-5 w-5 text-teal-600" /> Leadership Competencies
+            <ClipboardCheck className="h-5 w-5 text-teal-400" /> Leadership Competencies
           </CardTitle>
           <CardDescription>Skills assessed by your manager toward the lead role.</CardDescription>
         </CardHeader>
@@ -177,7 +177,7 @@ export default function TeamLeadTrackPage() {
               <div key={c.id} className="rounded-lg border border-border bg-card p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-teal-500/10 text-teal-600">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-teal-500/10 text-teal-400">
                       <c.icon className="h-4 w-4" />
                     </div>
                     <div className="min-w-0">
@@ -203,7 +203,7 @@ export default function TeamLeadTrackPage() {
       <Card className="border-t-4 border-t-sky-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <ArrowRight className="h-5 w-5 text-sky-600" /> Recommended Next Steps
+            <ArrowRight className="h-5 w-5 text-sky-300" /> Recommended Next Steps
           </CardTitle>
           <CardDescription>Actions that move you closer to the lead role.</CardDescription>
         </CardHeader>
@@ -211,16 +211,16 @@ export default function TeamLeadTrackPage() {
           <div className="space-y-2">
             {NEXT_STEPS.map((step, i) => (
               <div key={i} className="flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-3">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-500/10 text-sm font-semibold text-sky-700">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-500/10 text-sm font-semibold text-sky-300">
                   {i + 1}
                 </div>
                 <span className="text-sm text-foreground">{step}</span>
               </div>
             ))}
           </div>
-          <div className="flex flex-col gap-3 rounded-lg border border-indigo-500/25 bg-indigo-500/5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 rounded-lg border border-slate-500/25 bg-slate-500/5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-2 text-sm text-foreground">
-              <ShieldCheck className="h-4 w-4 text-indigo-600" />
+              <ShieldCheck className="h-4 w-4 text-slate-300" />
               Promotion requires manager review and sign-off.
             </div>
             <Button

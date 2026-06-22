@@ -61,7 +61,7 @@ export default function PromptCoach() {
       <PageHeader
         icon={Sparkles}
         eyebrow="Prompt engineering"
-        title="AI Prompt Coach"
+        title="Tuning Bay"
         subtitle="Transform rough questions into disciplined, source-backed executive prompts. Every rewrite keeps verification and human review in the loop."
         statsClassName="grid grid-cols-2 gap-3 shrink-0"
         stats={[
@@ -80,10 +80,10 @@ export default function PromptCoach() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-5 space-y-6">
-          <Card className="border-t-4 border-t-blue-500">
+          <Card className="border-t-4 border-t-sky-500">
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-500 text-white shadow-md shadow-blue-500/30">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-sky-500 text-white shadow-md shadow-sky-500/30">
                   <Sparkles className="h-5 w-5" />
                 </div>
                 <CardTitle className="text-lg">Prompt Context</CardTitle>
@@ -163,10 +163,10 @@ export default function PromptCoach() {
             </div>
           </div>
 
-          <Card className="border-l-4 border-l-indigo-500 bg-gradient-to-r from-indigo-500/10 to-transparent">
+          <Card className="border-l-4 border-l-slate-500 bg-gradient-to-r from-slate-500/10 to-transparent">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-base">
-                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-indigo-500 text-white shadow-sm shadow-indigo-500/30">
+                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-500 text-white shadow-sm shadow-slate-500/30">
                   <ListChecks className="w-4 h-4" />
                 </span>
                 Prompt Quality Checklist
@@ -190,11 +190,11 @@ export default function PromptCoach() {
         <div className="lg:col-span-7">
           {result ? (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
-              <Card className="border-t-4 border-t-indigo-500 shadow-md">
-                <CardHeader className="bg-indigo-500/5 border-b border-indigo-500/10 pb-4">
+              <Card className="border-t-4 border-t-slate-500 shadow-md">
+                <CardHeader className="bg-slate-500/5 border-b border-slate-500/10 pb-4">
                   <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center gap-2">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-md bg-indigo-500 text-white shadow-sm shadow-indigo-500/30">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-500 text-white shadow-sm shadow-slate-500/30">
                         <Sparkles className="w-4 h-4" />
                       </span>
                       Optimized Prompt

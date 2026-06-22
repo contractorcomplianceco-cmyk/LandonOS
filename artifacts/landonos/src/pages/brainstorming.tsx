@@ -26,20 +26,20 @@ const CATEGORY_BORDER_L: Record<IdeaCategory, string> = {
   "Opportunity": "border-l-emerald-500",
   "Risk": "border-l-rose-500",
   "Automation": "border-l-teal-500",
-  "Sales Support": "border-l-blue-500",
-  "Compliance Support": "border-l-indigo-500",
+  "Sales Support": "border-l-sky-500",
+  "Compliance Support": "border-l-slate-500",
   "Client Support": "border-l-sky-500",
   "Internal Process": "border-l-slate-400",
 };
 
 const CATEGORY_BADGE: Record<IdeaCategory, string> = {
-  "Opportunity": "bg-emerald-500/10 text-emerald-700 border-emerald-500/30",
-  "Risk": "bg-rose-500/10 text-rose-700 border-rose-500/30",
-  "Automation": "bg-teal-500/10 text-teal-700 border-teal-500/30",
-  "Sales Support": "bg-blue-500/10 text-blue-700 border-blue-500/30",
-  "Compliance Support": "bg-indigo-500/10 text-indigo-700 border-indigo-500/30",
-  "Client Support": "bg-sky-500/10 text-sky-700 border-sky-500/30",
-  "Internal Process": "bg-slate-500/10 text-slate-700 border-slate-500/30",
+  "Opportunity": "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+  "Risk": "bg-rose-500/10 text-rose-400 border-rose-500/30",
+  "Automation": "bg-teal-500/10 text-teal-400 border-teal-500/30",
+  "Sales Support": "bg-sky-500/10 text-sky-300 border-sky-500/30",
+  "Compliance Support": "bg-slate-500/10 text-slate-300 border-slate-500/30",
+  "Client Support": "bg-sky-500/10 text-sky-300 border-sky-500/30",
+  "Internal Process": "bg-slate-500/10 text-slate-300 border-slate-500/30",
 };
 
 const CONVERT_OPTIONS: ConvertToType[] = [
@@ -218,10 +218,10 @@ export default function BrainstormingStudio() {
       <PageHeader
         icon={Lightbulb}
         eyebrow="Idea Pipeline"
-        title="Brainstorming Studio"
+        title="Idea Garage"
         subtitle="Capture, categorize, and convert ideas into actionable research and company decisions."
         action={
-          <Button onClick={() => handleOpenDialog()} className="bg-white text-slate-900 hover:bg-blue-50">
+          <Button onClick={() => handleOpenDialog()} className="bg-white text-slate-900 hover:bg-slate-200">
             <Plus className="w-4 h-4 mr-2" /> Freeform Idea
           </Button>
         }

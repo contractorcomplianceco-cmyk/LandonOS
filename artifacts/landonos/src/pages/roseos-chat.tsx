@@ -169,8 +169,8 @@ export default function RoseOSChat() {
     <div className="space-y-6 h-full flex flex-col">
       <PageHeader
         icon={ShieldCheck}
-        eyebrow="Research mentor"
-        title="RoseOS Chat"
+        eyebrow="Your co-driver"
+        title="RoseOS Co-Driver"
         subtitle="Your AI-guided mentor for research strategy and planning — structured prompts and next steps, always paired with source and human-review reminders."
         statsClassName="grid grid-cols-2 gap-3 shrink-0"
         stats={[

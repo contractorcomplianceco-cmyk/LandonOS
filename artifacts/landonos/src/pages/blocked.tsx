@@ -34,19 +34,19 @@ const PRIORITIES: Priority[] = ['Low', 'Medium', 'High', 'Executive'];
 const STATUSES: BlockerStatus[] = ['Open', 'In Review', 'Waiting on Landon', 'Resolved', 'Archived'];
 
 const STATUS_BORDER_L: Record<BlockerStatus, string> = {
-  'Open': 'border-l-blue-500',
+  'Open': 'border-l-sky-500',
   'In Review': 'border-l-sky-500',
-  'Waiting on Landon': 'border-l-indigo-500',
+  'Waiting on Landon': 'border-l-slate-500',
   'Resolved': 'border-l-emerald-500',
   'Archived': 'border-l-slate-400',
 };
 
 const STATUS_BADGE: Record<BlockerStatus, string> = {
-  'Open': 'bg-blue-500/10 text-blue-700 border-blue-500/30',
-  'In Review': 'bg-sky-500/10 text-sky-700 border-sky-500/30',
-  'Waiting on Landon': 'bg-indigo-500/10 text-indigo-700 border-indigo-500/30',
-  'Resolved': 'bg-emerald-500/10 text-emerald-700 border-emerald-500/30',
-  'Archived': 'bg-slate-500/10 text-slate-700 border-slate-500/30',
+  'Open': 'bg-sky-500/10 text-sky-300 border-sky-500/30',
+  'In Review': 'bg-sky-500/10 text-sky-300 border-sky-500/30',
+  'Waiting on Landon': 'bg-slate-500/10 text-slate-300 border-slate-500/30',
+  'Resolved': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+  'Archived': 'bg-slate-500/10 text-slate-300 border-slate-500/30',
 };
 
 export default function Blocked() {
@@ -120,7 +120,7 @@ export default function Blocked() {
   const getUrgencyBadge = (urgency: Priority) => {
     if (urgency === 'Executive') return <Badge className="bg-rose-600 hover:bg-rose-700 text-white border-none shadow-sm shadow-rose-900/20">{urgency}</Badge>;
     if (urgency === 'High') return <Badge className="bg-rose-500 hover:bg-rose-600 text-white border-none">{urgency}</Badge>;
-    if (urgency === 'Medium') return <Badge className="bg-blue-500 hover:bg-blue-600 text-white border-none">{urgency}</Badge>;
+    if (urgency === 'Medium') return <Badge className="bg-sky-500 hover:bg-red-600 text-white border-none">{urgency}</Badge>;
     return <Badge variant="secondary">{urgency}</Badge>;
   };
 
@@ -156,11 +156,11 @@ export default function Blocked() {
     <div className="space-y-6">
       <PageHeader
         icon={LifeBuoy}
-        eyebrow="Escalation desk"
-        title="Blocked / Need Help"
+        eyebrow="Pit crew on standby"
+        title="Pit Stop"
         subtitle="Raise issues early instead of spinning your wheels. Log what you tried, who should help, and the suggested next step — then route it for review."
         action={
-          <Button onClick={handleCreate} className="bg-white text-slate-900 hover:bg-blue-50">
+          <Button onClick={handleCreate} className="bg-white text-slate-900 hover:bg-slate-200">
             <LifeBuoy className="h-4 w-4 mr-2" /> I'm Stuck
           </Button>
         }

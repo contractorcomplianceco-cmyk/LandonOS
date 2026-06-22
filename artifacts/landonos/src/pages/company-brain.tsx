@@ -123,25 +123,25 @@ export default function CompanyBrain() {
   };
 
   const STATUS_STYLE: Record<CompanyBrainUpdateStatus, { border: string; badge: string }> = {
-    "Recorded": { border: "border-l-emerald-500", badge: "bg-emerald-500/10 text-emerald-700 border-emerald-500/30" },
-    "Approved to Record": { border: "border-l-emerald-500", badge: "bg-emerald-500/10 text-emerald-700 border-emerald-500/30" },
-    "Needs Review": { border: "border-l-rose-500", badge: "bg-rose-500/10 text-rose-700 border-rose-500/30" },
-    "Suggested": { border: "border-l-blue-500", badge: "bg-blue-500/10 text-blue-700 border-blue-500/30" },
-    "Archived": { border: "border-l-slate-400", badge: "bg-slate-500/10 text-slate-700 border-slate-400/40" },
+    "Recorded": { border: "border-l-emerald-500", badge: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" },
+    "Approved to Record": { border: "border-l-emerald-500", badge: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" },
+    "Needs Review": { border: "border-l-rose-500", badge: "bg-rose-500/10 text-rose-400 border-rose-500/30" },
+    "Suggested": { border: "border-l-sky-500", badge: "bg-sky-500/10 text-sky-300 border-sky-500/30" },
+    "Archived": { border: "border-l-slate-400", badge: "bg-slate-500/10 text-slate-300 border-slate-400/40" },
   };
 
   const getStatusStyle = (status: CompanyBrainUpdateStatus) =>
-    STATUS_STYLE[status] ?? { border: "border-l-slate-400", badge: "bg-slate-500/10 text-slate-700 border-slate-400/40" };
+    STATUS_STYLE[status] ?? { border: "border-l-slate-400", badge: "bg-slate-500/10 text-slate-300 border-slate-400/40" };
 
   return (
     <div className="space-y-6">
       <PageHeader
         icon={BrainCircuit}
         eyebrow="Institutional Memory"
-        title="RoseOS"
+        title="Company Brain Sync"
         subtitle="The company's brain — a reviewed system of record for decisions, projects, and SOPs. Ask it what's on file, or file a suggestion. Nothing is recorded until a human signs off."
         action={
-          <Button onClick={handleCreate} className="bg-white text-slate-900 hover:bg-blue-50">
+          <Button onClick={handleCreate} className="bg-white text-slate-900 hover:bg-slate-200">
             <Plus className="w-4 h-4 mr-2" />
             New Suggestion
           </Button>

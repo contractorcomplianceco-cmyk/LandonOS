@@ -127,14 +127,14 @@ function renderScene(id: string) {
           <h1 className="text-5xl font-black tracking-tight text-white md:text-7xl">
             <Word delay={0.25}>Landon</Word>
             <Word delay={0.38}>
-              <span className="bg-gradient-to-r from-sky-300 via-blue-300 to-indigo-300 bg-clip-text text-transparent">OS</span>
+              <span className="bg-gradient-to-r from-red-400 via-red-300 to-red-400 bg-clip-text text-transparent">OS</span>
             </Word>
           </h1>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="mt-3 text-lg font-medium uppercase tracking-[0.3em] text-blue-200/80 md:text-xl"
+            className="mt-3 text-lg font-medium uppercase tracking-[0.3em] text-slate-300/80 md:text-xl"
           >
             Research Command Center
           </motion.p>
@@ -146,7 +146,7 @@ function renderScene(id: string) {
           <h2 className="max-w-4xl text-4xl font-black leading-tight tracking-tight text-white md:text-6xl">
             <Word delay={0.05}>AI&nbsp;speed.</Word>{" "}
             <Word delay={0.2}>
-              <span className="bg-gradient-to-r from-sky-300 to-blue-300 bg-clip-text text-transparent">Human&nbsp;trust.</span>
+              <span className="bg-gradient-to-r from-red-400 to-red-300 bg-clip-text text-transparent">Human&nbsp;trust.</span>
             </Word>{" "}
             <Word delay={0.38}>Always.</Word>
           </h2>
@@ -154,7 +154,7 @@ function renderScene(id: string) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
-            className="mt-5 max-w-2xl text-base text-blue-100/80 md:text-xl"
+            className="mt-5 max-w-2xl text-base text-slate-300/80 md:text-xl"
           >
             Every insight is source-checked and human-reviewed before it counts.
           </motion.p>
@@ -172,8 +172,8 @@ function renderScene(id: string) {
             Plan research <span className="text-sky-300">smarter</span>
           </motion.div>
           <div className="flex max-w-3xl flex-wrap items-center justify-center gap-3">
-            <FeatureChip icon={Target} label="Guided Builder" color="bg-blue-500" delay={0.15} />
-            <FeatureChip icon={Sparkles} label="AI Prompt Coach" color="bg-indigo-500" delay={0.3} />
+            <FeatureChip icon={Target} label="Guided Builder" color="bg-red-600" delay={0.15} />
+            <FeatureChip icon={Sparkles} label="AI Prompt Coach" color="bg-slate-600" delay={0.3} />
             <FeatureChip icon={Compass} label="Research GPS" color="bg-sky-500" delay={0.45} />
           </div>
         </SceneShell>
@@ -220,14 +220,14 @@ function renderScene(id: string) {
             transition={{ delay: 0.3 }}
             className="mb-6 text-5xl font-black text-white md:text-7xl"
           >
-            <span className="bg-gradient-to-r from-sky-300 to-indigo-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-red-400 to-red-300 bg-clip-text text-transparent">
               <CountUp to={1250} active suffix=" pts" />
             </span>
           </motion.div>
           <div className="flex max-w-3xl flex-wrap items-center justify-center gap-3">
-            <FeatureChip icon={Award} label="Rewards" color="bg-blue-500" delay={0.2} />
+            <FeatureChip icon={Award} label="Rewards" color="bg-red-600" delay={0.2} />
             <FeatureChip icon={Wallet} label="Bonus Tracker" color="bg-sky-500" delay={0.35} />
-            <FeatureChip icon={Rocket} label="Team Lead Track" color="bg-indigo-500" delay={0.5} />
+            <FeatureChip icon={Rocket} label="Team Lead Track" color="bg-slate-600" delay={0.5} />
             <FeatureChip icon={Trophy} label="Leaderboard" color="bg-teal-500" delay={0.65} />
           </div>
         </SceneShell>
@@ -246,14 +246,14 @@ function renderScene(id: string) {
           <h2 className="text-4xl font-black tracking-tight text-white md:text-6xl">
             <Word delay={0.15}>Let's</Word> <Word delay={0.28}>get</Word>{" "}
             <Word delay={0.41}>
-              <span className="bg-gradient-to-r from-sky-300 to-blue-300 bg-clip-text text-transparent">to work.</span>
+              <span className="bg-gradient-to-r from-red-400 to-red-300 bg-clip-text text-transparent">to work.</span>
             </Word>
           </h2>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
-            className="mt-4 text-lg text-blue-100/80"
+            className="mt-4 text-lg text-slate-300/80"
           >
             Your research command center is ready, Landon.
           </motion.p>
@@ -404,7 +404,7 @@ function WalkthroughVideoInner({ open, onClose }: { open: boolean; onClose: () =
             className="relative aspect-video w-full max-w-5xl overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-2xl"
           >
             {/* Animated background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950" />
+            <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-950 to-black" />
             <motion.div
               aria-hidden
               className="absolute inset-0"
@@ -450,7 +450,7 @@ function WalkthroughVideoInner({ open, onClose }: { open: boolean; onClose: () =
                 >
                   <button
                     onClick={() => begin(true)}
-                    className="flex items-center gap-2 rounded-full bg-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105"
+                    className="flex items-center gap-2 rounded-full bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105"
                   >
                     <RotateCcw className="h-4 w-4" /> Replay
                   </button>
@@ -487,7 +487,7 @@ function WalkthroughVideoInner({ open, onClose }: { open: boolean; onClose: () =
                 aria-valuenow={Math.round(progress)}
               >
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-sky-400 to-blue-500"
+                  className="h-full rounded-full bg-gradient-to-r from-red-500 to-red-400"
                   style={{ width: `${progress}%` }}
                 />
               </div>

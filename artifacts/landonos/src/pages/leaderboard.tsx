@@ -28,14 +28,14 @@ type Member = {
 };
 
 const RANK_STYLE: { ring: string; chip: string; icon: LucideIcon }[] = [
-  { ring: "border-blue-500/40 bg-blue-500/5 ring-1 ring-blue-500/20", chip: "bg-blue-500 text-white", icon: Crown },
-  { ring: "border-indigo-500/30 bg-indigo-500/5", chip: "bg-indigo-500 text-white", icon: Medal },
+  { ring: "border-sky-500/40 bg-sky-500/5 ring-1 ring-sky-500/20", chip: "bg-sky-500 text-white", icon: Crown },
+  { ring: "border-slate-500/30 bg-slate-500/5", chip: "bg-slate-500 text-white", icon: Medal },
   { ring: "border-sky-500/30 bg-sky-500/5", chip: "bg-sky-500 text-white", icon: Medal },
 ];
 
 const MOVE: Record<Member["move"], { icon: LucideIcon; cls: string }> = {
-  up: { icon: ArrowUp, cls: "text-emerald-600" },
-  down: { icon: ArrowDown, cls: "text-rose-600" },
+  up: { icon: ArrowUp, cls: "text-emerald-400" },
+  down: { icon: ArrowDown, cls: "text-rose-400" },
   same: { icon: Minus, cls: "text-slate-400" },
 };
 
@@ -82,10 +82,10 @@ export default function LeaderboardPage() {
       </div>
 
       {/* Podium — top 3 */}
-      <Card className="border-t-4 border-t-blue-500">
+      <Card className="border-t-4 border-t-sky-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Crown className="h-5 w-5 text-blue-600" /> Top Performers
+            <Crown className="h-5 w-5 text-sky-300" /> Top Performers
           </CardTitle>
           <CardDescription>This quarter's leading researchers.</CardDescription>
         </CardHeader>
@@ -117,10 +117,10 @@ export default function LeaderboardPage() {
       </Card>
 
       {/* Full standings */}
-      <Card className="border-t-4 border-t-indigo-500">
+      <Card className="border-t-4 border-t-slate-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-indigo-600" /> Full Standings
+            <Trophy className="h-5 w-5 text-slate-300" /> Full Standings
           </CardTitle>
           <CardDescription>Everyone on the research team, ranked by points.</CardDescription>
         </CardHeader>
@@ -135,7 +135,7 @@ export default function LeaderboardPage() {
                   className={
                     "flex items-center gap-3 rounded-lg border px-4 py-3 " +
                     (m.you
-                      ? "border-blue-500/40 bg-blue-500/5 ring-1 ring-blue-500/20"
+                      ? "border-sky-500/40 bg-sky-500/5 ring-1 ring-sky-500/20"
                       : "border-border bg-card")
                   }
                 >
@@ -146,7 +146,7 @@ export default function LeaderboardPage() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 text-sm font-medium text-foreground">
                       <span className="truncate">{m.name}</span>
-                      {m.you && <Badge className="border-blue-500/30 bg-blue-500/10 text-blue-700">You</Badge>}
+                      {m.you && <Badge className="border-sky-500/30 bg-sky-500/10 text-sky-300">You</Badge>}
                     </div>
                     <div className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Flame className="h-3 w-3 text-rose-500" /> {m.streak}-week streak

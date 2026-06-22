@@ -221,7 +221,7 @@ export default function GuidedResearchBuilder() {
     priority === "Executive" || priority === "High"
       ? "border-l-rose-500"
       : priority === "Medium"
-      ? "border-l-blue-500"
+      ? "border-l-sky-500"
       : "border-l-slate-400";
 
   return (
@@ -229,7 +229,7 @@ export default function GuidedResearchBuilder() {
       <PageHeader
         icon={Target}
         eyebrow="Structured intake"
-        title="Research Builder"
+        title="Research Engine"
         subtitle="Scope the question, lock the required sources, and define what not to assume before involving AI. Disciplined intake keeps the whole workflow defensible."
         action={
           <Button
@@ -237,7 +237,7 @@ export default function GuidedResearchBuilder() {
               resetForm();
               setActiveTab("builder");
             }}
-            className="bg-white text-slate-900 hover:bg-blue-50"
+            className="bg-white text-slate-900 hover:bg-slate-200"
           >
             <Plus className="h-4 w-4 mr-2" /> New Request
           </Button>
@@ -351,10 +351,10 @@ export default function GuidedResearchBuilder() {
 
         <TabsContent value="builder">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="border-t-4 border-t-blue-500">
+            <Card className="border-t-4 border-t-sky-500">
               <CardHeader>
                 <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-500 text-white shadow-md shadow-blue-500/30">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-sky-500 text-white shadow-md shadow-sky-500/30">
                     <ClipboardList className="h-5 w-5" />
                   </div>
                   <div>
@@ -364,10 +364,10 @@ export default function GuidedResearchBuilder() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="mb-4 space-y-1.5 rounded-lg border bg-blue-500/5 p-3">
+                <div className="mb-4 space-y-1.5 rounded-lg border bg-sky-500/5 p-3">
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-medium text-muted-foreground">Intake completeness</span>
-                    <span className="font-semibold tabular-nums text-blue-700">
+                    <span className="font-semibold tabular-nums text-sky-300">
                       {builderFilled} of {builderFields.length} fields
                     </span>
                   </div>
@@ -468,10 +468,10 @@ export default function GuidedResearchBuilder() {
             <div className="space-y-6">
               {generatedOutput ? (
                 <>
-                  <Card className="border-t-4 border-t-indigo-500 bg-gradient-to-br from-indigo-500/10 to-transparent">
+                  <Card className="border-t-4 border-t-slate-500 bg-gradient-to-br from-slate-500/10 to-transparent">
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center gap-2 text-base">
-                        <span className="flex h-8 w-8 items-center justify-center rounded-md bg-indigo-500 text-white shadow-sm shadow-indigo-500/30">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-500 text-white shadow-sm shadow-slate-500/30">
                           <Sparkles className="w-4 h-4" />
                         </span>
                         Initial Output Generated

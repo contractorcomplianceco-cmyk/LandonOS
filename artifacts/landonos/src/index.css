@@ -61,51 +61,51 @@
 }
 
 :root {
-  /* Executive Theme: Dark Navy foundation, Silver borders, Electric Blue accents, White work surfaces */
-  --background: 210 20% 98%; /* Light silver-gray background */
-  --foreground: 222 47% 11%; /* Very dark navy foreground */
-  
-  --card: 0 0% 100%; /* Pure white work surfaces */
-  --card-foreground: 222 47% 11%;
-  --card-border: 214 32% 91%; /* Silver/steel border */
+  /* Performance Cockpit Theme: deep black/graphite shell, chrome-silver borders, performance-red accents */
+  --background: 240 6% 6%; /* Deep graphite-black shell */
+  --foreground: 0 0% 96%; /* Pale chrome text */
 
-  --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
-  --popover-border: 214 32% 91%;
+  --card: 240 5% 10%; /* Graphite instrument panel */
+  --card-foreground: 0 0% 96%;
+  --card-border: 240 5% 20%; /* Chrome/silver divider */
 
-  --primary: 217 91% 60%; /* Electric blue */
-  --primary-foreground: 210 40% 98%;
-  
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
+  --popover: 240 6% 9%;
+  --popover-foreground: 0 0% 96%;
+  --popover-border: 240 5% 22%;
 
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --ring: 217 91% 60%;
-  
-  --sidebar: 222 47% 11%; /* Dark Navy Sidebar */
-  --sidebar-foreground: 210 40% 98%; /* White text */
-  --sidebar-border: 220 30% 20%;
-  --sidebar-primary: 217 91% 60%; /* Electric blue */
+  --primary: 0 84% 53%; /* Performance red */
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 240 5% 15%; /* Brushed graphite */
+  --secondary-foreground: 0 0% 94%;
+
+  --muted: 240 5% 14%;
+  --muted-foreground: 240 6% 64%; /* Silver-gray labels */
+
+  --accent: 240 5% 16%;
+  --accent-foreground: 0 0% 96%;
+
+  --destructive: 0 84% 53%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 240 5% 19%;
+  --input: 240 5% 19%;
+  --ring: 0 84% 53%;
+
+  --sidebar: 240 7% 5%; /* Near-black control rail */
+  --sidebar-foreground: 0 0% 92%;
+  --sidebar-border: 240 5% 16%;
+  --sidebar-primary: 0 84% 53%; /* Performance red */
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 217 33% 17%;
-  --sidebar-accent-foreground: 210 40% 98%;
-  --sidebar-ring: 217 91% 60%;
+  --sidebar-accent: 240 5% 13%;
+  --sidebar-accent-foreground: 0 0% 96%;
+  --sidebar-ring: 0 84% 53%;
 
   --app-font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --app-font-serif: Georgia, serif;
   --app-font-mono: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  
-  --radius: 0.3rem; /* Sleek, less rounded corners for an executive look */
+
+  --radius: 0.3rem; /* Sleek, precision-instrument corners */
 }
 
 @layer base {
@@ -115,8 +115,8 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
     background-image:
-      radial-gradient(circle at 0% 0%, hsl(217 91% 60% / 0.06), transparent 35%),
-      radial-gradient(circle at 100% 0%, hsl(239 84% 67% / 0.05), transparent 40%);
+      radial-gradient(circle at 0% 0%, hsl(0 84% 53% / 0.10), transparent 38%),
+      radial-gradient(circle at 100% 0%, hsl(0 0% 60% / 0.05), transparent 42%);
     background-attachment: fixed;
   }
 }
@@ -127,6 +127,20 @@
   }
   .animate-rise {
     animation: rise 0.4s ease-out both;
+  }
+  /* Subtle carbon-fiber weave for cockpit surfaces */
+  .carbon {
+    background-color: hsl(240 6% 7%);
+    background-image:
+      repeating-linear-gradient(45deg, hsl(0 0% 100% / 0.022) 0 1px, transparent 1px 6px),
+      repeating-linear-gradient(-45deg, hsl(0 0% 100% / 0.022) 0 1px, transparent 1px 6px);
+    background-size: 8px 8px;
+  }
+  /* Brushed-metal chrome edge for instrument panels */
+  .chrome-edge {
+    box-shadow:
+      inset 0 1px 0 hsl(0 0% 100% / 0.06),
+      inset 0 -1px 0 hsl(0 0% 0% / 0.4);
   }
 }
 

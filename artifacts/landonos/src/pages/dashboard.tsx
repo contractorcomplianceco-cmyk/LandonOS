@@ -14,13 +14,14 @@ import {
   Award,
   ArrowRight,
   Activity,
-  TrendingUp,
+  Gauge as GaugeIcon,
   Lightbulb,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ACCENT, StatCard, type Accent } from "@/components/stat-card";
 import { PageHeader } from "@/components/page-header";
+import { Gauge } from "@/components/gauge";
 import { levelProgress } from "@/lib/rewards";
 
 const COMPLIANCE_TIPS = [
@@ -32,12 +33,12 @@ const COMPLIANCE_TIPS = [
 ];
 
 const QUICK_ACTIONS: { href: string; label: string; icon: LucideIcon; color: Accent }[] = [
-  { href: "/guided-research-builder?new=1", label: "New Research", icon: Target, color: "blue" },
-  { href: "/prompt-coach", label: "Prompt Coach", icon: MessageSquare, color: "indigo" },
-  { href: "/roseos-chat", label: "Ask RoseOS", icon: ShieldCheck, color: "teal" },
-  { href: "/report-builder", label: "Build Report", icon: FileText, color: "sky" },
-  { href: "/blocked", label: "I'm Blocked", icon: AlertTriangle, color: "rose" },
-  { href: "/handoff", label: "Create Handoff", icon: Send, color: "emerald" },
+  { href: "/guided-research-builder?new=1", label: "Research Engine", icon: Target, color: "red" },
+  { href: "/prompt-coach", label: "Tuning Bay", icon: MessageSquare, color: "slate" },
+  { href: "/roseos-chat", label: "RoseOS Co-Driver", icon: ShieldCheck, color: "teal" },
+  { href: "/report-builder", label: "Brief Builder", icon: FileText, color: "sky" },
+  { href: "/blocked", label: "Pit Stop", icon: AlertTriangle, color: "rose" },
+  { href: "/handoff", label: "Finish Line Handoff", icon: Send, color: "emerald" },
 ];
 
 export default function Dashboard() {
@@ -55,10 +56,10 @@ export default function Dashboard() {
   const handoffsCompleted = data.handoffs.filter((h) => h.status === "Approved");
 
   const stats: { label: string; value: number; icon: LucideIcon; color: Accent }[] = [
-    { label: "Open Requests", value: openRequests.length, icon: Target, color: "blue" },
-    { label: "Blocked Items", value: blockedItems.length, icon: AlertTriangle, color: "rose" },
-    { label: "Reports in Progress", value: reportsInProgress.length, icon: FileText, color: "sky" },
-    { label: "Completed Handoffs", value: handoffsCompleted.length, icon: ShieldCheck, color: "emerald" },
+    { label: "Open Requests", value: openRequests.length, icon: Target, color: "red" },
+    { label: "Pit Stops", value: blockedItems.length, icon: AlertTriangle, color: "rose" },
+    { label: "Briefs in Progress", value: reportsInProgress.length, icon: FileText, color: "sky" },
+    { label: "Finished Handoffs", value: handoffsCompleted.length, icon: ShieldCheck, color: "emerald" },
   ];
 
   const riskySources = data.sources.filter(
@@ -67,9 +68,33 @@ export default function Dashboard() {
 
   const progress = levelProgress(data.rewardState.points);
 
+  // ----- Performance gauges -----
+  const verifiedSources = data.sources.length - riskySources.length;
+  const sourceQuality = data.sources.length
+    ? Math.round((verifiedSources / data.sources.length) * 100)
+    : 0;
+
+  const readyReports = data.reports.filter(
+    (r) =>
+      r.status === "Ready for Review" ||
+      r.status === "Reviewed" ||
+      r.status === "Approved"
+  ).length;
+  const reportReadiness = data.reports.length
+    ? Math.round((readyReports / data.reports.length) * 100)
+    : 0;
+
+  const completedRequests = data.requests.filter((r) => r.status === "Completed").length;
+  const researchVelocity = data.requests.length
+    ? Math.round((completedRequests / data.requests.length) * 100)
+    : 0;
+
+  const gaugeTone = (v: number): "red" | "emerald" | "steel" =>
+    v >= 70 ? "emerald" : v >= 40 ? "steel" : "red";
+
   const pipeline: { label: string; value: number; color: Accent }[] = [
-    { label: "Requests", value: data.requests.length, color: "blue" },
-    { label: "Reports", value: data.reports.length, color: "sky" },
+    { label: "Requests", value: data.requests.length, color: "red" },
+    { label: "Briefs", value: data.reports.length, color: "sky" },
     { label: "Sources", value: data.sources.length, color: "teal" },
     { label: "Handoffs", value: data.handoffs.length, color: "emerald" },
   ];
@@ -79,15 +104,16 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       <PageHeader
+        icon={GaugeIcon}
         statusDot
         eyebrow="All systems operational"
-        title="Command Center"
-        subtitle="AI-guided compliance and business research cockpit. Verify every source, keep humans in the loop."
+        title="Performance Cockpit"
+        subtitle="Your research command instrument cluster. Verify every source, keep humans in the loop."
         statsClassName="grid grid-cols-2 gap-3 shrink-0"
         action={
           <Link
             href="/guided-research-builder?new=1"
-            className="inline-flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-900"
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             Start New Research <ArrowRight className="h-4 w-4" />
           </Link>
@@ -97,6 +123,48 @@ export default function Dashboard() {
           { label: "Points", value: data.rewardState.points.toLocaleString(), icon: Activity },
         ]}
       />
+
+      {/* Instrument cluster — performance gauges */}
+      <Card className="carbon relative overflow-hidden border-white/10">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-500/60 to-transparent" />
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <span className="flex h-8 w-8 items-center justify-center rounded-md bg-red-600 text-white shadow-sm shadow-red-500/40">
+              <GaugeIcon className="w-4 h-4" />
+            </span>
+            Instrument Cluster
+          </CardTitle>
+          <CardDescription>Live performance read-outs across your research operation</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            <div className="flex items-center justify-center rounded-lg border border-white/10 bg-black/20 py-5">
+              <Gauge
+                value={sourceQuality}
+                tone={gaugeTone(sourceQuality)}
+                label="Source Quality"
+                sublabel="Official"
+              />
+            </div>
+            <div className="flex items-center justify-center rounded-lg border border-white/10 bg-black/20 py-5">
+              <Gauge
+                value={reportReadiness}
+                tone={gaugeTone(reportReadiness)}
+                label="Report Readiness"
+                sublabel="Ready"
+              />
+            </div>
+            <div className="flex items-center justify-center rounded-lg border border-white/10 bg-black/20 py-5">
+              <Gauge
+                value={researchVelocity}
+                tone={gaugeTone(researchVelocity)}
+                label="Research Velocity"
+                sublabel="Completed"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Quick Actions */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -120,7 +188,7 @@ export default function Dashboard() {
               >
                 <a.icon className="w-5 h-5" />
               </span>
-              <span className="text-xs font-semibold text-foreground">{a.label}</span>
+              <span className="text-xs font-semibold text-foreground text-center px-1">{a.label}</span>
             </Link>
           );
         })}
@@ -136,19 +204,19 @@ export default function Dashboard() {
       {/* Progress + Pipeline */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Level progress */}
-        <Card className="relative overflow-hidden border-t-4 border-t-indigo-500 bg-gradient-to-br from-indigo-500/10 to-transparent lg:col-span-1">
+        <Card className="relative overflow-hidden border-t-4 border-t-red-500 bg-gradient-to-br from-red-500/10 to-transparent lg:col-span-1">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-indigo-500 text-white shadow-sm shadow-indigo-500/30">
-                <TrendingUp className="w-4 h-4" />
+              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-red-600 text-white shadow-sm shadow-red-500/40">
+                <Award className="w-4 h-4" />
               </span>
-              Your Progress
+              Driver Standing
             </CardTitle>
             <CardDescription>{progress.current.level}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex items-end justify-between">
-              <div className="text-3xl font-bold tabular-nums text-indigo-700">
+              <div className="text-3xl font-bold tabular-nums text-red-400">
                 {data.rewardState.points.toLocaleString()}
               </div>
               <div className="text-xs text-muted-foreground">points</div>
@@ -160,7 +228,7 @@ export default function Dashboard() {
                 <span className="font-semibold text-foreground">{progress.next.level}</span>
               </p>
             ) : (
-              <p className="text-xs font-medium text-emerald-600">Top level reached. Outstanding work.</p>
+              <p className="text-xs font-medium text-emerald-400">Top level reached. Outstanding work.</p>
             )}
           </CardContent>
         </Card>
@@ -198,13 +266,13 @@ export default function Dashboard() {
       </div>
 
       {/* Compliance tip of the day */}
-      <Card className="border-l-4 border-l-blue-500 bg-gradient-to-r from-blue-500/10 to-transparent">
+      <Card className="border-l-4 border-l-red-500 bg-gradient-to-r from-red-500/10 to-transparent">
         <CardContent className="flex items-start gap-3 py-4">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500 text-white shadow-sm shadow-blue-500/30">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white shadow-sm shadow-red-500/40">
             <Lightbulb className="h-4.5 w-4.5" />
           </span>
           <div>
-            <div className="text-xs font-semibold uppercase tracking-wider text-blue-600">
+            <div className="text-xs font-semibold uppercase tracking-wider text-red-400">
               Compliance Tip
             </div>
             <p className="mt-0.5 text-sm text-foreground">{tip}</p>
@@ -217,7 +285,7 @@ export default function Dashboard() {
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-500 text-white shadow-sm shadow-blue-500/30">
+              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-red-600 text-white shadow-sm shadow-red-500/40">
                 <ListChecks className="w-4 h-4" />
               </span>
               Today's Research Priorities
@@ -237,7 +305,7 @@ export default function Dashboard() {
                     key={req.id}
                     className={cn(
                       "flex flex-col space-y-2 p-3 border border-l-4 rounded-md transition-colors hover:bg-muted/40",
-                      urgent ? "border-l-rose-500" : "border-l-blue-500"
+                      urgent ? "border-l-red-500" : "border-l-sky-500"
                     )}
                   >
                     <div className="flex items-center justify-between">
@@ -256,10 +324,10 @@ export default function Dashboard() {
         </Card>
 
         {/* Source Quality Warnings */}
-        <Card className="col-span-1 border-destructive/30 bg-gradient-to-br from-rose-500/10 to-transparent">
+        <Card className="col-span-1 border-destructive/30 bg-gradient-to-br from-red-500/10 to-transparent">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-destructive">
-              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-rose-500 text-white shadow-sm shadow-rose-500/30">
+              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-red-600 text-white shadow-sm shadow-red-500/40">
                 <AlertTriangle className="w-4 h-4" />
               </span>
               Source Quality Warnings

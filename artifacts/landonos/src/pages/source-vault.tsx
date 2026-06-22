@@ -162,10 +162,10 @@ export default function SourceVault() {
       <PageHeader
         icon={Database}
         eyebrow="Verified intelligence"
-        title="Source Vault"
+        title="Source Garage"
         subtitle="A single repository for every source — graded for quality and flagged when intelligence leans on AI drafts instead of official records."
         action={
-          <Button onClick={handleCreate} className="bg-white text-slate-900 hover:bg-blue-50">
+          <Button onClick={handleCreate} className="bg-white text-slate-900 hover:bg-slate-200">
             <Plus className="h-4 w-4 mr-2" /> Add Source
           </Button>
         }

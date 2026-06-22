@@ -13,16 +13,16 @@ import { EmptyState } from "@/components/empty-state";
 
 const STEP_BORDER: Record<Status, string> = {
   "Complete": "border-l-emerald-500 bg-emerald-500/5",
-  "In Progress": "border-l-blue-500 bg-blue-500/5",
+  "In Progress": "border-l-sky-500 bg-sky-500/5",
   "Needs Help": "border-l-rose-500 bg-rose-500/5",
   "Not Started": "border-l-slate-300 bg-card",
 };
 
 const STEP_CHIP: Record<Status, string> = {
   "Complete": "bg-emerald-500 text-white shadow-sm shadow-emerald-500/30",
-  "In Progress": "bg-blue-500 text-white shadow-sm shadow-blue-500/30",
+  "In Progress": "bg-sky-500 text-white shadow-sm shadow-sky-500/30",
   "Needs Help": "bg-rose-500 text-white shadow-sm shadow-rose-500/30",
-  "Not Started": "bg-slate-100 text-slate-500",
+  "Not Started": "bg-slate-700 text-slate-300",
 };
 
 export default function ResearchGPS() {
@@ -34,7 +34,7 @@ export default function ResearchGPS() {
   const getStatusIcon = (status: Status) => {
     switch (status) {
       case "Complete": return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
-      case "In Progress": return <Clock className="w-5 h-5 text-blue-500" />;
+      case "In Progress": return <Clock className="w-5 h-5 text-sky-300" />;
       case "Needs Help": return <AlertTriangle className="w-5 h-5 text-rose-500" />;
       default: return <Circle className="w-5 h-5 text-muted-foreground/30" />;
     }
@@ -74,7 +74,7 @@ export default function ResearchGPS() {
       <PageHeader
         icon={Compass}
         eyebrow="10-step workflow"
-        title="Research GPS"
+        title="Track Map"
         subtitle="Navigate every research mission through a disciplined, auditable 10-step path — from scoping the question to handoff for human review."
         statsClassName="grid grid-cols-2 gap-3 shrink-0"
         stats={[
@@ -83,7 +83,7 @@ export default function ResearchGPS() {
         ]}
       />
 
-      <Card className="border-t-4 border-t-blue-500">
+      <Card className="border-t-4 border-t-sky-500">
         <CardHeader className="pb-4">
           <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Select Active Mission</CardTitle>
           <Select value={selectedReqId} onValueChange={setSelectedReqId}>
@@ -129,10 +129,10 @@ export default function ResearchGPS() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex items-end justify-between">
-                    <div className="text-3xl font-bold tabular-nums text-emerald-700">
+                    <div className="text-3xl font-bold tabular-nums text-emerald-400">
                       {completedCount} <span className="text-base font-medium text-muted-foreground">of {GPS_STEPS.length} complete</span>
                     </div>
-                    <div className="text-sm font-semibold tabular-nums text-emerald-700">{pct}%</div>
+                    <div className="text-sm font-semibold tabular-nums text-emerald-400">{pct}%</div>
                   </div>
                   <Progress value={pct} className="h-2" />
                 </CardContent>
@@ -140,18 +140,19 @@ export default function ResearchGPS() {
             );
           })()}
 
-          <Card className="relative overflow-hidden border-slate-800 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800 text-white shadow-lg">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.25),transparent_55%)]" />
+          <Card className="carbon relative overflow-hidden border-white/10 text-white shadow-lg">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.22),transparent_55%)]" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-500/60 to-transparent" />
             <CardContent className="relative p-6 flex flex-col md:flex-row items-center gap-6">
               <div className="flex-1 space-y-2 w-full">
                 <h2 className="text-xl font-bold">{activeRequest.title}</h2>
-                <div className="flex items-center gap-2 text-sm text-blue-100/80">
+                <div className="flex items-center gap-2 text-sm text-slate-300">
                   <Badge variant="outline" className="border-white/25 text-white">{activeRequest.type}</Badge>
                   <span className="flex items-center"><ArrowRight className="w-3 h-3 mx-1" /> {activeRequest.reviewer}</span>
                 </div>
               </div>
               <div className="w-full md:w-64 shrink-0 space-y-2">
-                <div className="flex justify-between text-sm font-medium text-blue-100">
+                <div className="flex justify-between text-sm font-medium text-slate-200">
                   <span>Overall Progress</span>
                   <span>{calculateProgress(activeRequest)}%</span>
                 </div>

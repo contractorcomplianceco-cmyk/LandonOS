@@ -238,11 +238,11 @@ ${report.sourcesReviewed.map(id => {
             {report.sourceBackedFacts && (<div><h3 className="font-semibold text-primary mb-1 uppercase text-xs">Source-Backed Facts</h3><p className="whitespace-pre-wrap">{report.sourceBackedFacts}</p></div>)}
             
             <div className="grid grid-cols-2 gap-4">
-              {report.risks && (<div><h3 className="font-semibold text-rose-600 mb-1 uppercase text-xs">Risks</h3><p className="whitespace-pre-wrap">{report.risks}</p></div>)}
-              {report.opportunities && (<div><h3 className="font-semibold text-emerald-600 mb-1 uppercase text-xs">Opportunities</h3><p className="whitespace-pre-wrap">{report.opportunities}</p></div>)}
+              {report.risks && (<div><h3 className="font-semibold text-rose-400 mb-1 uppercase text-xs">Risks</h3><p className="whitespace-pre-wrap">{report.risks}</p></div>)}
+              {report.opportunities && (<div><h3 className="font-semibold text-emerald-400 mb-1 uppercase text-xs">Opportunities</h3><p className="whitespace-pre-wrap">{report.opportunities}</p></div>)}
             </div>
 
-            {report.unknowns && (<div><h3 className="font-semibold text-rose-600 mb-1 uppercase text-xs">Unknowns</h3><p className="whitespace-pre-wrap">{report.unknowns}</p></div>)}
+            {report.unknowns && (<div><h3 className="font-semibold text-rose-400 mb-1 uppercase text-xs">Unknowns</h3><p className="whitespace-pre-wrap">{report.unknowns}</p></div>)}
             {report.recommendation && (<div><h3 className="font-semibold text-primary mb-1 uppercase text-xs">Recommendation</h3><p className="whitespace-pre-wrap font-medium">{report.recommendation}</p></div>)}
             {report.nextSteps && (<div><h3 className="font-semibold text-primary mb-1 uppercase text-xs">Next Steps</h3><p className="whitespace-pre-wrap">{report.nextSteps}</p></div>)}
             
@@ -295,7 +295,7 @@ ${report.sourcesReviewed.map(id => {
         return "border-l-emerald-500";
       case "Reviewed":
       case "Ready for Review":
-        return "border-l-blue-500";
+        return "border-l-sky-500";
       case "Needs Sources":
       case "Needs More Research":
         return "border-l-rose-500";
@@ -322,10 +322,10 @@ ${report.sourcesReviewed.map(id => {
       <PageHeader
         icon={FileText}
         eyebrow="Executive reporting"
-        title="Report Builder"
+        title="Brief Builder"
         subtitle="Draft, score, and finalize source-backed executive reports. The readiness score flags gaps before anything reaches a decision-maker."
         action={
-          <Button onClick={handleCreate} className="bg-white text-slate-900 hover:bg-blue-50">
+          <Button onClick={handleCreate} className="bg-white text-slate-900 hover:bg-slate-200">
             <Plus className="h-4 w-4 mr-2" /> New Report
           </Button>
         }
@@ -341,7 +341,7 @@ ${report.sourcesReviewed.map(id => {
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-500 text-white shadow-sm shadow-blue-500/30">
+        <span className="flex h-8 w-8 items-center justify-center rounded-md bg-sky-500 text-white shadow-sm shadow-sky-500/30">
           <FileText className="w-4 h-4" />
         </span>
         <h2 className="text-lg font-semibold tracking-tight">Active Reports</h2>
@@ -377,7 +377,7 @@ ${report.sourcesReviewed.map(id => {
                     {warnings.length > 0 && (
                       <div className="flex flex-wrap gap-2">
                         {warnings.map(w => (
-                          <Badge key={w} variant="outline" className="bg-rose-500/10 text-rose-600 border-rose-500/20 text-xs">
+                          <Badge key={w} variant="outline" className="bg-rose-500/10 text-rose-400 border-rose-500/20 text-xs">
                             <ShieldAlert className="w-3 h-3 mr-1" />
                             {w}
                           </Badge>

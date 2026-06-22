@@ -1,0 +1,306 @@
+Redesign the existing LandonOS Research Command Center to match the new visual mockup exactly.
+
+New app identity:
+LandonOS: Performance Research Cockpit
+
+Primary goal:
+This is a complete visual facelift. The app should look and feel like the provided mockup: a luxury fast-car cockpit merged with an executive AI-guided compliance/business research command center.
+
+Do not redesign in another direction. Use the mockup as the design source of truth.
+
+Design theme:
+Landon loves fast cars, luxury cars, and the color red. The app should feel personalized to him while remaining professional, readable, and appropriate for compliance/business research.
+
+Visual style to match:
+- Deep black app shell
+- Graphite panels
+- Subtle carbon fiber texture
+- Rich performance red accents
+- Metallic silver / chrome dividers
+- Glassy instrument panels
+- Precision gauge-style progress indicators
+- Luxury dashboard control rail
+- Executive research software polish
+- Readable white or pale gray work surfaces for forms and reports
+- Red primary actions
+- Silver/white secondary actions
+
+Avoid:
+- Cartoon racing
+- Flames
+- Excessive checkered flags
+- Childish gamification
+- Red backgrounds behind long text
+- Low-contrast text
+- Beige/tan
+- Yellow/gold-heavy branding
+- Brown/orange palettes
+- Generic purple SaaS gradients
+- Decorative blobs
+- Generic admin dashboard styling
+
+Preserve the core app purpose:
+This is still an AI-guided compliance and business research training cockpit. The redesign must not remove research, training, source-checking, handoff, blocker, or review-gating functionality.
+
+Rename/reframe modules to match the mockup:
+
+- Command Center → Performance Cockpit
+- Guided Research Builder → Research Engine
+- AI Prompt Coach → Tuning Bay
+- Research GPS → Track Map
+- Research Report Builder → Brief Builder
+- Source Vault → Source Garage
+- Blocked / Need Help → Pit Stop
+- RoseOS Chat → RoseOS Co-Driver
+- Research Completed Handoff → Finish Line Handoff
+- Brainstorming Studio → Idea Garage
+- Reward Center → Garage Rewards
+- Training Academy → Driver Training
+- Company Brain Updates → Company Brain Sync
+
+Required left sidebar:
+Make the left sidebar feel like a luxury dashboard control rail.
+
+Navigation must include:
+- Performance Cockpit
+- Research Engine
+- Tuning Bay
+- Track Map
+- Brief Builder
+- Source Garage
+- Pit Stop
+- RoseOS Co-Driver
+- Finish Line Handoff
+- Idea Garage
+- Garage Rewards
+- Driver Training
+- Company Brain Sync
+
+Required top bar:
+Make the top header feel like an instrument cluster.
+
+Include:
+- LandonOS
+- Performance Research Cockpit
+- Compliance / Business Research
+- Status chips:
+  - Human Review Required
+  - AI Draft Only
+  - Source Check
+- Gauge-style status indicators where useful
+
+Required Performance Cockpit dashboard:
+Create a high-performance cockpit-style dashboard with:
+- Today’s research priorities
+- Active research runs
+- Source Quality gauge
+- Report Readiness gauge
+- Human Review Required alerts
+- Pit Stop blockers
+- RoseOS Co-Driver panel
+- Garage Rewards / level progress
+- Finish Line Handoff queue
+- Company Brain Sync suggestions
+
+Required Research Engine:
+This should be the main guided research intake panel.
+
+Fields:
+- Research Type
+- Decision Supported
+- Required Sources
+- What Not To Assume
+- Reviewer
+
+Primary button:
+- Generate Research Plan
+
+Secondary buttons:
+- Ask Co-Driver
+- I’m in the Pit Stop
+
+Make this panel look like a premium control console, not a plain form.
+
+Required Track Map:
+Replace generic research progress with a route/progress cockpit concept.
+
+Steps:
+- Intake
+- Questions
+- Sources
+- Verify
+- Brief
+- Handoff
+
+Statuses:
+- Complete
+- Active
+- Pit Stop
+- Not Started
+
+Use a gauge/route/progress style that matches the mockup.
+
+Required Brief Builder:
+Create a report preview panel with:
+- Objective
+- Findings
+- Risks
+- Recommendation
+- Sources
+
+Include:
+- Report Readiness gauge, example 72%
+- Warning tags:
+  - Needs official source
+  - Open questions remain
+
+The Brief Builder should feel leadership-ready and precise.
+
+Required Source Garage:
+Track and display source quality.
+
+Include:
+- Official sources
+- Internal company records
+- AI draft sources
+- Unknown sources
+- Source Quality gauge
+- Warnings for weak or unknown sources
+
+Required Pit Stop:
+This is the blocker/help area.
+
+Include blocker queue items:
+- Needs Sources
+- Conflicting Info
+- Rose Review
+
+Use pit-stop language lightly and professionally. It should feel like a help-routing workflow, not a joke.
+
+Required RoseOS Co-Driver:
+Create a right-side mentor chat panel.
+
+It should:
+- Ask clarifying questions
+- Suggest next actions
+- Help improve prompts
+- Help check sources
+- Help prepare handoffs
+- Remind Landon that AI output is draft only
+
+Buttons:
+- Improve Prompt
+- Check Sources
+- Prepare Handoff
+- Ask Co-Driver
+
+Required Finish Line Handoff:
+Create a handoff panel or queue showing:
+- Ready for Rose
+- Human Review Required
+- Company Brain Sync Suggested
+- Source quality unresolved if applicable
+
+Required Idea Garage:
+Include brainstorming prompts:
+- What opportunity are we missing?
+- What could be automated?
+- What should Rose know?
+- What risk should we watch?
+- What would help compliance?
+- What would help sales?
+
+Required Garage Rewards:
+Make rewards professional and skill-based.
+
+Show:
+- Level 2: Source Finder
+- Points
+- Progress bar
+- Badges:
+  - Official Source Added
+  - Clean Handoff
+  - Prompt Tuned
+  - Pit Stop Raised Early
+
+Do not make rewards childish.
+
+Required Driver Training:
+Include lessons:
+- Use AI Responsibly
+- Verify Sources
+- Write Executive Summary
+- Separate Facts From Assumptions
+- Prepare a Clean Handoff
+
+Required Company Brain Sync:
+Show suggested company record updates:
+- Decision Log
+- Requirements Registry
+- Automation Registry
+- Knowledge Gap Report
+
+Make clear these are suggestions only, not automatic records.
+
+Critical guardrails to preserve:
+- AI output is draft only.
+- Official sources should be preferred.
+- Unknown sources should be flagged.
+- Compliance and business conclusions require human review.
+- No client-facing conclusions without review.
+- Human Review Required must remain visible.
+- Do not imply legal, CPA, licensing board, or compliance advice is final.
+- The system guides Landon but does not replace human judgment.
+
+Interaction requirements:
+- All existing working functionality must remain working.
+- Do not break navigation.
+- Do not remove forms.
+- Do not remove localStorage persistence if it exists.
+- All visible buttons should work or clearly show disabled/unavailable state.
+- Dashboard counts and progress should update when statuses change.
+- Forms should accept input.
+- Search/filter should continue to work if already implemented.
+- Mobile navigation must work.
+
+Responsive requirements:
+- Desktop should match the mockup first.
+- Tablet should remain clean and usable.
+- Mobile should stack panels cleanly.
+- No overlapping text.
+- No clipped labels.
+- Text must fit inside buttons, cards, and gauges.
+- Preserve readable contrast, especially with red accents.
+
+Implementation process:
+1. Audit current app structure.
+2. Map old module names to new module names.
+3. Apply global theme tokens for black, graphite, red, silver, chrome, white surfaces.
+4. Redesign shell/sidebar/topbar first.
+5. Redesign Performance Cockpit dashboard.
+6. Redesign each module one at a time.
+7. Preserve data models and existing behavior.
+8. Run typecheck/build.
+9. Browser preview the app.
+10. Check console errors.
+11. Test click-through navigation.
+12. Test responsive layouts.
+13. Fix issues before reporting complete.
+
+Required completion report:
+Provide a section-by-section report:
+
+For each section:
+- What changed
+- How it matches the mockup
+- What functionality was preserved
+- Any remaining limitations
+
+Also include:
+- Typecheck/build result
+- Console check result
+- Responsive check result
+- Any known remaining gaps
+
+Important:
+The final result should look like the mockup: luxury fast-car cockpit, black/graphite/red, polished, executive, personalized to Landon, and still serious enough for compliance/business research.

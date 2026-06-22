@@ -23,7 +23,7 @@ export default function RewardCenter() {
       <PageHeader
         icon={Award}
         eyebrow="Skill Progression"
-        title="Reward Center"
+        title="Garage Rewards"
         subtitle="Track your professional growth — quality and thoroughness are rewarded over speed."
         stats={[
           { label: "Level", value: rewardState.level, icon: Award },
@@ -40,10 +40,10 @@ export default function RewardCenter() {
         <StatCard label="Badges Earned" value={rewardState.badges.length} icon={Medal} color="sky" />
       </div>
 
-      <Card className="border-t-4 border-t-indigo-500 bg-gradient-to-br from-indigo-500/10 to-transparent">
+      <Card className="border-t-4 border-t-slate-500 bg-gradient-to-br from-slate-500/10 to-transparent">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-md bg-indigo-500 text-white shadow-sm shadow-indigo-500/30">
+            <span className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-500 text-white shadow-sm shadow-slate-500/30">
               <TrendingUp className="w-4 h-4" />
             </span>
             Level Progress
@@ -53,10 +53,10 @@ export default function RewardCenter() {
         <CardContent className="space-y-3">
           <div className="flex items-end justify-between">
             <div>
-              <div className="text-3xl font-bold tabular-nums text-indigo-700">{rewardState.points.toLocaleString()}</div>
+              <div className="text-3xl font-bold tabular-nums text-slate-300">{rewardState.points.toLocaleString()}</div>
               <div className="text-xs text-muted-foreground">total points</div>
             </div>
-            <div className="text-right text-sm font-semibold tabular-nums text-indigo-700">{progress.percent}%</div>
+            <div className="text-right text-sm font-semibold tabular-nums text-slate-300">{progress.percent}%</div>
           </div>
           <Progress value={progress.percent} className="h-2" />
           {progress.next ? (
@@ -65,7 +65,7 @@ export default function RewardCenter() {
               <span className="font-semibold text-foreground">{progress.next.level}</span>
             </p>
           ) : (
-            <p className="text-xs font-medium text-emerald-600">Top level reached. Outstanding work.</p>
+            <p className="text-xs font-medium text-emerald-400">Top level reached. Outstanding work.</p>
           )}
         </CardContent>
       </Card>
@@ -199,12 +199,12 @@ export default function RewardCenter() {
               const isAchieved = rewardState.points >= level.minPoints;
               const isCurrent = level.level === rewardState.level;
               const cardClass = isCurrent
-                ? "border-l-blue-500 bg-blue-500/5"
+                ? "border-l-sky-500 bg-sky-500/5"
                 : isAchieved
                 ? "border-l-emerald-500 bg-emerald-500/5"
                 : "border-l-slate-300 bg-card";
               const dotClass = isCurrent
-                ? "bg-blue-500 border-blue-500 ring-4 ring-blue-500/20"
+                ? "bg-sky-500 border-sky-500 ring-4 ring-sky-500/20"
                 : isAchieved
                 ? "bg-emerald-500 border-emerald-500"
                 : "bg-background border-muted";
@@ -215,9 +215,9 @@ export default function RewardCenter() {
                     <div className="flex items-center justify-between gap-2">
                       <span className={cn("font-semibold", isAchieved ? "text-foreground" : "text-muted-foreground")}>{level.level}</span>
                       <div className="flex items-center gap-2 shrink-0">
-                        {isCurrent && <Badge className="bg-blue-500 hover:bg-blue-500">Current</Badge>}
+                        {isCurrent && <Badge className="bg-sky-500 hover:bg-red-500">Current</Badge>}
                         {!isCurrent && isAchieved && (
-                          <Badge variant="outline" className="border-emerald-500/40 text-emerald-600">Achieved</Badge>
+                          <Badge variant="outline" className="border-emerald-500/40 text-emerald-400">Achieved</Badge>
                         )}
                         {!isAchieved && (
                           <Badge variant="outline" className="border-slate-300 text-slate-500">Locked</Badge>
