@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "wouter";
 import { useHelp } from "@/hooks/use-help";
 import { TOUR_STEPS } from "@/lib/walkthrough";
+import { speakText, cancelSpeech } from "@/lib/speech";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -32,18 +33,14 @@ export function GuidedTour() {
 
     navigate(step.route);
 
-    if (narrationOn && typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(`${step.title}. ${step.narration}`);
-      utterance.rate = 0.98;
-      utterance.pitch = 1;
-      window.speechSynthesis.speak(utterance);
+    if (narrationOn) {
+      speakText(`${step.title}. ${step.narration}`);
+    } else {
+      cancelSpeech();
     }
 
     return () => {
-      if (typeof window !== "undefined" && "speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
+      cancelSpeech();
     };
   }, [tourActive, stepIndex, narrationOn, navigate]);
 

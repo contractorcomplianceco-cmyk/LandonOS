@@ -7,6 +7,7 @@ import React, {
   ReactNode,
 } from "react";
 import { TOUR_STEPS } from "@/lib/walkthrough";
+import { cancelSpeech } from "@/lib/speech";
 
 interface HelpContextType {
   hintsEnabled: boolean;
@@ -30,12 +31,6 @@ interface HelpContextType {
 
 const HelpContext = createContext<HelpContextType | undefined>(undefined);
 const HINTS_KEY = "landonos_help_hints";
-
-function cancelSpeech() {
-  if (typeof window !== "undefined" && "speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-  }
-}
 
 export function HelpProvider({ children }: { children: ReactNode }) {
   const [hintsEnabled, setHintsEnabled] = useState<boolean>(() => {
