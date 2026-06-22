@@ -5,6 +5,7 @@ import {
   Pause,
   Volume2,
   VolumeX,
+  Music,
   RotateCcw,
   Download,
   FileText,
@@ -53,8 +54,14 @@ export default function Welcome() {
   const [started, setStarted] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
+  const [musicVolume, setMusicVolume] = useState(0.05);
   const [completed, setCompleted] = useState(false);
   const [segProgress, setSegProgress] = useState(0);
+
+  // Refs mirror the latest mute/volume so the auto-advance `onended` handler
+  // (which holds an older playSection closure) always applies current settings.
+  const mutedRef = useRef(muted);
+  const musicVolumeRef = useRef(musicVolume);
 
   const clearNarrationHandlers = (n: HTMLAudioElement) => {
     n.ontimeupdate = null;
@@ -90,6 +97,20 @@ export default function Welcome() {
   // Tear down audio when the page unmounts.
   useEffect(() => stopAllAudio, [stopAllAudio]);
 
+  // Keep the music bed at the user-chosen volume (narration stays full volume).
+  useEffect(() => {
+    musicVolumeRef.current = musicVolume;
+    if (musicRef.current) musicRef.current.volume = musicVolume;
+  }, [musicVolume]);
+
+  // Keep both audio elements in sync with the mute toggle (covers chapter
+  // transitions, where the auto-advance handler may use an older closure).
+  useEffect(() => {
+    mutedRef.current = muted;
+    if (narrationRef.current) narrationRef.current.muted = muted;
+    if (musicRef.current) musicRef.current.muted = muted;
+  }, [muted]);
+
   const playSection = useCallback(
     (i: number) => {
       const n = narrationRef.current;
@@ -104,7 +125,7 @@ export default function Welcome() {
 
       n.src = onboardingAsset(SECTIONS[i].audio);
       n.currentTime = 0;
-      n.muted = muted;
+      n.muted = mutedRef.current;
       n.ontimeupdate = () => {
         if (n.duration > 0) setSegProgress(n.currentTime / n.duration);
       };
@@ -133,15 +154,15 @@ export default function Welcome() {
 
       if (m) {
         m.loop = true;
-        m.muted = muted;
-        m.volume = 0.12;
+        m.muted = mutedRef.current;
+        m.volume = musicVolumeRef.current;
         if (m.paused) {
           const mp = m.play();
           if (mp && typeof mp.catch === "function") mp.catch(() => {});
         }
       }
     },
-    [muted, stopAllAudio, toast]
+    [stopAllAudio, toast]
   );
 
   const pauseVideo = () => {
@@ -176,14 +197,7 @@ export default function Welcome() {
     }
   };
 
-  const toggleMute = () => {
-    setMuted((m) => {
-      const next = !m;
-      if (narrationRef.current) narrationRef.current.muted = next;
-      if (musicRef.current) musicRef.current.muted = next;
-      return next;
-    });
-  };
+  const toggleMute = () => setMuted((m) => !m);
 
   const switchMode = (next: Mode) => {
     if (next === mode) return;
@@ -416,6 +430,28 @@ export default function Welcome() {
               >
                 {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
               </button>
+
+              {/* Music-bed volume (separate from narration) */}
+              <div
+                className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5"
+                title="Background music volume"
+              >
+                <Music className="h-4 w-4 shrink-0 text-slate-300" />
+                <input
+                  type="range"
+                  min={0}
+                  max={0.5}
+                  step={0.01}
+                  value={musicVolume}
+                  onChange={(e) => setMusicVolume(parseFloat(e.target.value))}
+                  aria-label="Background music volume"
+                  className="h-1 w-20 cursor-pointer accent-red-500 sm:w-28"
+                />
+                <span className="w-8 shrink-0 text-right text-[11px] font-medium tabular-nums text-slate-400">
+                  {Math.round((musicVolume / 0.5) * 100)}%
+                </span>
+              </div>
+
               <span className="ml-auto text-xs font-medium text-slate-400">
                 Chapter {current + 1} of {SECTIONS.length}
               </span>
