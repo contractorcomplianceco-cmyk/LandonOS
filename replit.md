@@ -49,7 +49,7 @@ Visual theme: a luxury fast-car cockpit — deep black/graphite foundation, carb
 
 ## Generators (not shipped in the app)
 
-- `pnpm --filter @workspace/scripts run guide:landonos` — regenerates `artifacts/landonos/public/onboarding/landonos-user-guide.pdf` from `scripts/src/generate-user-guide.ts` (pdfkit; branded cover + one page per section + page-number footers). `pdfkit`/`@types/pdfkit` live in `@workspace/scripts` devDeps only — never add them to the landonos runtime.
+- `pnpm --filter @workspace/scripts run guide:landonos` — regenerates `artifacts/landonos/public/onboarding/landonos-user-guide.pdf` from `scripts/src/generate-user-guide.ts` (pdfkit; branded cover with a flowed/measured title block so the chrome divider never crosses the words, a "Getting Started" pre-flight page, then one page per instrument — each with intro, "What you can do" bullets, a numbered "How to use it" walkthrough, and a human-review callout — plus page-number footers). `addFooters` zeroes `doc.page.margins.bottom` while drawing (footers sit below the bottom margin; otherwise pdfkit auto-inserts a trailing blank page per footer). `pdfkit`/`@types/pdfkit` live in `@workspace/scripts` devDeps only — never add them to the landonos runtime.
 - Onboarding audio (`public/onboarding/welcome-*.mp3`) was produced with the media-generation TTS/music tools; re-run those tools if narration copy in `src/lib/onboarding.ts` changes (keep the clip text in sync with `narration`).
 
 ## Architecture decisions

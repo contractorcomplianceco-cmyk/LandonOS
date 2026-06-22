@@ -1,3 +1,4 @@
 - [DESIGN subagent build gotchas](design-subagent-gotchas.md) — subagents sometimes report success without writing files, and escape template-literal backticks/`${` with stray backslashes; always typecheck and verify files after.
 - [Web Speech narration reliability](web-speech-narration.md) — speechSynthesis "no audio" is usually the cancel/speak race, async voice loading, or ~15s truncation; fix with delay + voiceschanged wait + per-sentence chain.
+- [pdfkit gotchas](pdfkit-gotchas.md) — footers drawn below the bottom margin auto-insert trailing blank pages (zero the margin while drawing); fixed-Y cover dividers cross wrapped titles (flow from a measured cursor).
 - [LandonOS StatCard value sizing](landonos-statcard.md) — StatCard `value` is text-4xl beside a fixed icon; keep it short/numeric or it collides with the icon, put detail in `hint`.
