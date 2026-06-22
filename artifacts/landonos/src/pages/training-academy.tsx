@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { levelForPoints } from "@/lib/rewards";
 import { StatCard } from "@/components/stat-card";
+import { Gauge } from "@/components/gauge";
 import { PageHeader } from "@/components/page-header";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -120,12 +121,27 @@ export default function TrainingAcademy() {
           </CardTitle>
           <CardDescription>{completedLessons} of {allLessons.length} lessons completed</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2">
-          <div className="flex justify-between text-sm">
-            <span className="font-medium">Curriculum completion</span>
-            <span className="font-semibold tabular-nums text-emerald-400">{progressPercent}%</span>
+        <CardContent>
+          <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center">
+            <div className="flex shrink-0 items-center justify-center rounded-lg border border-white/10 bg-black/20 px-6 py-4">
+              <Gauge
+                value={progressPercent}
+                tone={progressPercent >= 70 ? "emerald" : progressPercent >= 40 ? "steel" : "red"}
+                label="Training Progress"
+                sublabel="Complete"
+              />
+            </div>
+            <div className="w-full flex-1 space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="font-medium">Curriculum completion</span>
+                <span className="font-semibold tabular-nums text-emerald-400">{progressPercent}%</span>
+              </div>
+              <Progress value={progressPercent} className="h-3" />
+              <p className="text-xs text-muted-foreground">
+                {completedLessons} of {allLessons.length} lessons completed across {tracks.length} tracks.
+              </p>
+            </div>
           </div>
-          <Progress value={progressPercent} className="h-3" />
         </CardContent>
       </Card>
       

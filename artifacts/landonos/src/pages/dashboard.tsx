@@ -92,6 +92,12 @@ export default function Dashboard() {
   const gaugeTone = (v: number): "red" | "emerald" | "steel" =>
     v >= 70 ? "emerald" : v >= 40 ? "steel" : "red";
 
+  const reviewRisk = data.sources.length
+    ? Math.round((riskySources.length / data.sources.length) * 100)
+    : 0;
+  const riskTone = (v: number): "red" | "emerald" | "amber" =>
+    v >= 60 ? "red" : v >= 30 ? "amber" : "emerald";
+
   const pipeline: { label: string; value: number; color: Accent }[] = [
     { label: "Requests", value: data.requests.length, color: "red" },
     { label: "Briefs", value: data.reports.length, color: "sky" },
@@ -137,7 +143,7 @@ export default function Dashboard() {
           <CardDescription>Live performance read-outs across your research operation</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <div className="flex items-center justify-center rounded-lg border border-white/10 bg-black/20 py-5">
               <Gauge
                 value={sourceQuality}
@@ -160,6 +166,14 @@ export default function Dashboard() {
                 tone={gaugeTone(researchVelocity)}
                 label="Research Velocity"
                 sublabel="Completed"
+              />
+            </div>
+            <div className="flex items-center justify-center rounded-lg border border-white/10 bg-black/20 py-5">
+              <Gauge
+                value={reviewRisk}
+                tone={riskTone(reviewRisk)}
+                label="Human Review Risk"
+                sublabel="Unverified"
               />
             </div>
           </div>

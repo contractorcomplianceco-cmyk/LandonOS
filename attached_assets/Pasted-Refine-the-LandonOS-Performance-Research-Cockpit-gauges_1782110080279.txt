@@ -1,0 +1,91 @@
+Refine the LandonOS Performance Research Cockpit gauges and automotive UI elements so they look realistic, premium, and luxury-performance inspired.
+
+Problem to fix:
+The current gauges / car-inspired elements look too cartoony. They should not feel like a game, toy dashboard, or generic racing graphic.
+
+Design goal:
+Make the automotive elements feel like a real luxury performance car cockpit: refined, precise, metallic, dimensional, and executive.
+
+Gauge style requirements:
+- Use realistic luxury instrument-cluster styling
+- Dark graphite or black gauge faces
+- Subtle carbon fiber or brushed-metal texture
+- Thin chrome / silver outer rings
+- Fine tick marks
+- Clean numeric labels
+- Red needle or red progress arc
+- Soft inner glow, not neon overload
+- Subtle glass reflection or sheen
+- Depth through shadows and layering
+- Smooth circular progress arcs
+- No chunky cartoon rings
+- No oversized playful icons
+- No toy-like speedometer graphics
+- No flame/checkered-flag styling
+
+Use gauges for:
+- Report Readiness
+- Source Quality
+- Research Progress
+- Training Progress
+- Reward / Level Progress
+- Human Review Risk
+
+Specific visual direction:
+Think modern Ferrari / Porsche / Lamborghini / Mercedes AMG digital cockpit inspiration, but do not use any real brand logos or copyrighted dashboard replicas. The result should be original and brand-safe, inspired by luxury performance design.
+
+Keep it professional:
+This is still an executive compliance/business research app. The gauges should support decision-making, not overpower the workspace.
+
+Implementation requirements:
+- Replace cartoony gauge components with realistic SVG/CSS or canvas-based instrument gauges.
+- Use layered circles, thin tick marks, subtle gradients, metallic borders, and red accent arcs.
+- Add labels that are readable and not cramped.
+- Use high contrast for numbers and status text.
+- Keep gauges compact enough for dashboard use.
+- Ensure gauges work on desktop, tablet, and mobile.
+- Do not use external car brand assets.
+- Do not use stock images as gauges.
+- Do not use low-quality emoji/icons for automotive styling.
+
+Recommended gauge component structure:
+- Outer metallic ring
+- Inner graphite face
+- Fine tick marks around edge
+- Red progress arc or needle
+- Center value
+- Small status label
+- Optional micro warning badge
+
+Examples:
+- Report Readiness: circular gauge showing 72%
+- Source Quality: gauge showing Strong / Needs Source
+- Research Progress: route/progress gauge
+- Training Progress: level meter
+- Human Review Risk: red caution gauge, but still refined
+
+Also refine:
+- Track Map should feel like a premium navigation/race telemetry route, not a cartoon racetrack.
+- Pit Stop should feel like a professional blocker/help workflow with subtle automotive language, not a racing game.
+- Garage Rewards should feel like a luxury performance achievement system, not childish gamification.
+
+Avoid:
+- Cartoon dashboards
+- Toy speedometers
+- Big playful icons
+- Flames
+- Excessive checkered flags
+- Neon overload
+- Low-contrast red-on-black text
+- Fake car brand logos
+- Busy decorative backgrounds
+- Anything that makes the app less readable
+
+After implementing:
+- Compare the gauges against the design goal.
+- Confirm they look premium and realistic.
+- Confirm all gauge labels are readable.
+- Confirm the app still feels executive and research-focused.
+- Run typecheck/build.
+- Check desktop and mobile layouts.
+- Provide before/after notes describing how the gauges were improved.

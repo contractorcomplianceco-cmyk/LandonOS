@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/page-header";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Gauge } from "@/components/gauge";
 import { Compass, CheckCircle2, Circle, Clock, AlertTriangle, ArrowRight, ListChecks } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { EmptyState } from "@/components/empty-state";
@@ -127,14 +128,26 @@ export default function ResearchGPS() {
                   </CardTitle>
                   <CardDescription>How far this research has moved through the 10-step path</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex items-end justify-between">
-                    <div className="text-3xl font-bold tabular-nums text-emerald-400">
-                      {completedCount} <span className="text-base font-medium text-muted-foreground">of {GPS_STEPS.length} complete</span>
+                <CardContent>
+                  <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center">
+                    <div className="flex shrink-0 items-center justify-center rounded-lg border border-white/10 bg-black/20 px-6 py-4">
+                      <Gauge
+                        value={pct}
+                        tone={pct >= 70 ? "emerald" : pct >= 40 ? "steel" : "red"}
+                        label="Research Progress"
+                        sublabel="Steps done"
+                      />
                     </div>
-                    <div className="text-sm font-semibold tabular-nums text-emerald-400">{pct}%</div>
+                    <div className="w-full flex-1 space-y-3">
+                      <div className="flex items-end justify-between">
+                        <div className="text-3xl font-bold tabular-nums text-emerald-400">
+                          {completedCount} <span className="text-base font-medium text-muted-foreground">of {GPS_STEPS.length} complete</span>
+                        </div>
+                        <div className="text-sm font-semibold tabular-nums text-emerald-400">{pct}%</div>
+                      </div>
+                      <Progress value={pct} className="h-2" />
+                    </div>
                   </div>
-                  <Progress value={pct} className="h-2" />
                 </CardContent>
               </Card>
             );

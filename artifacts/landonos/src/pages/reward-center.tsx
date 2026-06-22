@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { LEVELS, levelProgress } from "@/lib/rewards";
 import { StatCard } from "@/components/stat-card";
+import { Gauge } from "@/components/gauge";
 import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/page-header";
 import { Award, Star, Medal, Zap, BookOpen, Target, CheckCircle2, TrendingUp, GraduationCap } from "lucide-react";
@@ -50,23 +51,35 @@ export default function RewardCenter() {
           </CardTitle>
           <CardDescription>{progress.current.description}</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="flex items-end justify-between">
-            <div>
-              <div className="text-3xl font-bold tabular-nums text-slate-300">{rewardState.points.toLocaleString()}</div>
-              <div className="text-xs text-muted-foreground">total points</div>
+        <CardContent>
+          <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center">
+            <div className="flex shrink-0 items-center justify-center rounded-lg border border-white/10 bg-black/20 px-6 py-4">
+              <Gauge
+                value={progress.percent}
+                tone={progress.next ? "steel" : "emerald"}
+                label="To Next Level"
+                sublabel={progress.next ? progress.next.level : "Max"}
+              />
             </div>
-            <div className="text-right text-sm font-semibold tabular-nums text-slate-300">{progress.percent}%</div>
+            <div className="w-full flex-1 space-y-3">
+              <div className="flex items-end justify-between">
+                <div>
+                  <div className="text-3xl font-bold tabular-nums text-slate-300">{rewardState.points.toLocaleString()}</div>
+                  <div className="text-xs text-muted-foreground">total points</div>
+                </div>
+                <div className="text-right text-sm font-semibold tabular-nums text-slate-300">{progress.percent}%</div>
+              </div>
+              <Progress value={progress.percent} className="h-2" />
+              {progress.next ? (
+                <p className="text-xs text-muted-foreground">
+                  <span className="font-semibold text-foreground">{pointsToNext.toLocaleString()}</span> pts to next level{" "}
+                  <span className="font-semibold text-foreground">{progress.next.level}</span>
+                </p>
+              ) : (
+                <p className="text-xs font-medium text-emerald-400">Top level reached. Outstanding work.</p>
+              )}
+            </div>
           </div>
-          <Progress value={progress.percent} className="h-2" />
-          {progress.next ? (
-            <p className="text-xs text-muted-foreground">
-              <span className="font-semibold text-foreground">{pointsToNext.toLocaleString()}</span> pts to next level{" "}
-              <span className="font-semibold text-foreground">{progress.next.level}</span>
-            </p>
-          ) : (
-            <p className="text-xs font-medium text-emerald-400">Top level reached. Outstanding work.</p>
-          )}
         </CardContent>
       </Card>
 
