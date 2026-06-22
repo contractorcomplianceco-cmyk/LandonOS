@@ -46,7 +46,7 @@ function getDistortionCurve(): Float32Array<ArrayBuffer> {
   if (!distortionCurve) {
     const n = 1024;
     const curve = new Float32Array(new ArrayBuffer(n * 4));
-    const k = 8;
+    const k = 5;
     for (let i = 0; i < n; i++) {
       const x = (i / (n - 1)) * 2 - 1;
       curve[i] = Math.tanh(k * x);
@@ -84,9 +84,10 @@ export function playRev(): void {
   const end = now + 0.95; // settles back to idle
 
   // firing frequency = engine note: idle -> peak rev -> drop back toward idle
-  const fIdle = 72;
-  const fPeak = 300;
-  const fSettle = 118;
+  // kept deliberately low so it reads as a big-displacement V8, not a high-rev synth
+  const fIdle = 42;
+  const fPeak = 165;
+  const fSettle = 64;
   const setSweep = (p: AudioParam, mult: number) => {
     p.setValueAtTime(fIdle * mult, now);
     p.exponentialRampToValueAtTime(fPeak * mult, stab);
@@ -107,10 +108,10 @@ export function playRev(): void {
 
   const lp = ctx.createBiquadFilter();
   lp.type = "lowpass";
-  lp.Q.value = 1.4;
-  lp.frequency.setValueAtTime(520, now);
-  lp.frequency.exponentialRampToValueAtTime(4600, stab);
-  lp.frequency.exponentialRampToValueAtTime(1100, end);
+  lp.Q.value = 1.1;
+  lp.frequency.setValueAtTime(320, now);
+  lp.frequency.exponentialRampToValueAtTime(2200, stab);
+  lp.frequency.exponentialRampToValueAtTime(620, end);
   lp.connect(shaper);
   shaper.connect(master);
 
@@ -129,10 +130,11 @@ export function playRev(): void {
     oscs.push(osc);
   };
 
-  // two engine voices, detuned for the cross-plane V8 lope, + a sub octave thump
-  addOsc("sawtooth", 1, -8, 0.5);
-  addOsc("sawtooth", 1, 11, 0.45);
-  addOsc("triangle", 0.5, 0, 0.6);
+  // two engine voices, detuned for the cross-plane V8 lope, + sub octaves for the deep chest thump
+  addOsc("sawtooth", 1, -8, 0.34);
+  addOsc("sawtooth", 1, 11, 0.3);
+  addOsc("triangle", 0.5, 0, 0.95);
+  addOsc("sine", 0.25, 0, 0.7);
 
   // exhaust roar: white noise gated by a pulse at the firing rate ("blat-blat")
   const noise = ctx.createBufferSource();
@@ -141,13 +143,13 @@ export function playRev(): void {
 
   const noiseBand = ctx.createBiquadFilter();
   noiseBand.type = "bandpass";
-  noiseBand.Q.value = 0.8;
-  noiseBand.frequency.setValueAtTime(700, now);
-  noiseBand.frequency.exponentialRampToValueAtTime(2600, stab);
-  noiseBand.frequency.exponentialRampToValueAtTime(900, end);
+  noiseBand.Q.value = 0.7;
+  noiseBand.frequency.setValueAtTime(360, now);
+  noiseBand.frequency.exponentialRampToValueAtTime(1200, stab);
+  noiseBand.frequency.exponentialRampToValueAtTime(520, end);
 
   const noiseGate = ctx.createGain();
-  noiseGate.gain.value = 0.16;
+  noiseGate.gain.value = 0.13;
 
   const amOsc = ctx.createOscillator();
   amOsc.type = "sawtooth";
