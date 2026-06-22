@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/hooks/use-store";
 import { useHelp } from "@/hooks/use-help";
+import { playRev, setSoundEnabled, useSoundEnabled } from "@/lib/sound";
 import { useToast } from "@/hooks/use-toast";
 import { PageHelp } from "@/components/page-help";
 import { HelpPopup } from "@/components/help-popup";
@@ -52,6 +53,8 @@ import {
   Trophy,
   Play,
   Megaphone,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 
 const NAV_SECTIONS = [
@@ -171,7 +174,15 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
             {section.items.map((item) => {
               const isActive = location === item.href;
               return (
-                <Link key={item.href} href={item.href} className="block" onClick={onNavigate}>
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="block"
+                  onClick={() => {
+                    playRev();
+                    onNavigate?.();
+                  }}
+                >
                   <div
                     className={cn(
                       "group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all",
@@ -389,6 +400,7 @@ function GlobalSearch() {
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { data } = useStore();
   const { hintsEnabled, toggleHints, startTour, openGuide } = useHelp();
+  const soundOn = useSoundEnabled();
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -494,6 +506,23 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 title={hintsEnabled ? "Help hints on" : "Help hints off"}
               >
                 <HelpCircle size={18} />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const next = !soundOn;
+                  setSoundEnabled(next);
+                  if (next) playRev();
+                }}
+                className={cn(
+                  "rounded-md p-2 hover:bg-white/10 hover:text-white",
+                  soundOn ? "text-red-400" : "text-slate-400"
+                )}
+                aria-label={soundOn ? "Mute engine sound" : "Unmute engine sound"}
+                aria-pressed={soundOn}
+                title={soundOn ? "Engine sound on" : "Engine sound off"}
+              >
+                {soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
               </button>
 
               <button
