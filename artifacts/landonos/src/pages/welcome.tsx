@@ -134,7 +134,7 @@ export default function Welcome() {
       if (m) {
         m.loop = true;
         m.muted = muted;
-        m.volume = 0.3;
+        m.volume = 0.12;
         if (m.paused) {
           const mp = m.play();
           if (mp && typeof mp.catch === "function") mp.catch(() => {});
