@@ -16,6 +16,8 @@ import {
   Activity,
   Gauge as GaugeIcon,
   Lightbulb,
+  Megaphone,
+  Pin,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,6 +25,7 @@ import { ACCENT, StatCard, type Accent } from "@/components/stat-card";
 import { PageHeader } from "@/components/page-header";
 import { Gauge } from "@/components/gauge";
 import { levelProgress } from "@/lib/rewards";
+import { levelAccent } from "@/lib/announcements";
 
 const COMPLIANCE_TIPS = [
   "AI output is a draft, not a decision. Every claim needs a verifiable source before it reaches a reviewer.",
@@ -107,6 +110,18 @@ export default function Dashboard() {
 
   const tip = COMPLIANCE_TIPS[new Date().getDate() % COMPLIANCE_TIPS.length];
 
+  const LEVEL_RANK: Record<string, number> = { Critical: 0, Important: 1, Info: 2 };
+  const activeAnnouncements = (data.announcements ?? [])
+    .filter((a) => a.active)
+    .slice()
+    .sort((a, b) => {
+      if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+      const rankDiff = (LEVEL_RANK[a.level] ?? 3) - (LEVEL_RANK[b.level] ?? 3);
+      if (rankDiff !== 0) return rankDiff;
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    })
+    .slice(0, 3);
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -129,6 +144,57 @@ export default function Dashboard() {
           { label: "Points", value: data.rewardState.points.toLocaleString(), icon: Activity },
         ]}
       />
+
+      {/* Company broadcast — announcements from Race Control */}
+      {activeAnnouncements.length > 0 && (
+        <Card className="carbon relative overflow-hidden border-white/10">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-500/60 to-transparent" />
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between gap-2">
+              <CardTitle className="flex items-center gap-2">
+                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-red-600 text-white shadow-sm shadow-red-500/40">
+                  <Megaphone className="h-4 w-4" />
+                </span>
+                Race Control
+              </CardTitle>
+              <Link
+                href="/announcements"
+                className="inline-flex items-center gap-1 text-xs font-medium text-red-400 hover:text-red-300"
+              >
+                View all <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+            <CardDescription>Company announcements broadcast to everyone</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {activeAnnouncements.map((a) => {
+              const accent = ACCENT[levelAccent(a.level)];
+              return (
+                <Link
+                  key={a.id}
+                  href="/announcements"
+                  className={cn(
+                    "flex items-start gap-3 rounded-lg border border-l-4 p-3 transition-colors hover:bg-muted/40",
+                    accent.borderL
+                  )}
+                >
+                  <span className={cn("mt-1 flex h-2 w-2 shrink-0 rounded-full", accent.iconSolid)} />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      {a.pinned && <Pin className={cn("h-3 w-3 shrink-0", accent.text)} />}
+                      <span className="truncate text-sm font-semibold text-foreground">{a.title}</span>
+                    </div>
+                    <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{a.body}</p>
+                  </div>
+                  <Badge variant="outline" className={cn("shrink-0", accent.soft, accent.text)}>
+                    {a.level}
+                  </Badge>
+                </Link>
+              );
+            })}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Instrument cluster — performance gauges */}
       <Card className="carbon relative overflow-hidden border-white/10">

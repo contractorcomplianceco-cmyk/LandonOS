@@ -51,6 +51,7 @@ import {
   Rocket,
   Trophy,
   Play,
+  Megaphone,
 } from "lucide-react";
 
 const NAV_SECTIONS = [
@@ -59,6 +60,7 @@ const NAV_SECTIONS = [
     items: [
       { href: "/welcome", label: "Welcome", icon: Sparkles },
       { href: "/", label: "Performance Cockpit", icon: GaugeIcon },
+      { href: "/announcements", label: "Race Control", icon: Megaphone },
     ],
   },
   {

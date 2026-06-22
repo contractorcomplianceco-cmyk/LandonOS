@@ -116,6 +116,31 @@ export interface CompanyBrainUpdate {
   status: CompanyBrainUpdateStatus;
 }
 
+export type AnnouncementLevel = 'Info' | 'Important' | 'Critical';
+export type AnnouncementCategory =
+  | 'Company'
+  | 'Policy'
+  | 'Compliance'
+  | 'Operations'
+  | 'Recognition';
+
+export interface Announcement {
+  id: string;
+  title: string;
+  body: string;
+  category: AnnouncementCategory;
+  level: AnnouncementLevel;
+  author: string;
+  date: string; // YYYY-MM-DD
+  pinned: boolean;
+  active: boolean;
+}
+
+export interface AdminState {
+  unlocked: boolean;
+  passcode: string;
+}
+
 export interface ChecklistItem {
   text: string;
   done: boolean;
@@ -176,6 +201,8 @@ export interface AppData {
   ideas: Idea[];
   brainUpdates: CompanyBrainUpdate[];
   training: TrainingTrack[];
+  announcements: Announcement[];
+  admin: AdminState;
   rewardState: RewardState;
   settings: AppSettings;
 }

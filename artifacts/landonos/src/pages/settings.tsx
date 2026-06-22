@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useStore } from "@/hooks/use-store";
+import { defaultData } from "@/lib/default-data";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { PageHeader } from "@/components/page-header";
@@ -107,7 +108,9 @@ export default function Settings() {
           importedData.rewardState &&
           typeof importedData.rewardState === "object";
         if (arraysValid && objectsValid) {
-          updateData(importedData);
+          // Merge with defaults so older backups missing newer top-level fields
+          // (e.g. announcements/admin) still import without breaking the app.
+          updateData({ ...defaultData, ...importedData });
           toast({ title: "Import Successful", description: "Your data has been restored." });
         } else {
           throw new Error("Invalid format");

@@ -16,7 +16,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState<AppData>(() => {
     try {
       const item = window.localStorage.getItem(STORAGE_KEY);
-      return item ? JSON.parse(item) : defaultData;
+      if (!item) return defaultData;
+      const parsed = JSON.parse(item);
+      // Merge with defaults so data saved before a new top-level field was
+      // added (e.g. announcements/admin) still loads without crashing.
+      return { ...defaultData, ...parsed };
     } catch (error) {
       console.warn("Failed to read from localStorage", error);
       return defaultData;

@@ -7,6 +7,7 @@ export type Accent = "red" | "blue" | "indigo" | "teal" | "sky" | "rose" | "emer
 interface AccentStyle {
   value: string;
   borderT: string;
+  borderL: string;
   grad: string;
   iconSolid: string;
   iconShadow: string;
@@ -19,6 +20,7 @@ export const ACCENT: Record<Accent, AccentStyle> = {
   red: {
     value: "text-red-400",
     borderT: "border-t-red-500",
+    borderL: "border-l-red-500",
     grad: "from-red-500/10 to-transparent",
     iconSolid: "bg-red-600",
     iconShadow: "shadow-red-500/40",
@@ -29,6 +31,7 @@ export const ACCENT: Record<Accent, AccentStyle> = {
   blue: {
     value: "text-sky-300",
     borderT: "border-t-sky-500",
+    borderL: "border-l-sky-500",
     grad: "from-sky-500/10 to-transparent",
     iconSolid: "bg-sky-600",
     iconShadow: "shadow-sky-500/30",
@@ -39,6 +42,7 @@ export const ACCENT: Record<Accent, AccentStyle> = {
   indigo: {
     value: "text-slate-200",
     borderT: "border-t-slate-400",
+    borderL: "border-l-slate-400",
     grad: "from-slate-400/10 to-transparent",
     iconSolid: "bg-slate-500",
     iconShadow: "shadow-slate-500/30",
@@ -49,6 +53,7 @@ export const ACCENT: Record<Accent, AccentStyle> = {
   teal: {
     value: "text-teal-300",
     borderT: "border-t-teal-500",
+    borderL: "border-l-teal-500",
     grad: "from-teal-500/10 to-transparent",
     iconSolid: "bg-teal-500",
     iconShadow: "shadow-teal-500/30",
@@ -59,6 +64,7 @@ export const ACCENT: Record<Accent, AccentStyle> = {
   sky: {
     value: "text-sky-300",
     borderT: "border-t-sky-500",
+    borderL: "border-l-sky-500",
     grad: "from-sky-500/10 to-transparent",
     iconSolid: "bg-sky-500",
     iconShadow: "shadow-sky-500/30",
@@ -69,6 +75,7 @@ export const ACCENT: Record<Accent, AccentStyle> = {
   rose: {
     value: "text-red-400",
     borderT: "border-t-red-500",
+    borderL: "border-l-red-500",
     grad: "from-red-500/10 to-transparent",
     iconSolid: "bg-red-600",
     iconShadow: "shadow-red-500/40",
@@ -79,6 +86,7 @@ export const ACCENT: Record<Accent, AccentStyle> = {
   emerald: {
     value: "text-emerald-300",
     borderT: "border-t-emerald-500",
+    borderL: "border-l-emerald-500",
     grad: "from-emerald-500/10 to-transparent",
     iconSolid: "bg-emerald-500",
     iconShadow: "shadow-emerald-500/30",
@@ -89,6 +97,7 @@ export const ACCENT: Record<Accent, AccentStyle> = {
   slate: {
     value: "text-slate-200",
     borderT: "border-t-slate-400",
+    borderL: "border-l-slate-400",
     grad: "from-slate-400/10 to-transparent",
     iconSolid: "bg-slate-500",
     iconShadow: "shadow-slate-500/30",

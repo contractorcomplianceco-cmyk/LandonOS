@@ -30,6 +30,7 @@ import Benefits from "@/pages/benefits";
 import BonusTracker from "@/pages/bonus-tracker";
 import TeamLeadTrack from "@/pages/team-lead-track";
 import Leaderboard from "@/pages/leaderboard";
+import Announcements from "@/pages/announcements";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ function Router() {
       <Route path="/bonus-tracker" component={BonusTracker} />
       <Route path="/team-lead-track" component={TeamLeadTrack} />
       <Route path="/leaderboard" component={Leaderboard} />
+      <Route path="/announcements" component={Announcements} />
       <Route path="/company-brain" component={CompanyBrain} />
       <Route path="/account" component={Account} />
       <Route path="/employee-account" component={EmployeeAccount} />

@@ -508,6 +508,48 @@ export const defaultData: AppData = {
       ],
     },
   ],
+  announcements: [
+    {
+      id: "ann-1",
+      title: "Mandatory: human review sign-off on every AI-drafted brief",
+      body:
+        "Effective immediately, no brief that contains AI-drafted content may be routed for a company decision until a named reviewer has signed off. Mark AI Draft sources clearly and attach at least one official source before handoff. This is a compliance requirement, not a guideline.",
+      category: "Compliance",
+      level: "Critical",
+      author: "Carmen (Compliance Lead)",
+      date: "2026-06-18",
+      pinned: true,
+      active: true,
+    },
+    {
+      id: "ann-2",
+      title: "Q3 research priorities are locked — EU expansion is the focus",
+      body:
+        "Leadership has set the EU expansion readiness review as the top research priority for Q3. Data residency, vendor compliance, and competitor pricing in the mid-market tier are the three lanes. Align new requests to one of these where possible.",
+      category: "Company",
+      level: "Important",
+      author: "Gregg (Executive Sponsor)",
+      date: "2026-06-15",
+      pinned: false,
+      active: true,
+    },
+    {
+      id: "ann-3",
+      title: "Shout-out: five official-source verifications cleared this week",
+      body:
+        "Nice work clearing five official-source verifications in the Source Garage this week and raising a blocker early instead of guessing. That is exactly the responsible-research habit we are building. Keep it up.",
+      category: "Recognition",
+      level: "Info",
+      author: "Rose (Team Lead)",
+      date: "2026-06-20",
+      pinned: false,
+      active: true,
+    },
+  ],
+  admin: {
+    unlocked: false,
+    passcode: "landon-admin",
+  },
   rewardState: {
     level: "Source Finder",
     points: 1250,

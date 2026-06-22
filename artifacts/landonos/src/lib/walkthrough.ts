@@ -127,6 +127,28 @@ export const PAGE_HELP: Record<string, PageHelpContent> = {
       },
     ],
   },
+  "/announcements": {
+    title: "Race Control",
+    body: "Official company announcements broadcast to everyone in the cockpit. The team reads here; admins sign in to publish, pin, archive, and manage announcements. Anything published also surfaces on the Performance Cockpit dashboard.",
+    tip: "Admin mode is local to this browser. Use it to broadcast policy, compliance, and recognition updates the whole team should see.",
+    sections: [
+      {
+        heading: "Read the broadcast",
+        detail:
+          "Pinned and critical announcements show first. Use search and the level filter to find a specific update.",
+      },
+      {
+        heading: "Sign in as admin",
+        detail:
+          "Enter the admin passcode to unlock publishing controls. Exit admin when you are done to lock them again.",
+      },
+      {
+        heading: "Publish and pin",
+        detail:
+          "Create an announcement, set its level and category, then publish it. Pin the most important ones so they stay at the top for everyone.",
+      },
+    ],
+  },
   "/guided-research-builder": {
     title: "Research Engine",
     body: "Define the decision this supports, the required sources, and what not to assume before involving AI. A clear, scoped question is what keeps the rest of the workflow disciplined.",
