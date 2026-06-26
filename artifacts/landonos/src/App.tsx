@@ -2,13 +2,16 @@ import { Switch, Route, Router as WouterRouter } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/hooks/use-auth";
 import { AppProvider } from "@/hooks/use-store";
 import { HelpProvider } from "@/hooks/use-help";
 import { AppLayout } from "@/components/layout";
+import { AuthGate } from "@/components/auth-gate";
 import { GuidedTour } from "@/components/guided-tour";
 import { WalkthroughVideo } from "@/components/walkthrough-video";
 
 import NotFound from "@/pages/not-found";
+import LoginPage from "@/pages/login";
 import Welcome from "@/pages/welcome";
 import Dashboard from "@/pages/dashboard";
 import GuidedResearchBuilder from "@/pages/guided-research-builder";
@@ -24,6 +27,7 @@ import RewardCenter from "@/pages/reward-center";
 import TrainingAcademy from "@/pages/training-academy";
 import CompanyBrain from "@/pages/company-brain";
 import Settings from "@/pages/settings";
+import InstallAppPage from "@/pages/install-app";
 import Account from "@/pages/account";
 import EmployeeAccount from "@/pages/employee-account";
 import Benefits from "@/pages/benefits";
@@ -59,6 +63,7 @@ function Router() {
       <Route path="/employee-account" component={EmployeeAccount} />
       <Route path="/benefits" component={Benefits} />
       <Route path="/settings" component={Settings} />
+      <Route path="/install" component={InstallAppPage} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -68,18 +73,27 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <AppProvider>
-          <WouterRouter base={import.meta.env.BASE_URL?.replace(/\/$/, "") || ""}>
-            <HelpProvider>
-              <AppLayout>
-                <Router />
-              </AppLayout>
-              <GuidedTour />
-              <WalkthroughVideo />
-            </HelpProvider>
-          </WouterRouter>
-          <Toaster />
-        </AppProvider>
+        <AuthProvider>
+          <AppProvider>
+            <WouterRouter base={import.meta.env.BASE_URL?.replace(/\/$/, "") || ""}>
+              <Switch>
+                <Route path="/login" component={LoginPage} />
+                <Route>
+                  <AuthGate>
+                    <HelpProvider>
+                      <AppLayout>
+                        <Router />
+                      </AppLayout>
+                      <GuidedTour />
+                      <WalkthroughVideo />
+                    </HelpProvider>
+                  </AuthGate>
+                </Route>
+              </Switch>
+            </WouterRouter>
+            <Toaster />
+          </AppProvider>
+        </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

@@ -2,11 +2,13 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/hooks/use-store";
+import { useAuth } from "@/hooks/use-auth";
 import { useHelp } from "@/hooks/use-help";
 import { playRev, preloadRev, setSoundEnabled, useSoundEnabled } from "@/lib/sound";
 import { useToast } from "@/hooks/use-toast";
 import { PageHelp } from "@/components/page-help";
 import { HelpPopup } from "@/components/help-popup";
+import { SyncStatusChip } from "@/components/sync-status-chip";
 import ccaCrest from "@assets/cca-crest-inset_1781446966845.png";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -47,6 +49,7 @@ import {
   Briefcase,
   HeartPulse,
   LogOut,
+  FolderKanban,
   ChevronDown,
   Wallet,
   Rocket,
@@ -399,6 +402,14 @@ function GlobalSearch() {
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { data } = useStore();
+  const {
+    user,
+    workspaces,
+    activeWorkspaceId,
+    apiAvailable,
+    logout,
+    switchWorkspace,
+  } = useAuth();
   const { hintsEnabled, toggleHints, startTour, openGuide } = useHelp();
   const soundOn = useSoundEnabled();
   const { toast } = useToast();
@@ -411,12 +422,28 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
   const attentionCount =
     data.blockers.filter((b) => b.status === "Open" || b.status === "In Review").length;
-  const initials = (data.settings.userName || "Landon")
+  const displayName = user?.displayName ?? data.settings.userName ?? "Landon";
+  const displayRole = user?.role ?? data.settings.userRole ?? "Research Lead";
+  const activeWorkspace = workspaces.find((w) => w.id === activeWorkspaceId);
+  const initials = displayName
     .split(" ")
     .map((p) => p[0])
     .slice(0, 2)
     .join("")
     .toUpperCase();
+
+  const handleSignOut = async () => {
+    if (apiAvailable && user) {
+      await logout();
+      navigate("/login");
+      toast({ title: "Signed out", description: "Your session has ended." });
+      return;
+    }
+    toast({
+      title: "Signed out",
+      description: "This is a local demo workspace — there is no remote session to end.",
+    });
+  };
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background">
@@ -475,6 +502,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             {/* Right: status + actions */}
             <div className="flex flex-1 lg:flex-none items-center justify-end gap-2 md:gap-3">
               <div className="hidden xl:flex items-center gap-2">
+                <SyncStatusChip />
                 <StatusChip label="Human Review Required" tone="alert" />
                 <StatusChip label="AI Draft Only" tone="neutral" />
                 <StatusChip label="Source Check" tone="verify" />
@@ -562,11 +590,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                       {initials}
                     </div>
                     <div className="hidden text-left leading-tight md:block">
-                      <div className="text-sm font-medium text-white">
-                        {data.settings.userName || "Landon"}
-                      </div>
+                      <div className="text-sm font-medium text-white">{displayName}</div>
                       <div className="text-[11px] text-slate-400">
-                        {data.settings.userRole || "Research Lead"}
+                        {activeWorkspace?.name ?? displayRole}
                       </div>
                     </div>
                     <ChevronDown size={15} className="hidden text-slate-400 md:block" />
@@ -574,12 +600,35 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel className="flex flex-col">
-                    <span className="text-sm font-medium">{data.settings.userName || "Landon"}</span>
+                    <span className="text-sm font-medium">{displayName}</span>
                     <span className="text-xs font-normal text-muted-foreground">
-                      {data.settings.userRole || "Research Lead"}
+                      {activeWorkspace?.name ?? displayRole}
                     </span>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  {apiAvailable && user && workspaces.length > 0 && (
+                    <>
+                      <DropdownMenuLabel className="text-xs text-muted-foreground">
+                        Workspaces
+                      </DropdownMenuLabel>
+                      {workspaces.map((workspace) => (
+                        <DropdownMenuItem
+                          key={workspace.id}
+                          onClick={() => switchWorkspace(workspace.id)}
+                          className={cn(
+                            workspace.id === activeWorkspaceId && "bg-accent font-medium",
+                          )}
+                        >
+                          <FolderKanban className="mr-2 h-4 w-4" />
+                          {workspace.name}
+                        </DropdownMenuItem>
+                      ))}
+                      <DropdownMenuItem onClick={() => navigate("/settings?tab=workspaces")}>
+                        <Plus className="mr-2 h-4 w-4" /> Manage workspaces
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
                   <DropdownMenuItem onClick={() => navigate("/account")}>
                     <UserCog className="mr-2 h-4 w-4" /> My Account
                   </DropdownMenuItem>
@@ -595,12 +644,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="text-rose-400 focus:text-rose-400"
-                    onClick={() =>
-                      toast({
-                        title: "Signed out",
-                        description: "This is a local demo workspace — there is no remote session to end.",
-                      })
-                    }
+                    onClick={handleSignOut}
                   >
                     <LogOut className="mr-2 h-4 w-4" /> Sign Out
                   </DropdownMenuItem>

@@ -1,2 +1,7 @@
+# Staging / private default — block all crawlers.
+# For a public launch, replace with:
+#   User-agent: *
+#   Allow: /
+
 User-agent: *
-Allow: /
+Disallow: /

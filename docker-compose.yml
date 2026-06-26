@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: landonos
+      POSTGRES_PASSWORD: landonos
+      POSTGRES_DB: landonos
+    ports:
+      - "5432:5432"
+    volumes:
+      - landonos_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U landonos -d landonos"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://landonos:landonos@postgres:5432/landonos
+      PORT: "3001"
+      NODE_ENV: production
+      # API_KEY: change-me-for-write-protection
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  landonos_pg:

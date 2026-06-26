@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { useLocation } from "wouter";
 import { useStore } from "@/hooks/use-store";
+import { useAuth } from "@/hooks/use-auth";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
@@ -46,6 +48,8 @@ const NOTIFICATIONS: { key: string; label: string; desc: string }[] = [
 
 export default function AccountPage() {
   const { data } = useStore();
+  const { logout, apiAvailable, user } = useAuth();
+  const [, navigate] = useLocation();
   const { toast } = useToast();
   const name = data.settings.userName || "Landon";
   const email = `${name.split(" ")[0].toLowerCase()}@roseos.com`;
@@ -71,7 +75,13 @@ export default function AccountPage() {
     toast({ title: "Session ended", description: "That device has been signed out." });
   };
 
-  const signOut = () => {
+  const signOut = async () => {
+    if (apiAvailable && user) {
+      await logout();
+      navigate("/login");
+      toast({ title: "Signed out", description: "Your session has ended." });
+      return;
+    }
     toast({
       title: "Signed out",
       description: "This is a local demo workspace — there is no remote session to end.",

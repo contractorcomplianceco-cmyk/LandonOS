@@ -1,0 +1,5 @@
+{
+  "buildCommand": "pnpm --filter @workspace/landonos run build",
+  "outputDirectory": "artifacts/landonos/dist/public",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}

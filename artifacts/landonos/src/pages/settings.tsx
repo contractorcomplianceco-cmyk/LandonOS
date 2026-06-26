@@ -1,5 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
+import { useSearch } from 'wouter';
 import { useStore } from "@/hooks/use-store";
+import { useAuth } from "@/hooks/use-auth";
 import { defaultData } from "@/lib/default-data";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -8,7 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Settings2, Download, Upload, AlertTriangle, User, List, Award, Database } from "lucide-react";
+import { Settings2, Download, Upload, AlertTriangle, User, List, Award, Database, FolderKanban, Plus } from "lucide-react";
+import { InstallAppCard } from "@/pages/install-app";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,9 +26,21 @@ import {
 
 export default function Settings() {
   const { data, updateData, resetData } = useStore();
+  const {
+    workspaces,
+    activeWorkspaceId,
+    switchWorkspace,
+    createWorkspace,
+    apiAvailable,
+    user,
+  } = useAuth();
   const { settings } = data;
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const search = useSearch();
+  const defaultTab = new URLSearchParams(search).get("tab") ?? "profile";
+  const [newWorkspaceName, setNewWorkspaceName] = useState("");
+  const showWorkspaces = apiAvailable && !!user;
 
   const updateSetting = (key: keyof typeof settings, value: any) => {
     updateData(prev => ({
@@ -123,6 +138,21 @@ export default function Settings() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
+  const handleCreateWorkspace = async () => {
+    const name = newWorkspaceName.trim() || "New Cockpit";
+    try {
+      await createWorkspace(name);
+      setNewWorkspaceName("");
+      toast({ title: "Workspace created", description: `"${name}" is now active.` });
+    } catch (err) {
+      toast({
+        title: "Could not create workspace",
+        description: err instanceof Error ? err.message : "Try again",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -138,13 +168,71 @@ export default function Settings() {
         ]}
       />
 
-      <Tabs defaultValue="profile" className="space-y-6">
+      <InstallAppCard />
+
+      <Tabs defaultValue={defaultTab} className="space-y-6">
         <TabsList className="bg-card border w-full justify-start h-auto p-1 rounded-md overflow-x-auto flex-nowrap">
           <TabsTrigger value="profile" className="flex items-center py-2"><User className="w-4 h-4 mr-2" /> Profile</TabsTrigger>
+          {showWorkspaces && (
+            <TabsTrigger value="workspaces" className="flex items-center py-2">
+              <FolderKanban className="w-4 h-4 mr-2" /> Workspaces
+            </TabsTrigger>
+          )}
           <TabsTrigger value="lists" className="flex items-center py-2"><List className="w-4 h-4 mr-2" /> Lists & Categories</TabsTrigger>
           <TabsTrigger value="rewards" className="flex items-center py-2"><Award className="w-4 h-4 mr-2" /> Rewards Config</TabsTrigger>
           <TabsTrigger value="data" className="flex items-center py-2"><Database className="w-4 h-4 mr-2" /> Data Management</TabsTrigger>
         </TabsList>
+
+        {showWorkspaces && (
+          <TabsContent value="workspaces" className="space-y-6 outline-none">
+            <Card>
+              <CardHeader>
+                <CardTitle>Your workspaces</CardTitle>
+                <CardDescription>
+                  Each workspace has its own research data. Switching reloads the active cockpit.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  {workspaces.map((workspace) => (
+                    <div
+                      key={workspace.id}
+                      className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3"
+                    >
+                      <div>
+                        <div className="text-sm font-medium text-foreground">{workspace.name}</div>
+                        <div className="text-xs text-muted-foreground">
+                          Updated {new Date(workspace.updatedAt).toLocaleString()}
+                        </div>
+                      </div>
+                      {workspace.id === activeWorkspaceId ? (
+                        <span className="text-xs font-medium text-emerald-400">Active</span>
+                      ) : (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => switchWorkspace(workspace.id)}
+                        >
+                          Switch
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <Input
+                    placeholder="New workspace name"
+                    value={newWorkspaceName}
+                    onChange={(e) => setNewWorkspaceName(e.target.value)}
+                  />
+                  <Button className="gap-2 shrink-0" onClick={handleCreateWorkspace}>
+                    <Plus className="h-4 w-4" /> Create workspace
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        )}
 
         <TabsContent value="profile" className="space-y-6 outline-none">
           <Card>
