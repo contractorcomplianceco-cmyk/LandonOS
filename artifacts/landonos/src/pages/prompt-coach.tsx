@@ -11,6 +11,7 @@ import { generatePromptImprovement } from "@/lib/prompt-coach-templates";
 import { Sparkles, Target, Database, FileText, CheckCircle2, ShieldAlert, AlertTriangle, ListChecks } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PageHeader } from "@/components/page-header";
+import { DemoModeBanner } from "@/components/demo-mode-banner";
 
 const QUALITY_CHECKLIST: { title: string; detail: string }[] = [
   { title: "Define the role", detail: "Tell the AI who it is (e.g. compliance analyst) so tone and rigor match the task." },

@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ShieldCheck, MessageSquare, Send, User, Bot, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import { DemoModeBanner } from "@/components/demo-mode-banner";
 
 type ChatMode = 
   | "Help me understand this topic"
@@ -108,13 +109,11 @@ export default function RoseOSChat() {
     }
   ]);
   const [input, setInput] = useState("");
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages]);
 
   const handleSend = () => {
@@ -211,7 +210,7 @@ export default function RoseOSChat() {
             </CardTitle>
           </CardHeader>
           
-          <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+          <ScrollArea className="flex-1 p-4">
             <div className="space-y-6">
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -266,6 +265,7 @@ export default function RoseOSChat() {
                   </div>
                 </div>
               ))}
+              <div ref={bottomRef} />
             </div>
           </ScrollArea>
           
