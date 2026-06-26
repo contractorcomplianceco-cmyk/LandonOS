@@ -8,8 +8,10 @@ Visual theme: a luxury fast-car cockpit — deep black/graphite foundation, carb
 
 - `pnpm --filter @workspace/landonos run dev` — run the app (port provided by workflow)
 - `pnpm --filter @workspace/landonos run typecheck` — typecheck the app
+- `pnpm --filter @workspace/landonos run build` — production build → `dist/public`; `run serve` previews it
 - The app runs via the `artifacts/landonos: web` workflow; restart it to apply config changes
-- No backend, no database, no env vars required
+- No backend, no database, no env vars required. `vite.config.ts` is portable: `PORT` (default 5000) and `BASE_PATH` (default `/`) default instead of throwing, and the Replit Vite plugins are dynamically imported only when `REPL_ID` is set, so the app builds/runs off Replit too.
+- Migration handoff docs at repo root: `README.md`, `CURSOR-HANDOFF.md`, `MIGRATION-CHECKLIST.md`, `.env.example` (placeholders only; `.env` is gitignored). Target future home: GitHub → Cursor → AWS (`/home/ubuntu/projects/landonos`), staging `landon.cagteam.net` — Replit is NOT the final production home.
 
 ## Stack
 
@@ -31,7 +33,7 @@ Visual theme: a luxury fast-car cockpit — deep black/graphite foundation, carb
   - `src/components/toolbar.tsx` — `Toolbar` search/filter row
   - `src/components/empty-state.tsx` — `EmptyState` zero-data placeholder
   - `src/components/confirm-delete-dialog.tsx` — `ConfirmDeleteDialog` guarded destructive-action confirm. Every list with a delete MUST guard it with this. Standard pattern: `deletingId`/`isDeleteDialogOpen` state + `requestDelete(id)` (opens dialog) + `handleConfirmDelete()` (calls the real `handleDelete(deletingId)`, closes dialog, resets state). Archive is a non-destructive status change and stays on the status Select, never on the trash icon.
-- `src/hooks/use-store.tsx` — the localStorage store. `useStore()` → `{ data, updateData, resetData }`; storage key `landonos_data`. On load it merges parsed data over `defaultData` (`{ ...defaultData, ...parsed }`) so older saved data missing newer top-level keys (e.g. `announcements`/`admin`) still loads without crashing; settings import does the same merge.
+- `src/hooks/use-store.tsx` — the localStorage store. `useStore()` → `{ data, updateData, resetData }`; versioned storage key `landonos_data_v1` (bump the suffix on a breaking schema change), with a one-time fallback read of the legacy `landonos_data` key so existing browser-local data migrates forward. On load it merges parsed data over `defaultData` (`{ ...defaultData, ...parsed }`) so older saved data missing newer top-level keys (e.g. `announcements`/`admin`) still loads without crashing; settings import does the same merge.
 - `src/pages/announcements.tsx` (/announcements) — "Race Control" company-broadcast page (Overview nav, after Performance Cockpit). Everyone reads active announcements (pinned/newest first); an admin passcode sign-in (`data.admin.passcode`) unlocks publish/edit/delete/pin/archive controls (`admin.unlocked` toggled in the store). Standard CRUD + `ConfirmDeleteDialog` pattern; `active=false` archives (hidden from non-admins, dimmed for admins). Browser-only — no backend/role server.
 - `src/pages/welcome.tsx` (/welcome) — Welcome/Onboarding page; top sidebar item (above Command Center). Three ways to learn: (1) Narrated Video mode — per-section TTS narration + looping music bed, start/replay overlay, play/pause, mute, segmented progress driven by real playback time, auto-advance, complete state; (2) Guided Tour mode — same scenes, no audio, Back/Next + Restart; (3) downloadable PDF user guide. Single `stopAllAudio` helper (clears handlers, pauses, resets both `<audio>` refs) is called on unmount, on error, and on mode switch; all `play()` promises are `.catch`-guarded; `onended` auto-advance uses the invocation-local index (no stale state); a toast fires on narration load failure.
 - `src/lib/onboarding.ts` — `ONBOARDING_SECTIONS` (7 featured areas: Command Center, Research Builder, Research GPS, Source Vault, Report Builder, RoseOS, Growth & Rewards), `ONBOARDING_MUSIC`, `USER_GUIDE_PDF`, and `onboardingAsset(name)` (resolves `${BASE_URL}onboarding/<file>`)

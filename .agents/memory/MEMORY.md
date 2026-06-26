@@ -1,4 +1,5 @@
 - [DESIGN subagent build gotchas](design-subagent-gotchas.md) — subagents sometimes report success without writing files, and escape template-literal backticks/`${` with stray backslashes; always typecheck and verify files after.
+- [Portable Vite config](replit-portable-vite-config.md) — to leave Replit, default PORT/BASE_PATH instead of throwing and REPL_ID-gate `@replit/*` plugins via dynamic import; preserves Replit dev.
 - [Tailwind JIT derived classes](tailwind-jit-derived-classes.md) — never build class names with `.replace()`/string-munging; JIT only emits CSS for literals it sees in source. Use static maps.
 - [Web Speech narration reliability](web-speech-narration.md) — speechSynthesis "no audio" is usually the cancel/speak race, async voice loading, or ~15s truncation; fix with delay + voiceschanged wait + per-sentence chain.
 - [pdfkit gotchas](pdfkit-gotchas.md) — footers drawn below the bottom margin auto-insert trailing blank pages (zero the margin while drawing); fixed-Y cover dividers cross wrapped titles (flow from a measured cursor).

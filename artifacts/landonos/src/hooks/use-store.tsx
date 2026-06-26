@@ -10,12 +10,18 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-const STORAGE_KEY = 'landonos_data';
+// Versioned storage key. Bump the suffix when a breaking schema change makes
+// older saved data incompatible. The legacy unversioned key is read once as a
+// fallback so existing browser-local prototype data migrates forward cleanly.
+const STORAGE_KEY = 'landonos_data_v1';
+const LEGACY_STORAGE_KEY = 'landonos_data';
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState<AppData>(() => {
     try {
-      const item = window.localStorage.getItem(STORAGE_KEY);
+      const item =
+        window.localStorage.getItem(STORAGE_KEY) ??
+        window.localStorage.getItem(LEGACY_STORAGE_KEY);
       if (!item) return defaultData;
       const parsed = JSON.parse(item);
       // Merge with defaults so data saved before a new top-level field was

@@ -1,0 +1,358 @@
+We need to prepare the existing LandonOS app for real migration out of Replit and into our GitHub + Cursor + AWS/server workflow.
+
+IMPORTANT CONTEXT:
+This app is LandonOS: Performance Research Cockpit.
+
+It was originally a Replit prototype / app build. It now needs to be prepared as a real portable app that can be moved into GitHub, opened in Cursor, built on our shared AWS/server environment, and eventually protected behind staging access.
+
+Do not treat Replit as the final production home.
+Do not deploy from Replit as the final solution.
+Do not connect live company systems unless explicitly instructed.
+
+PRIMARY GOAL:
+Convert and package LandonOS into a clean, portable, server-ready app with a clear migration handoff so Carmen can move it quickly into GitHub + Cursor + AWS/server without repeating prior mistakes.
+
+APP IDENTITY:
+LandonOS: Performance Research Cockpit
+
+The app should feel like a luxury performance car cockpit merged with an executive AI-guided compliance/business research command center.
+
+VISUAL DIRECTION TO PRESERVE:
+- Deep black app shell
+- Graphite panels
+- Subtle carbon fiber texture
+- Rich performance red accents
+- Metallic silver / chrome dividers
+- Glassy instrument panels
+- Precision gauge-style progress indicators
+- Luxury dashboard control rail
+- Executive research software polish
+- Readable white or pale gray work surfaces for forms and reports
+- Red primary actions
+- Silver/white secondary actions
+
+AVOID:
+- Cartoon racing
+- Flames
+- Excessive checkered flags
+- Childish gamification
+- Red backgrounds behind long text
+- Low-contrast text
+- Beige/tan
+- Yellow/gold-heavy branding
+- Brown/orange palettes
+- Generic purple SaaS gradients
+- Decorative blobs
+- Generic admin dashboard styling
+- Fake production claims
+- Fake live integrations
+- Dead buttons that look live
+
+CORE MODULES TO PRESERVE:
+- Performance Cockpit
+- Research Engine
+- Tuning Bay
+- Track Map
+- Brief Builder
+- Source Garage
+- Pit Stop
+- RoseOS Co-Driver
+- Finish Line Handoff
+- Idea Garage
+- Garage Rewards
+- Driver Training
+- Company Brain Sync
+- Settings, if already present
+
+CRITICAL GUARDRAILS:
+- AI output is draft only.
+- Official sources should be preferred.
+- Unknown sources should be flagged.
+- Compliance and business conclusions require human review.
+- No client-facing conclusions without review.
+- Human Review Required must remain visible.
+- Do not imply legal, CPA, licensing board, or compliance advice is final.
+- Company Brain Sync suggestions are suggestions only, not automatic records.
+- This app guides Landon but does not replace human judgment.
+
+MIGRATION RULES:
+1. Do not paste or create real secrets.
+2. Do not expose API keys.
+3. Do not connect live Zoho, WorkDrive, CRM, Supabase, OpenAI, Company Brain, email, SMS, or external systems.
+4. Do not create destructive database migrations.
+5. Do not delete user-created content unless it is clearly unused and listed first.
+6. Do not assume Replit Auth is the future auth system.
+7. Do not use Clerk unless explicitly approved.
+8. Do not make this app dependent on Replit-only services.
+9. If data is localStorage/demo/sample data, label it honestly.
+10. If any feature is simulated, label it as prototype/demo/staging.
+11. Preserve existing working behavior before improving structure.
+12. Make the app portable so it can build outside Replit.
+
+TARGET FUTURE SERVER CONTEXT:
+The app is expected to move into our shared AWS/server workflow, similar to other migrated apps.
+
+Expected future AWS path:
+`/home/ubuntu/projects/landonos`
+
+Expected future staging domain, if approved later:
+`landon.cagteam.net`
+
+Replit should not configure nginx, DNS, PM2, SSL, or AWS directly.
+Instead, prepare the code and handoff so Cursor/server work can do that safely.
+
+TECHNICAL PRE-MIGRATION TASKS:
+
+Phase 0 - Inspect and report
+First inspect the current project structure.
+
+Report:
+- Framework used
+- Package manager
+- Build command
+- Dev command
+- Whether there is a backend/API
+- Whether there is a database
+- Whether data is localStorage, static seed data, Replit DB, Postgres, Supabase, or unknown
+- Whether any Replit-only dependencies exist
+- Whether any secrets or env vars are referenced
+- Whether any auth system exists
+- Whether any AI endpoint exists
+- Whether any Zoho/CRM/WorkDrive integrations exist
+- Whether buttons/routes are dead, mocked, or functional
+
+Do not make major changes until this audit is complete.
+
+Phase 1 - Make the app portable
+Make the app build cleanly outside Replit.
+
+Required:
+- Clean `package.json` scripts
+- Clear `dev`, `build`, `preview`, and `typecheck` commands where applicable
+- Remove or isolate Replit-only assumptions
+- Ensure the app can run locally without Replit services
+- Ensure static assets are included correctly in the build
+- Ensure all referenced images/audio/PDFs exist or remove broken references
+- Ensure no absolute Replit workspace paths are required
+- Ensure environment variables are documented in `.env.example`
+- Ensure `.env` is gitignored
+- Ensure build output is standard and predictable
+
+If the app is frontend-only:
+- Keep it frontend-only for this migration package.
+- Do not invent a backend.
+- Clearly document that real auth/database/API work is a later Cursor/server phase.
+
+If the app already has a backend:
+- Make sure it has a health endpoint such as `/api/health`.
+- Make sure the port is configurable with `PORT`.
+- Make sure host binding can work on a server, preferably `HOST=127.0.0.1` for reverse proxy use.
+- Do not bind only to Replit-specific host assumptions.
+- Document backend start/build commands.
+
+Phase 2 - Preserve and clean data behavior
+If the app uses localStorage:
+- Keep localStorage working.
+- Add versioned localStorage keys if not already present.
+- Add a safe reset demo data option only if appropriate.
+- Do not claim data is shared across users.
+- Clearly label localStorage as browser-local prototype persistence.
+
+If the app uses seed data:
+- Keep seed data as fallback/demo data.
+- Do not overwrite real data.
+- Do not create destructive seed scripts.
+
+If there is real Replit database data:
+- Stop and report before changing it.
+- Create an export plan.
+- Do not delete, migrate, or overwrite it automatically.
+
+Phase 3 - App quality and UX hardening
+Verify:
+- All visible navigation items open real views or clearly show unavailable/staging status.
+- All buttons either work or are intentionally disabled with a clear reason.
+- Forms accept input.
+- Progress/status/counts update when the user interacts where applicable.
+- No console errors.
+- No broken asset references.
+- No clipped labels.
+- No overlapping text.
+- Mobile layout works.
+- Tablet layout works.
+- Desktop layout remains polished.
+- Performance-car styling remains premium and professional, not cartoonish.
+
+Preserve the LandonOS cockpit modules and labels:
+- Performance Cockpit
+- Research Engine
+- Tuning Bay
+- Track Map
+- Brief Builder
+- Source Garage
+- Pit Stop
+- RoseOS Co-Driver
+- Finish Line Handoff
+- Idea Garage
+- Garage Rewards
+- Driver Training
+- Company Brain Sync
+
+Phase 4 - Migration handoff files
+Create or update the following repo-root files:
+
+1. `CURSOR-HANDOFF.md`
+
+Include:
+- App name
+- Current status
+- What works
+- What is demo/prototype only
+- Commands to install, run, typecheck, build, and preview
+- Expected build output
+- Required env vars, with placeholders only
+- Whether backend exists
+- Whether database exists
+- Whether auth exists
+- Whether AI exists
+- Whether Zoho/CRM/WorkDrive exists
+- Known broken items
+- Known missing items
+- Recommended next Cursor tasks
+- Recommended future AWS path: `/home/ubuntu/projects/landonos`
+- Possible future staging domain: `landon.cagteam.net`
+- Warning that Replit is not the final production home
+
+2. `MIGRATION-CHECKLIST.md`
+
+Include:
+- Pre-migration audit complete
+- Secrets removed / not present
+- `.env.example` reviewed
+- Build passes
+- Typecheck passes
+- Assets verified
+- Replit-only dependencies removed or documented
+- LocalStorage/demo data labeled
+- GitHub repo created or ready
+- AWS clone path planned
+- Basic Auth needed before staging exposure
+- No live integrations connected
+- No production data migrated
+- Cursor next-step list
+
+3. `.env.example`
+
+Include only placeholder names.
+Do not include real values.
+
+Potential placeholders only if actually needed:
+- `PORT=5000`
+- `HOST=127.0.0.1`
+- `NODE_ENV=development`
+- `DATABASE_URL=`
+- `OPENAI_API_KEY=`
+- `VITE_APP_ENV=staging`
+
+Only include env vars actually referenced by the app or needed for future documented setup.
+
+4. `README.md`, if missing or weak
+
+Include:
+- What LandonOS is
+- How to run locally
+- How to build
+- What is prototype/demo
+- What is not connected yet
+- Migration status
+- Safety notes
+
+Phase 5 - Verification
+Run all available checks:
+
+- install dependencies
+- typecheck
+- build
+- preview or dev server
+- browser/manual click-through where possible
+- responsive check
+- console check
+
+If any command fails:
+- Fix reasonable project issues.
+- If the failure requires missing secrets or external services, do not fake it.
+- Document the blocker clearly.
+
+REQUIRED FINAL OUTPUT FROM REPLIT:
+Give Carmen a concise migration report with these sections:
+
+1. Current App Status
+- What framework
+- What package manager
+- Whether frontend-only or full-stack
+- Whether data is localStorage/demo/db
+- Whether auth exists
+- Whether AI exists
+- Whether CRM/Zoho exists
+
+2. What I Changed
+- Files changed
+- Why each change was needed
+
+3. What I Preserved
+- Design
+- Modules
+- Data behavior
+- Assets
+- Existing working functions
+
+4. What Is Still Prototype/Demo
+- Local-only data
+- Mock AI
+- Mock Company Brain
+- Mock source checks
+- Any simulated workflows
+
+5. Migration Readiness
+Choose one:
+- Ready for GitHub/Cursor/AWS handoff
+- Almost ready, with listed blockers
+- Not ready, with required fixes
+
+6. Exact Commands For Cursor/AWS
+List exact commands Carmen should run after cloning on the server.
+
+Example format:
+`npm install`
+`npm run typecheck`
+`npm run build`
+`npm run preview`
+
+Only list commands that are true for this project.
+
+7. Recommended AWS/Server Plan
+Do not execute server changes.
+Just document:
+- Suggested AWS folder: `/home/ubuntu/projects/landonos`
+- Suggested future domain: `landon.cagteam.net`
+- Needs Basic Auth before private staging exposure
+- Needs nginx/PM2 only during Cursor/server phase
+- Do not connect live integrations until approved
+
+8. Known Risks
+Include:
+- Any Replit-only dependency
+- Any fake/live confusion
+- Any localStorage limitations
+- Any auth gap
+- Any missing env vars
+- Any broken buttons/routes/assets
+- Any mobile layout issues
+- Any build issues
+
+9. Next Cursor Prompt
+Write the exact next prompt Carmen should paste into Cursor after the code is in GitHub/AWS.
+
+IMPORTANT:
+Do not claim the app is production-ready just because it builds.
+The correct target is migration-ready and staging-ready after server protection is added.
