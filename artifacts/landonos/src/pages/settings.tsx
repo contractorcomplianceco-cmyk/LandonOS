@@ -10,8 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Settings2, Download, Upload, AlertTriangle, User, List, Award, Database, FolderKanban, Plus } from "lucide-react";
-import { InstallAppCard } from "@/pages/install-app";
+import { Settings2, Download, Upload, AlertTriangle, User, List, Award, Database, FolderKanban, Plus, Loader2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,9 +22,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { InstallAppCard } from "@/pages/install-app";
+import { PageLoadingSkeleton } from "@/components/page-loading";
+import { isRoseReviewModeEnabled } from "@/lib/rose-review-mode";
 
 export default function Settings() {
-  const { data, updateData, resetData } = useStore();
+  const { data, updateData, resetData, syncMode, isSaving } = useStore();
   const {
     workspaces,
     activeWorkspaceId,
@@ -40,6 +42,7 @@ export default function Settings() {
   const search = useSearch();
   const defaultTab = new URLSearchParams(search).get("tab") ?? "profile";
   const [newWorkspaceName, setNewWorkspaceName] = useState("");
+  const [workspaceBusy, setWorkspaceBusy] = useState(false);
   const showWorkspaces = apiAvailable && !!user;
 
   const updateSetting = (key: keyof typeof settings, value: any) => {
@@ -140,6 +143,7 @@ export default function Settings() {
 
   const handleCreateWorkspace = async () => {
     const name = newWorkspaceName.trim() || "New Cockpit";
+    setWorkspaceBusy(true);
     try {
       await createWorkspace(name);
       setNewWorkspaceName("");
@@ -150,8 +154,31 @@ export default function Settings() {
         description: err instanceof Error ? err.message : "Try again",
         variant: "destructive",
       });
+    } finally {
+      setWorkspaceBusy(false);
     }
   };
+
+  const handleSwitchWorkspace = async (id: string, name: string) => {
+    if (id === activeWorkspaceId) return;
+    setWorkspaceBusy(true);
+    try {
+      await switchWorkspace(id);
+      toast({ title: "Workspace switched", description: `Now working in "${name}".` });
+    } catch (err) {
+      toast({
+        title: "Could not switch workspace",
+        description: err instanceof Error ? err.message : "Try again",
+        variant: "destructive",
+      });
+    } finally {
+      setWorkspaceBusy(false);
+    }
+  };
+
+  if (syncMode === "loading") {
+    return <PageLoadingSkeleton />;
+  }
 
   return (
     <div className="space-y-6">
@@ -171,7 +198,7 @@ export default function Settings() {
       <InstallAppCard />
 
       <Tabs defaultValue={defaultTab} className="space-y-6">
-        <TabsList className="bg-card border w-full justify-start h-auto p-1 rounded-md overflow-x-auto flex-nowrap">
+        <TabsList className="sticky top-0 z-10 bg-card/95 backdrop-blur-md supports-[backdrop-filter]:bg-card/90 border w-full justify-start h-auto p-1 rounded-md overflow-x-auto flex-nowrap">
           <TabsTrigger value="profile" className="flex items-center py-2"><User className="w-4 h-4 mr-2" /> Profile</TabsTrigger>
           {showWorkspaces && (
             <TabsTrigger value="workspaces" className="flex items-center py-2">
@@ -211,9 +238,11 @@ export default function Settings() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => switchWorkspace(workspace.id)}
+                          className="min-h-9"
+                          disabled={workspaceBusy}
+                          onClick={() => handleSwitchWorkspace(workspace.id, workspace.name)}
                         >
-                          Switch
+                          {workspaceBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Switch Here"}
                         </Button>
                       )}
                     </div>
@@ -225,8 +254,9 @@ export default function Settings() {
                     value={newWorkspaceName}
                     onChange={(e) => setNewWorkspaceName(e.target.value)}
                   />
-                  <Button className="gap-2 shrink-0" onClick={handleCreateWorkspace}>
-                    <Plus className="h-4 w-4" /> Create workspace
+                  <Button className="gap-2 shrink-0 min-h-10" onClick={handleCreateWorkspace} disabled={workspaceBusy}>
+                    {workspaceBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+                    Create Workspace
                   </Button>
                 </div>
               </CardContent>
@@ -255,6 +285,12 @@ export default function Settings() {
                   <Input value={settings.userRole} onChange={e => updateSetting('userRole', e.target.value)} />
                 </div>
               </div>
+              {isSaving && (
+                <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                  <Loader2 className="h-3 w-3 animate-spin" aria-hidden="true" />
+                  Saving changes…
+                </p>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -369,7 +405,13 @@ export default function Settings() {
                 </p>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="destructive" className="w-full">Reset to Default Data</Button>
+                    <Button
+                      variant="destructive"
+                      className="w-full"
+                      disabled={isRoseReviewModeEnabled()}
+                    >
+                      Reset to Default Data
+                    </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
@@ -381,10 +423,20 @@ export default function Settings() {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => {
-                        resetData();
-                        toast({ title: "Data Reset", description: "Application has been restored to default state." });
-                      }} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                      <AlertDialogAction
+                        onClick={() => {
+                          if (isRoseReviewModeEnabled()) {
+                            toast({
+                              title: "Reset disabled",
+                              description: "Reset is disabled during Rose Review Mode.",
+                            });
+                            return;
+                          }
+                          resetData();
+                          toast({ title: "Data Reset", description: "Application has been restored to default state." });
+                        }}
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      >
                         Yes, reset data
                       </AlertDialogAction>
                     </AlertDialogFooter>

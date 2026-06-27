@@ -11,6 +11,9 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         PORT: "3001",
+        // TODO: Temporary Rose Review Mode. Remove after Command Center role-based auth is finalized.
+        CCA_REVIEW_MODE: "true",
+        CCA_REVIEW_MODE_EXPIRES_AT: "2026-06-27T12:00:00Z",
       },
       max_restarts: 10,
       min_uptime: "10s",

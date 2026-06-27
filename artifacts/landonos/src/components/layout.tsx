@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { PageHelp } from "@/components/page-help";
 import { HelpPopup } from "@/components/help-popup";
 import { SyncStatusChip } from "@/components/sync-status-chip";
+import { RoseReviewModeBanner } from "@/components/rose-review-mode-banner";
 import ccaCrest from "@assets/cca-crest-inset_1781446966845.png";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -446,7 +447,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-background">
+    <div className="flex h-screen w-full flex-col overflow-hidden bg-background">
+      <RoseReviewModeBanner />
+      <div className="flex flex-1 min-h-0 overflow-hidden">
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex w-64 bg-gradient-to-b from-sidebar to-slate-950 text-sidebar-foreground border-r border-sidebar-border flex-col shrink-0">
         <SidebarBrand />
@@ -500,9 +503,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </div>
 
             {/* Right: status + actions */}
-            <div className="flex flex-1 lg:flex-none items-center justify-end gap-2 md:gap-3">
+            <div className="flex flex-1 lg:flex-none items-center justify-end gap-1.5 md:gap-3">
+              <SyncStatusChip />
               <div className="hidden xl:flex items-center gap-2">
-                <SyncStatusChip />
                 <StatusChip label="Human Review Required" tone="alert" />
                 <StatusChip label="AI Draft Only" tone="neutral" />
                 <StatusChip label="Source Check" tone="verify" />
@@ -511,7 +514,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <button
                 type="button"
                 onClick={openGuide}
-                className="rounded-md p-2 text-slate-400 hover:bg-white/10 hover:text-white"
+                className="rounded-md p-2.5 min-h-10 min-w-10 inline-flex items-center justify-center text-slate-400 transition-colors hover:bg-white/10 hover:text-white active:bg-white/15 active:scale-95"
                 aria-label="Open page guide"
                 title="Open guide for this page"
               >
@@ -520,7 +523,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <button
                 type="button"
                 onClick={startTour}
-                className="rounded-md p-2 text-slate-400 hover:bg-white/10 hover:text-white"
+                className="rounded-md p-2.5 min-h-10 min-w-10 inline-flex items-center justify-center text-slate-400 transition-colors hover:bg-white/10 hover:text-white active:bg-white/15 active:scale-95"
                 aria-label="Start narrated walkthrough"
                 title="Start narrated walkthrough"
               >
@@ -530,7 +533,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 type="button"
                 onClick={toggleHints}
                 className={cn(
-                  "rounded-md p-2 hover:bg-white/10 hover:text-white",
+                  "rounded-md p-2.5 min-h-10 min-w-10 inline-flex items-center justify-center transition-colors hover:bg-white/10 hover:text-white active:bg-white/15 active:scale-95",
                   hintsEnabled ? "text-red-400" : "text-slate-400"
                 )}
                 aria-label={hintsEnabled ? "Hide help hints" : "Show help hints"}
@@ -547,7 +550,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                   if (next) playRev();
                 }}
                 className={cn(
-                  "rounded-md p-2 hover:bg-white/10 hover:text-white",
+                  "rounded-md p-2.5 min-h-10 min-w-10 inline-flex items-center justify-center transition-colors hover:bg-white/10 hover:text-white active:bg-white/15 active:scale-95",
                   soundOn ? "text-red-400" : "text-slate-400"
                 )}
                 aria-label={soundOn ? "Mute engine sound" : "Unmute engine sound"}
@@ -560,7 +563,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <button
                 type="button"
                 onClick={() => navigate("/blocked")}
-                className="relative rounded-md p-2 text-slate-400 hover:bg-white/10 hover:text-white"
+                className="relative rounded-md p-2.5 min-h-10 min-w-10 inline-flex items-center justify-center text-slate-400 transition-colors hover:bg-white/10 hover:text-white active:bg-white/15 active:scale-95"
                 aria-label="Attention items"
               >
                 <Bell size={18} />
@@ -571,7 +574,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <button
                 type="button"
                 onClick={() => navigate("/roseos-chat")}
-                className="rounded-md p-2 text-slate-400 hover:bg-white/10 hover:text-white"
+                className="rounded-md p-2.5 min-h-10 min-w-10 inline-flex items-center justify-center text-slate-400 transition-colors hover:bg-white/10 hover:text-white active:bg-white/15 active:scale-95"
                 aria-label="RoseOS Co-Driver"
               >
                 <MessageSquare size={18} />
@@ -583,7 +586,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
-                    className="flex items-center gap-2 rounded-md p-1 pr-2 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                    className="flex items-center gap-2 rounded-md p-1 pr-2 min-h-10 transition-colors hover:bg-white/10 active:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
                     aria-label="Open profile menu"
                   >
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/15 text-sm font-bold text-white ring-1 ring-white/20">
@@ -614,7 +617,22 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                       {workspaces.map((workspace) => (
                         <DropdownMenuItem
                           key={workspace.id}
-                          onClick={() => switchWorkspace(workspace.id)}
+                          onClick={async () => {
+                            if (workspace.id === activeWorkspaceId) return;
+                            try {
+                              await switchWorkspace(workspace.id);
+                              toast({
+                                title: "Workspace switched",
+                                description: `Now working in "${workspace.name}".`,
+                              });
+                            } catch (err) {
+                              toast({
+                                title: "Could not switch workspace",
+                                description: err instanceof Error ? err.message : "Try again",
+                                variant: "destructive",
+                              });
+                            }
+                          }}
                           className={cn(
                             workspace.id === activeWorkspaceId && "bg-accent font-medium",
                           )}
@@ -672,6 +690,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       </main>
       <HelpPopup />
+      </div>
     </div>
   );
 }
