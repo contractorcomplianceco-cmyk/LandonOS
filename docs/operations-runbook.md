@@ -22,7 +22,7 @@ Architecture and env vars: [deploy-live-app.md](./deploy-live-app.md). nginx/HTT
 | SPA web root | **`/var/www/landonos`** |
 | nginx site | **`/etc/nginx/sites-available/landonos`** → `sites-enabled/landonos` |
 | HTTPS | Let's Encrypt — `/etc/letsencrypt/live/landon.cagteam.net/` |
-| HTTP Basic Auth | **Temporarily disabled** 2026-06-26 for Rose Review Mode — revert by 2026-06-27T12:00:00Z. Backup: `/etc/nginx/sites-available/landonos.bak-2026-06-26`. Credentials file: `/etc/nginx/.htpasswd-landonos` |
+| HTTP Basic Auth | **Temporarily disabled** 2026-06-26 for Rose Review Mode — revert by 2026-07-04T12:00:00Z. Backup: `/etc/nginx/sites-available/landonos.bak-2026-06-26`. Credentials file: `/etc/nginx/.htpasswd-landonos` |
 
 Production uses **PM2 for the API**, not the Compose `api` service.
 
@@ -283,7 +283,7 @@ Full nginx/SSL steps: [deploy-nginx-landonos.md](./deploy-nginx-landonos.md).
 
 ## 7. Rose Review Mode (temporary auth bypass)
 
-**Active:** 2026-06-26 through **2026-06-27T12:00:00Z** (auto-expires via build-time env).
+**Active:** 2026-06-26 through **2026-07-04T12:00:00Z** (auto-expires via build-time env).
 
 Allows Command Center to open LandonOS without nginx Basic Auth or email/password login. Login routes and auth code remain; destructive reset is disabled in the SPA during review mode. Admin passcode on Race Control is unchanged.
 
@@ -300,17 +300,17 @@ Allows Command Center to open LandonOS without nginx Basic Auth or email/passwor
 | Variable | Where | Value (tonight) |
 |----------|-------|-----------------|
 | `CCA_REVIEW_MODE` | PM2 `landonos-api` | `true` |
-| `CCA_REVIEW_MODE_EXPIRES_AT` | PM2 `landonos-api` | `2026-06-27T12:00:00Z` |
+| `CCA_REVIEW_MODE_EXPIRES_AT` | PM2 `landonos-api` | `2026-07-04T12:00:00Z` |
 | `VITE_CCA_REVIEW_MODE` | SPA build | `true` |
-| `VITE_CCA_REVIEW_MODE_EXPIRES_AT` | SPA build | `2026-06-27T12:00:00Z` |
+| `VITE_CCA_REVIEW_MODE_EXPIRES_AT` | SPA build | `2026-07-04T12:00:00Z` |
 
 SPA build example:
 
 ```bash
-VITE_CCA_REVIEW_MODE=true VITE_CCA_REVIEW_MODE_EXPIRES_AT=2026-06-27T12:00:00Z pnpm run build:app
+VITE_CCA_REVIEW_MODE=true VITE_CCA_REVIEW_MODE_EXPIRES_AT=2026-07-04T12:00:00Z pnpm run build:app
 ```
 
-### Revert after 2026-06-27T12:00:00Z (or manually)
+### Revert after 2026-07-04T12:00:00Z (or manually)
 
 ```bash
 # 1. Restore nginx Basic Auth
