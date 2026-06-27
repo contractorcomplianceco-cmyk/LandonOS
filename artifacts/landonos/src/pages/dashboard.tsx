@@ -26,6 +26,8 @@ import { PageHeader } from "@/components/page-header";
 import { Gauge } from "@/components/gauge";
 import { levelProgress } from "@/lib/rewards";
 import { levelAccent } from "@/lib/announcements";
+import { EmptyState } from "@/components/empty-state";
+import { PageLoadingSkeleton } from "@/components/page-loading";
 
 const COMPLIANCE_TIPS = [
   "AI output is a draft, not a decision. Every claim needs a verifiable source before it reaches a reviewer.",
@@ -45,7 +47,11 @@ const QUICK_ACTIONS: { href: string; label: string; icon: LucideIcon; color: Acc
 ];
 
 export default function Dashboard() {
-  const { data } = useStore();
+  const { data, syncMode } = useStore();
+
+  if (syncMode === "loading") {
+    return <PageLoadingSkeleton />;
+  }
 
   const openRequests = data.requests.filter(
     (r) => r.status === "Open" || r.status === "In Progress"
@@ -134,7 +140,7 @@ export default function Dashboard() {
         action={
           <Link
             href="/guided-research-builder?new=1"
-            className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 min-h-10 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 active:bg-primary/80 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             Start New Research <ArrowRight className="h-4 w-4" />
           </Link>
@@ -255,7 +261,7 @@ export default function Dashboard() {
               key={a.href}
               href={a.href}
               className={cn(
-                "group h-24 flex flex-col items-center justify-center gap-2.5 rounded-lg border border-border bg-card transition-all hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                "group h-24 min-h-[5.5rem] flex flex-col items-center justify-center gap-2.5 rounded-lg border border-border bg-card transition-all hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                 c.hover
               )}
             >
@@ -374,17 +380,29 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="space-y-4">
             {openRequests.length === 0 ? (
-              <div className="text-sm text-muted-foreground italic p-4 text-center border rounded-md">
-                No open requests. Great job!
-              </div>
+              <EmptyState
+                icon={Target}
+                title="No open requests"
+                description="You're caught up. Start a new research request when the next question lands."
+                action={
+                  <Link
+                    href="/guided-research-builder?new=1"
+                    className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 min-h-10 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 active:bg-primary/80"
+                  >
+                    Start New Research <ArrowRight className="h-4 w-4" />
+                  </Link>
+                }
+                className="border-solid bg-muted/5 p-8"
+              />
             ) : (
               openRequests.map((req) => {
                 const urgent = req.priority === "Executive" || req.priority === "High";
                 return (
-                  <div
+                  <Link
                     key={req.id}
+                    href="/guided-research-builder"
                     className={cn(
-                      "flex flex-col space-y-2 p-3 border border-l-4 rounded-md transition-colors hover:bg-muted/40",
+                      "flex flex-col space-y-2 p-3 border border-l-4 rounded-md transition-colors hover:bg-muted/40 active:bg-muted/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                       urgent ? "border-l-red-500" : "border-l-sky-500"
                     )}
                   >
@@ -396,7 +414,7 @@ export default function Dashboard() {
                       <span>Due: {req.dueDate}</span>
                       <span>Reviewer: {req.reviewer}</span>
                     </div>
-                  </div>
+                  </Link>
                 );
               })
             )}
@@ -417,9 +435,20 @@ export default function Dashboard() {
           <CardContent>
             <div className="space-y-4">
               {riskySources.length === 0 ? (
-                <div className="text-sm text-muted-foreground italic">
-                  No risky sources currently attached to open requests.
-                </div>
+                <EmptyState
+                  icon={ShieldCheck}
+                  title="All sources verified"
+                  description="No AI drafts or unknown sources need review right now."
+                  action={
+                    <Link
+                      href="/source-vault"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+                    >
+                      Open Source Garage <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  }
+                  className="border-none bg-transparent p-4"
+                />
               ) : (
                 riskySources.map((s) => (
                   <div

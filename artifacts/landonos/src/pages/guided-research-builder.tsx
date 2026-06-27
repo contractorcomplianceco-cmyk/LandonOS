@@ -15,15 +15,17 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Progress } from "@/components/ui/progress";
-import { Target, Plus, Trash2, Edit2, Play, Archive, ClipboardList, Clock, ShieldAlert, Sparkles } from "lucide-react";
+import { Target, Plus, Trash2, Edit2, Play, Archive, ClipboardList, Clock, ShieldAlert, Sparkles, Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageHeader } from "@/components/page-header";
 import { Toolbar } from "@/components/toolbar";
 import { EmptyState } from "@/components/empty-state";
 import { ConfirmDeleteDialog } from "@/components/confirm-delete-dialog";
+import { PageLoadingSkeleton } from "@/components/page-loading";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function GuidedResearchBuilder() {
-  const { data, updateData } = useStore();
+  const { data, updateData, syncMode, isSaving } = useStore();
   const { toast } = useToast();
   const search = useSearch();
   const [, navigate] = useLocation();
@@ -171,6 +173,7 @@ export default function GuidedResearchBuilder() {
 
   const handleStatusChange = (id: string, newStatus: any) => {
     updateData(prev => ({ ...prev, requests: prev.requests.map(r => r.id === id ? { ...r, status: newStatus } : r) }));
+    toast({ title: "Status updated", description: `Request marked as ${newStatus}.` });
   };
 
   const handleEdit = (req: ResearchRequest) => {
@@ -224,7 +227,12 @@ export default function GuidedResearchBuilder() {
       ? "border-l-sky-500"
       : "border-l-slate-400";
 
+  if (syncMode === "loading") {
+    return <PageLoadingSkeleton />;
+  }
+
   return (
+    <TooltipProvider delayDuration={300}>
     <div className="space-y-6">
       <PageHeader
         icon={Target}
@@ -256,12 +264,13 @@ export default function GuidedResearchBuilder() {
 
         <TabsContent value="list" className="space-y-4">
           <Toolbar
+            sticky
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
             searchPlaceholder="Search requests..."
           >
             <Select value={filterType} onValueChange={setFilterType}>
-              <SelectTrigger className="w-full sm:w-40">
+              <SelectTrigger className="w-full sm:w-36">
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
               <SelectContent>
@@ -271,8 +280,20 @@ export default function GuidedResearchBuilder() {
                 ))}
               </SelectContent>
             </Select>
+            <Select value={filterPriority} onValueChange={setFilterPriority}>
+              <SelectTrigger className="w-full sm:w-36">
+                <SelectValue placeholder="Priority" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Priorities</SelectItem>
+                <SelectItem value="Executive">Executive</SelectItem>
+                <SelectItem value="High">High</SelectItem>
+                <SelectItem value="Medium">Medium</SelectItem>
+                <SelectItem value="Low">Low</SelectItem>
+              </SelectContent>
+            </Select>
             <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-full sm:w-40">
+              <SelectTrigger className="w-full sm:w-36">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -284,20 +305,40 @@ export default function GuidedResearchBuilder() {
                 <SelectItem value="Archived">Archived</SelectItem>
               </SelectContent>
             </Select>
-            <Button onClick={() => setActiveTab("builder")} className="shrink-0">
-              <Plus className="h-4 w-4 mr-2" /> New
+            <Button
+              onClick={() => {
+                resetForm();
+                setActiveTab("builder");
+              }}
+              className="shrink-0 min-h-10"
+            >
+              <Plus className="h-4 w-4 mr-2" /> New Request
             </Button>
           </Toolbar>
           {filteredRequests.length === 0 ? (
                 <EmptyState
                   icon={Target}
-                  title="No requests found"
-                  description="Adjust filters or create a new request."
+                  title={data.requests.length === 0 ? "No research requests yet" : "No matching requests"}
+                  description={
+                    data.requests.length === 0
+                      ? "Create your first structured research request to generate a plan and source checklist."
+                      : "Try clearing filters or start a new request."
+                  }
+                  action={
+                    <Button
+                      onClick={() => {
+                        resetForm();
+                        setActiveTab("builder");
+                      }}
+                    >
+                      <Plus className="h-4 w-4 mr-2" /> Create Research Request
+                    </Button>
+                  }
                 />
               ) : (
                 <div className="space-y-4">
                   {filteredRequests.map(req => (
-                    <Card key={req.id} className={`border-border/50 border-l-4 ${priorityAccent(req.priority)} shadow-sm overflow-hidden transition-shadow hover:shadow-md`}>
+                    <Card key={req.id} className={`border-border/50 border-l-4 ${priorityAccent(req.priority)} shadow-sm overflow-hidden transition-all hover:shadow-md active:scale-[0.995]`}>
                       <div className="p-4 flex flex-col md:flex-row justify-between gap-4">
                         <div className="flex-1 space-y-2">
                           <div className="flex items-center gap-2">
@@ -328,18 +369,33 @@ export default function GuidedResearchBuilder() {
                               <SelectItem value="Completed">Completed</SelectItem>
                             </SelectContent>
                           </Select>
-                          <div className="flex gap-2">
-                            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleEdit(req)}>
-                              <Edit2 className="h-4 w-4" />
-                            </Button>
+                          <div className="flex gap-1">
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => handleEdit(req)} aria-label="Edit request">
+                                  <Edit2 className="h-4 w-4" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>Edit request</TooltipContent>
+                            </Tooltip>
                             {req.status !== 'Archived' && (
-                              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleArchive(req.id)}>
-                                <Archive className="h-4 w-4" />
-                              </Button>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => handleArchive(req.id)} aria-label="Archive request">
+                                    <Archive className="h-4 w-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>Archive request</TooltipContent>
+                              </Tooltip>
                             )}
-                            <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => requestDelete(req.id)}>
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button variant="ghost" size="icon" className="h-9 w-9 text-destructive" onClick={() => requestDelete(req.id)} aria-label="Delete request">
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>Delete request</TooltipContent>
+                            </Tooltip>
                           </div>
                         </div>
                       </div>
@@ -460,8 +516,16 @@ export default function GuidedResearchBuilder() {
                 </form>
               </CardContent>
               <CardFooter className="flex justify-between border-t p-4">
-                <Button variant="outline" onClick={resetForm}>Clear</Button>
-                <Button type="submit" form="builder-form">{editingId ? "Update Request" : "Generate Plan & Create"}</Button>
+                <Button variant="outline" onClick={resetForm} disabled={isSaving}>Clear Form</Button>
+                <Button type="submit" form="builder-form" disabled={isSaving}>
+                  {isSaving ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : editingId ? (
+                    "Save Changes"
+                  ) : (
+                    "Create Request & Generate Plan"
+                  )}
+                </Button>
               </CardFooter>
             </Card>
 
@@ -560,5 +624,6 @@ export default function GuidedResearchBuilder() {
         description="This will permanently delete this research request. This action cannot be undone."
       />
     </div>
+    </TooltipProvider>
   );
 }

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { Link } from "wouter";
 import { useStore } from "@/hooks/use-store";
+import { useToast } from "@/hooks/use-toast";
 import { GPS_STEPS } from "@/lib/default-data";
 import { Status, ResearchRequest } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -8,9 +10,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Gauge } from "@/components/gauge";
-import { Compass, CheckCircle2, Circle, Clock, AlertTriangle, ArrowRight, ListChecks } from "lucide-react";
+import { Compass, CheckCircle2, Circle, Clock, AlertTriangle, ArrowRight, ListChecks, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { EmptyState } from "@/components/empty-state";
+import { Button } from "@/components/ui/button";
+import { PageLoadingSkeleton } from "@/components/page-loading";
 
 const STEP_BORDER: Record<Status, string> = {
   "Complete": "border-l-emerald-500 bg-emerald-500/5",
@@ -27,7 +31,8 @@ const STEP_CHIP: Record<Status, string> = {
 };
 
 export default function ResearchGPS() {
-  const { data, updateData } = useStore();
+  const { data, updateData, syncMode } = useStore();
+  const { toast } = useToast();
   const [selectedReqId, setSelectedReqId] = useState<string>("");
 
   const activeRequest = data.requests.find(r => r.id === selectedReqId);
@@ -59,6 +64,7 @@ export default function ResearchGPS() {
         return r;
       })
     }));
+    toast({ title: "Step updated", description: `"${step}" marked as ${status}.` });
   };
 
   const calculateProgress = (req: ResearchRequest) => {
@@ -69,6 +75,10 @@ export default function ResearchGPS() {
   };
 
   const activeMissions = data.requests.filter((r) => r.status !== "Archived");
+
+  if (syncMode === "loading") {
+    return <PageLoadingSkeleton />;
+  }
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
@@ -84,7 +94,7 @@ export default function ResearchGPS() {
         ]}
       />
 
-      <Card className="border-t-4 border-t-sky-500">
+      <Card className="sticky top-0 z-10 border-t-4 border-t-sky-500 backdrop-blur-md bg-card/95 supports-[backdrop-filter]:bg-card/90">
         <CardHeader className="pb-4">
           <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Select Active Mission</CardTitle>
           <Select value={selectedReqId} onValueChange={setSelectedReqId}>
@@ -92,10 +102,10 @@ export default function ResearchGPS() {
               <SelectValue placeholder="Choose a research request..." />
             </SelectTrigger>
             <SelectContent>
-              {data.requests.filter(r => r.status !== 'Archived').length === 0 ? (
+              {activeMissions.length === 0 ? (
                 <SelectItem value="none" disabled>No active requests available</SelectItem>
               ) : (
-                data.requests.filter(r => r.status !== 'Archived').map(req => (
+                activeMissions.map(req => (
                   <SelectItem key={req.id} value={req.id}>
                     {req.title} <span className="text-muted-foreground text-xs ml-2">({req.type})</span>
                   </SelectItem>
@@ -106,10 +116,24 @@ export default function ResearchGPS() {
         </CardHeader>
       </Card>
 
-      {!activeRequest ? (
+      {activeMissions.length === 0 ? (
         <EmptyState
           icon={Compass}
-          description="Select a research request to view its GPS path."
+          title="No active missions"
+          description="Create a research request first, then track its progress through all 10 workflow steps here."
+          action={
+            <Link href="/guided-research-builder?new=1">
+              <Button>
+                <Plus className="h-4 w-4 mr-2" /> Create Research Request
+              </Button>
+            </Link>
+          }
+        />
+      ) : !activeRequest ? (
+        <EmptyState
+          icon={Compass}
+          title="Pick a mission"
+          description="Choose a research request above to view and update its 10-step track map."
           className="h-64"
         />
       ) : (
@@ -182,7 +206,7 @@ export default function ResearchGPS() {
               {GPS_STEPS.map((step, index) => {
                 const currentStatus = activeRequest.gpsSteps[step] || "Not Started";
                 return (
-                  <Card key={step} className={cn("border-l-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md", STEP_BORDER[currentStatus])}>
+                  <Card key={step} className={cn("border-l-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.995]", STEP_BORDER[currentStatus])}>
                     <div className="flex items-center p-4">
                       <div className={cn("hidden sm:flex shrink-0 w-8 h-8 rounded-full items-center justify-center mr-4 z-10 font-mono text-xs font-semibold", STEP_CHIP[currentStatus])}>
                         {index + 1}
@@ -203,7 +227,7 @@ export default function ResearchGPS() {
                           value={currentStatus} 
                           onValueChange={(val) => handleStatusChange(step, val as Status)}
                         >
-                          <SelectTrigger className="w-[140px] h-8 text-xs">
+                          <SelectTrigger className="w-full sm:w-[140px] h-9 text-xs">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>

@@ -24,6 +24,7 @@ interface AppContextType {
   resetData: () => void;
   syncMode: SyncMode;
   syncError: string | null;
+  isSaving: boolean;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -59,6 +60,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState<AppData>(defaultData);
   const [syncMode, setSyncMode] = useState<SyncMode>("loading");
   const [syncError, setSyncError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const liveRef = useRef(false);
 
@@ -102,6 +104,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     if (!liveRef.current) return;
 
     if (saveTimer.current) clearTimeout(saveTimer.current);
+    setIsSaving(true);
     saveTimer.current = setTimeout(async () => {
       try {
         await persistWorkspace(next);
@@ -111,6 +114,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         console.warn("Failed to persist workspace", err);
         setSyncError(err instanceof Error ? err.message : "Save failed");
         setSyncMode("error");
+      } finally {
+        setIsSaving(false);
       }
     }, SAVE_DEBOUNCE_MS);
   }, []);
@@ -155,7 +160,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AppContext.Provider value={{ data, updateData, resetData, syncMode, syncError }}>
+    <AppContext.Provider value={{ data, updateData, resetData, syncMode, syncError, isSaving }}>
       {children}
     </AppContext.Provider>
   );

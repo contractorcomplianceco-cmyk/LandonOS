@@ -75,7 +75,7 @@ export default function LoginPage() {
                 Start the api-server and Postgres to enable accounts and live sync.
               </p>
               <Link href="/">
-                <Button className="w-full">Continue in local mode</Button>
+                <Button className="w-full min-h-11">Continue in Local Mode</Button>
               </Link>
             </div>
           ) : (
@@ -115,18 +115,21 @@ export default function LoginPage() {
                   autoComplete={mode === "login" ? "current-password" : "new-password"}
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={submitting}>
+              <Button type="submit" className="w-full min-h-11" disabled={submitting}>
                 {submitting ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    {mode === "login" ? "Signing in…" : "Creating account…"}
+                  </>
                 ) : mode === "login" ? (
-                  "Sign in"
+                  "Sign In"
                 ) : (
-                  "Create account"
+                  "Create Account"
                 )}
               </Button>
               <button
                 type="button"
-                className="w-full text-center text-sm text-muted-foreground hover:text-foreground"
+                className="w-full min-h-11 rounded-md text-center text-sm text-muted-foreground transition-colors hover:text-foreground hover:bg-muted/50 active:bg-muted/70"
                 onClick={() => setMode(mode === "login" ? "register" : "login")}
               >
                 {mode === "login"

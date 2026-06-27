@@ -11,13 +11,14 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle, Plus, Database, ExternalLink, ShieldCheck, ShieldAlert, Trash2, HelpCircle } from "lucide-react";
+import { AlertTriangle, Plus, Database, ShieldCheck, ShieldAlert, Trash2, HelpCircle, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { StatCard, ACCENT, type Accent } from "@/components/stat-card";
 import { PageHeader } from "@/components/page-header";
 import { Toolbar } from "@/components/toolbar";
 import { EmptyState } from "@/components/empty-state";
 import { ConfirmDeleteDialog } from "@/components/confirm-delete-dialog";
+import { PageLoadingSkeleton } from "@/components/page-loading";
 
 const SOURCE_TYPES: SourceType[] = [
   'Official Source', 
@@ -30,7 +31,7 @@ const SOURCE_TYPES: SourceType[] = [
 ];
 
 export default function SourceVault() {
-  const { data, updateData } = useStore();
+  const { data, updateData, syncMode, isSaving } = useStore();
   const { toast } = useToast();
   
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -157,6 +158,10 @@ export default function SourceVault() {
     { label: "Unknown", value: data.sources.filter((s) => s.type === "Unknown").length, icon: HelpCircle, color: "slate" },
   ];
 
+  if (syncMode === "loading") {
+    return <PageLoadingSkeleton />;
+  }
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -183,6 +188,7 @@ export default function SourceVault() {
       {risksWarning(riskyResearchIds, data.requests)}
 
       <Toolbar
+        sticky
         searchValue={searchQuery}
         onSearchChange={setSearchQuery}
         searchPlaceholder="Search by title, summary, key facts, tags..."
@@ -200,7 +206,20 @@ export default function SourceVault() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredSources.length === 0 ? (
-          <EmptyState icon={Database} description="No sources found. Adjust filters or add a new source." />
+          <EmptyState
+            icon={Database}
+            title={data.sources.length === 0 ? "Your source garage is empty" : "No sources match"}
+            description={
+              data.sources.length === 0
+                ? "Add official sources, client records, and market intel to back your research."
+                : "Adjust your search or filter to find sources."
+            }
+            action={
+              <Button onClick={handleCreate}>
+                <Plus className="h-4 w-4 mr-2" /> {data.sources.length === 0 ? "Add First Source" : "Add Source"}
+              </Button>
+            }
+          />
         ) : (
           filteredSources.map(source => {
             const req = data.requests.find(r => r.id === source.relatedResearchId);
@@ -212,7 +231,7 @@ export default function SourceVault() {
               <Card
                 key={source.id}
                 className={cn(
-                  "flex flex-col border-t-4 bg-gradient-to-br transition-all hover:-translate-y-0.5 hover:shadow-lg",
+                  "flex flex-col border-t-4 bg-gradient-to-br transition-all hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.995]",
                   accent.borderT,
                   accent.grad
                 )}
@@ -245,8 +264,8 @@ export default function SourceVault() {
                     <div className="text-xs text-muted-foreground border-t pt-3 flex justify-between items-center">
                       <span className="truncate pr-2">Req: {req?.title || 'None'}</span>
                       <div className="flex items-center gap-1 shrink-0">
-                        <Button variant="ghost" size="sm" className="h-7 px-2" onClick={() => handleEdit(source)}>Edit</Button>
-                        <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => requestDelete(source.id)}>
+                        <Button variant="ghost" size="sm" className="h-9 min-h-9 px-3" onClick={() => handleEdit(source)}>Edit Source</Button>
+                        <Button variant="ghost" size="icon" className="h-9 w-9 text-destructive" onClick={() => requestDelete(source.id)} aria-label="Delete source">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -333,8 +352,10 @@ export default function SourceVault() {
 
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleSave}>Save Source</Button>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)} disabled={isSaving}>Cancel</Button>
+            <Button onClick={handleSave} disabled={isSaving}>
+              {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : editingId ? "Save Changes" : "Add Source"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

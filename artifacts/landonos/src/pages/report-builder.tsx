@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle, Plus, FileText, CheckCircle2, ClipboardCopy, Trash2, ShieldAlert, Files, FileClock } from "lucide-react";
+import { AlertTriangle, Plus, FileText, CheckCircle2, ClipboardCopy, Trash2, ShieldAlert, Files, FileClock, Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { StatCard, ACCENT, type Accent } from "@/components/stat-card";
@@ -19,11 +19,12 @@ import { PageHeader } from "@/components/page-header";
 import { Toolbar } from "@/components/toolbar";
 import { EmptyState } from "@/components/empty-state";
 import { ConfirmDeleteDialog } from "@/components/confirm-delete-dialog";
+import { PageLoadingSkeleton } from "@/components/page-loading";
 
 const REPORT_STATUSES: ReportStatus[] = ['Draft', 'Needs Sources', 'Ready for Review', 'Needs More Research', 'Reviewed', 'Approved', 'Archived'];
 
 export default function ReportBuilder() {
-  const { data, updateData } = useStore();
+  const { data, updateData, syncMode, isSaving } = useStore();
   const { toast } = useToast();
   
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -262,7 +263,7 @@ ${report.sourcesReviewed.map(id => {
             <Button variant="outline" onClick={() => setPreviewId(null)}>Close</Button>
             <Button onClick={() => copyToClipboard(report)}>
               <ClipboardCopy className="w-4 h-4 mr-2" />
-              Copy to Clipboard
+              Copy Brief Text
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -317,6 +318,10 @@ ${report.sourcesReviewed.map(id => {
     { label: "Approved", value: nonArchivedReports.filter((r) => r.status === "Approved").length, icon: CheckCircle2, color: "emerald" },
   ];
 
+  if (syncMode === "loading") {
+    return <PageLoadingSkeleton />;
+  }
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -348,6 +353,7 @@ ${report.sourcesReviewed.map(id => {
       </div>
 
       <Toolbar
+        sticky
         searchValue={searchQuery}
         onSearchChange={setSearchQuery}
         searchPlaceholder="Search reports..."
@@ -355,7 +361,20 @@ ${report.sourcesReviewed.map(id => {
 
       <div className="grid grid-cols-1 gap-4">
         {activeReports.length === 0 ? (
-          <EmptyState icon={FileText} description="No reports found. Create your first report to get started." />
+          <EmptyState
+            icon={FileText}
+            title={data.reports.length === 0 ? "No briefs yet" : "No matching briefs"}
+            description={
+              data.reports.length === 0
+                ? "Draft your first executive brief and attach verified sources before review."
+                : "Try a different search term or create a new report."
+            }
+            action={
+              <Button onClick={handleCreate}>
+                <Plus className="h-4 w-4 mr-2" /> Create Executive Brief
+              </Button>
+            }
+          />
         ) : (
           activeReports.map(report => {
             const readiness = calculateReadiness(report);
@@ -363,7 +382,7 @@ ${report.sourcesReviewed.map(id => {
             const rAccent = ACCENT[readinessAccent(readiness)];
 
             return (
-              <Card key={report.id} className={cn("border-l-4 transition-all hover:-translate-y-0.5 hover:shadow-lg", statusAccent(report.status))}>
+              <Card key={report.id} className={cn("border-l-4 transition-all hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.995]", statusAccent(report.status))}>
                 <CardContent className="p-6 flex flex-col md:flex-row gap-6">
                   <div className="flex-1 space-y-4">
                     <div className="flex items-start justify-between">
@@ -401,9 +420,9 @@ ${report.sourcesReviewed.map(id => {
                         />
                       </div>
                     </div>
-                    <div className="flex space-x-2 w-full">
-                      <Button variant="outline" size="sm" className="flex-1" onClick={() => setPreviewId(report.id)}>Preview</Button>
-                      <Button size="sm" className="flex-1" onClick={() => handleEdit(report)}>Edit</Button>
+                    <div className="flex gap-2 w-full">
+                      <Button variant="outline" size="sm" className="flex-1 min-h-9" onClick={() => setPreviewId(report.id)}>Preview Brief</Button>
+                      <Button size="sm" className="flex-1 min-h-9" onClick={() => handleEdit(report)}>Edit Brief</Button>
                     </div>
                   </div>
                 </CardContent>
@@ -544,8 +563,10 @@ ${report.sourcesReviewed.map(id => {
               {editingId && formData.status !== 'Archived' && (
                 <Button variant="outline" onClick={() => { setIsDialogOpen(false); handleArchive(editingId); }}>Archive</Button>
               )}
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-              <Button onClick={handleSave}>Save Report</Button>
+              <Button variant="outline" onClick={() => setIsDialogOpen(false)} disabled={isSaving}>Cancel</Button>
+              <Button onClick={handleSave} disabled={isSaving}>
+                {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : editingId ? "Save Changes" : "Create Brief"}
+              </Button>
             </div>
           </DialogFooter>
         </DialogContent>

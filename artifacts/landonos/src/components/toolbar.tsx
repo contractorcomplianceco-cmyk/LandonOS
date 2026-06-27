@@ -10,6 +10,8 @@ interface ToolbarProps {
   searchIcon?: LucideIcon;
   children?: React.ReactNode;
   className?: string;
+  /** Pin toolbar below the page header on long scroll lists. */
+  sticky?: boolean;
 }
 
 export function Toolbar({
@@ -19,11 +21,14 @@ export function Toolbar({
   searchIcon: Icon = Search,
   children,
   className,
+  sticky = false,
 }: ToolbarProps) {
   return (
     <div
       className={cn(
         "flex flex-col sm:flex-row sm:items-center gap-4 bg-card p-4 rounded-lg border shadow-sm",
+        sticky &&
+          "sticky top-0 z-10 backdrop-blur-md bg-card/95 supports-[backdrop-filter]:bg-card/90",
         className
       )}
     >

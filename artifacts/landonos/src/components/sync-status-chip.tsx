@@ -11,10 +11,14 @@ export function SyncStatusChip() {
   const workspaceLabel =
     apiAvailable && user && activeWorkspace ? activeWorkspace.name : null;
 
+  const base =
+    "inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[10px] font-medium ring-1 sm:px-2.5 sm:text-[11px]";
+
   if (syncMode === "loading") {
     return (
-      <span className="hidden items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[11px] text-slate-300 md:inline-flex">
-        <Loader2 className="h-3 w-3 animate-spin" /> Syncing…
+      <span className={cn(base, "bg-white/10 text-slate-300 ring-white/15")} role="status">
+        <Loader2 className="h-3 w-3 animate-spin" aria-hidden="true" />
+        <span className="hidden min-[380px]:inline">Syncing…</span>
       </span>
     );
   }
@@ -22,11 +26,24 @@ export function SyncStatusChip() {
   if (syncMode === "live") {
     return (
       <span
-        className="hidden items-center gap-1.5 rounded-full bg-emerald-500/15 px-2.5 py-1 text-[11px] font-medium text-emerald-300 ring-1 ring-emerald-500/30 md:inline-flex"
-        title={workspaceLabel ?? undefined}
+        className={cn(
+          base,
+          "bg-emerald-500/15 text-emerald-300 ring-emerald-500/30",
+        )}
+        title={workspaceLabel ?? "Connected to live workspace sync"}
+        role="status"
       >
-        <Database className="h-3 w-3" />
-        {workspaceLabel ? `Live · ${workspaceLabel}` : "Live data"}
+        <Database className="h-3 w-3 shrink-0" aria-hidden="true" />
+        <span className="max-w-[7rem] truncate sm:max-w-none">
+          {workspaceLabel ? (
+            <>
+              <span className="hidden sm:inline">Live · </span>
+              {workspaceLabel}
+            </>
+          ) : (
+            "Live"
+          )}
+        </span>
       </span>
     );
   }
@@ -34,23 +51,26 @@ export function SyncStatusChip() {
   if (syncMode === "error") {
     return (
       <span
-        className="hidden items-center gap-1.5 rounded-full bg-rose-500/15 px-2.5 py-1 text-[11px] font-medium text-rose-300 ring-1 ring-rose-500/30 md:inline-flex"
+        className={cn(base, "bg-rose-500/15 text-rose-300 ring-rose-500/30")}
         title={syncError ?? "Save failed"}
+        role="status"
       >
-        <AlertTriangle className="h-3 w-3" /> Sync issue
+        <AlertTriangle className="h-3 w-3 shrink-0" aria-hidden="true" />
+        <span className="hidden sm:inline">Sync issue</span>
+        <span className="sm:hidden">Error</span>
       </span>
     );
   }
 
   return (
     <span
-      className={cn(
-        "hidden items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ring-1 md:inline-flex",
-        "bg-white/[0.06] text-slate-300 ring-white/15",
-      )}
+      className={cn(base, "bg-white/[0.06] text-slate-300 ring-white/15")}
       title="API unavailable — using browser storage"
+      role="status"
     >
-      <HardDrive className="h-3 w-3" /> Local only
+      <HardDrive className="h-3 w-3 shrink-0" aria-hidden="true" />
+      <span className="hidden sm:inline">Local only</span>
+      <span className="sm:hidden">Local</span>
     </span>
   );
 }
