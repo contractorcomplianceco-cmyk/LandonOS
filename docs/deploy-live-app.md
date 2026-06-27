@@ -39,13 +39,14 @@ sudo nginx -t && sudo systemctl reload nginx
 
 nginx config, HTTPS, and cache headers: [deploy-nginx-landonos.md](./deploy-nginx-landonos.md).
 
-Health checks:
+Health checks (local API — no nginx auth):
 
 ```bash
 curl -s http://127.0.0.1:3001/api/healthz
-curl -s https://landon.cagteam.net/api/healthz
 curl -s http://127.0.0.1:3001/health
 ```
+
+Over HTTPS, live nginx requires Basic Auth — see [operations-runbook.md](./operations-runbook.md#4-health-checks).
 
 ---
 
@@ -126,7 +127,7 @@ See [deploy-nginx-landonos.md](./deploy-nginx-landonos.md).
 
 ## Smoke tests (live)
 
-1. `curl https://landon.cagteam.net/api/healthz` → `"database":"connected"`
+1. `curl -su 'USER:PASS' https://landon.cagteam.net/api/healthz` → `"database":"connected"` (or local: `curl -s http://127.0.0.1:3001/api/healthz`)
 2. Register at `/login` → cockpit with **Live · My Cockpit**
 3. Create research request → refresh → data persists
 4. Settings → Workspaces → second workspace → isolated data
@@ -137,6 +138,7 @@ See [deploy-nginx-landonos.md](./deploy-nginx-landonos.md).
 
 ## Deploy index
 
+- **[operations-runbook.md](./operations-runbook.md)** — backup, restore, health checks, deploy sequence, reboot startup
 - **This file** — architecture, env vars, PM2 + Postgres
 - **[deploy-nginx-landonos.md](./deploy-nginx-landonos.md)** — nginx, HTTPS, static sync
 - **[ecosystem.landonos.config.cjs](../ecosystem.landonos.config.cjs)** — PM2 process `landonos-api`

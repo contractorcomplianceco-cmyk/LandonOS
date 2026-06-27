@@ -108,7 +108,22 @@ server {
 
 ---
 
-## Optional: HTTP Basic Auth (staging)
+## HTTP Basic Auth (live)
+
+Production **`/etc/nginx/sites-available/landonos`** enables Basic Auth at the **server** level (all routes, including `/api/`). Credentials file: `/etc/nginx/.htpasswd-landonos`.
+
+Health checks over HTTPS require `-u user:pass`. Local checks bypass nginx:
+
+```bash
+curl -s http://127.0.0.1:3001/api/healthz
+curl -su 'USER:PASS' https://landon.cagteam.net/api/healthz
+```
+
+See [operations-runbook.md](./operations-runbook.md) for full health and ops procedures.
+
+---
+
+## Optional: HTTP Basic Auth (staging-only pattern)
 
 ```nginx
 location / {
@@ -137,7 +152,9 @@ Re-test SPA routes and `/api/healthz` over HTTPS after enabling SSL.
 
 ## Deploy steps (summary)
 
+Full sequence (git pull, API restart, backup): [operations-runbook.md](./operations-runbook.md#5-deploy--update-sequence).
+
 1. `pnpm run build` and rsync `dist/public` → `/var/www/landonos`.
 2. Ensure PM2 **`landonos-api`** is running (`ecosystem.landonos.config.cjs`).
 3. Apply nginx config; `sudo nginx -t && sudo systemctl reload nginx`.
-4. Verify `curl -s https://landon.cagteam.net/api/healthz`.
+4. Verify health (Basic Auth on live): `curl -su 'USER:PASS' https://landon.cagteam.net/api/healthz`.
