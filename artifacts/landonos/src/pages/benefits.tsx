@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { PageHeader } from "@/components/page-header";
+import { FeatureScopeNotice } from "@/components/feature-scope-notice";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -65,6 +66,8 @@ export default function BenefitsPage() {
           { label: "Plans", value: "3 active", icon: Shield },
         ]}
       />
+
+      <FeatureScopeNotice scope="hr-preview" />
 
       {/* Time-off balances */}
       <Card className="border-t-4 border-t-sky-500">

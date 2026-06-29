@@ -19,6 +19,7 @@ import { Toolbar } from "@/components/toolbar";
 import { EmptyState } from "@/components/empty-state";
 import { ConfirmDeleteDialog } from "@/components/confirm-delete-dialog";
 import { PageLoadingSkeleton } from "@/components/page-loading";
+import { FeatureScopeNotice } from "@/components/feature-scope-notice";
 
 const SOURCE_TYPES: SourceType[] = [
   'Official Source', 
@@ -166,9 +167,9 @@ export default function SourceVault() {
     <div className="space-y-6">
       <PageHeader
         icon={Database}
-        eyebrow="Verified intelligence"
+        eyebrow="Source tracking"
         title="Source Garage"
-        subtitle="A single repository for every source — graded for quality and flagged when intelligence leans on AI drafts instead of official records."
+        subtitle="Track sources you have reviewed manually — types and ratings are your notes, not automated verification."
         action={
           <Button onClick={handleCreate} className="bg-white text-slate-900 hover:bg-slate-200">
             <Plus className="h-4 w-4 mr-2" /> Add Source
@@ -177,6 +178,8 @@ export default function SourceVault() {
         statsClassName="grid grid-cols-3 gap-3 shrink-0"
         stats={vaultKpis.map((k) => ({ label: k.label, value: k.value, icon: k.icon }))}
       />
+
+      <FeatureScopeNotice scope="source-manual" />
 
       {/* Source metrics strip */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

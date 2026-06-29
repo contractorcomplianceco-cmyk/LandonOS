@@ -19,6 +19,7 @@ import { PageHeader } from "@/components/page-header";
 import { Toolbar } from "@/components/toolbar";
 import { EmptyState } from "@/components/empty-state";
 import { ConfirmDeleteDialog } from "@/components/confirm-delete-dialog";
+import { FeatureScopeNotice } from "@/components/feature-scope-notice";
 
 const RECORD_TYPES = [
   "Active Projects Tracker",
@@ -139,7 +140,7 @@ export default function CompanyBrain() {
         icon={BrainCircuit}
         eyebrow="Institutional Memory"
         title="Company Brain Sync"
-        subtitle="The company's brain — a reviewed system of record for decisions, projects, and SOPs. Ask it what's on file, or file a suggestion. Nothing is recorded until a human signs off."
+        subtitle="Draft suggestions for institutional memory — nothing is an official Company Brain record until leadership records it."
         action={
           <Button onClick={handleCreate} className="bg-white text-slate-900 hover:bg-slate-200">
             <Plus className="w-4 h-4 mr-2" />
@@ -154,6 +155,8 @@ export default function CompanyBrain() {
           { label: "Record Types", value: RECORD_TYPES.length, icon: BrainCircuit },
         ]}
       />
+
+      <FeatureScopeNotice scope="brain-suggestions" />
 
       <Alert className="bg-primary/5 border-primary/20 text-foreground">
         <ShieldAlert className="h-4 w-4 text-primary" />

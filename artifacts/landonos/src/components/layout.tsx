@@ -260,10 +260,10 @@ function SidebarFooter() {
         </div>
       </div>
       <div className="mt-3 flex items-center justify-between px-1">
-        <span className="text-[11px] text-sidebar-foreground/40">RoseOS v2.7.4</span>
-        <span className="flex items-center gap-1.5 text-[10px] font-medium text-emerald-300/80">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          Operational
+        <span className="text-[11px] text-sidebar-foreground/40">LandonOS</span>
+        <span className="flex items-center gap-1.5 text-[10px] font-medium text-slate-400/80">
+          <span className="h-1.5 w-1.5 rounded-full bg-slate-500" />
+          Review build
         </span>
       </div>
     </div>
@@ -508,7 +508,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <div className="hidden xl:flex items-center gap-2">
                 <StatusChip label="Human Review Required" tone="alert" />
                 <StatusChip label="AI Draft Only" tone="neutral" />
-                <StatusChip label="Source Check" tone="verify" />
+                <StatusChip label="Manual Verify" tone="neutral" />
               </div>
 
               <button
@@ -678,6 +678,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 <span className="md:hidden">New</span>
               </Button>
             </div>
+          </div>
+          <div className="flex border-t border-white/10 px-3 pb-3 pt-2 lg:hidden">
+            <GlobalSearch />
           </div>
         </header>
 

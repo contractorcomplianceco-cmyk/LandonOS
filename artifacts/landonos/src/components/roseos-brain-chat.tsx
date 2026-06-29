@@ -98,6 +98,9 @@ export function RoseOSBrainChat() {
           <Bot className="w-5 h-5 text-primary" />
           Ask RoseOS
         </CardTitle>
+        <p className="text-xs text-muted-foreground mt-1">
+          Keyword search over suggestions in this workspace — not live AI and not the official Company Brain.
+        </p>
       </CardHeader>
 
       <ScrollArea className="h-[320px] p-4">

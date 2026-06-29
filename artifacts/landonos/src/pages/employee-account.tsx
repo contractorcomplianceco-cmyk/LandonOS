@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { PageHeader } from "@/components/page-header";
+import { FeatureScopeNotice } from "@/components/feature-scope-notice";
 
 const DOCUMENTS = [
   { id: "d1", name: "Employment Agreement", meta: "PDF · Signed Jan 2024", icon: FileText },
@@ -76,6 +77,8 @@ export default function EmployeeAccountPage() {
           { label: "Tenure", value: "2.4 yrs", icon: CalendarDays },
         ]}
       />
+
+      <FeatureScopeNotice scope="hr-preview" />
 
       {/* Informational notice */}
       <div className="flex items-start gap-3 rounded-lg border border-sky-500/30 bg-sky-500/5 px-4 py-3">

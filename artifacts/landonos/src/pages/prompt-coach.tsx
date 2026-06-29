@@ -12,6 +12,7 @@ import { Sparkles, Target, Database, FileText, CheckCircle2, ShieldAlert, AlertT
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PageHeader } from "@/components/page-header";
 import { DemoModeBanner } from "@/components/demo-mode-banner";
+import { FeatureScopeNotice } from "@/components/feature-scope-notice";
 
 const QUALITY_CHECKLIST: { title: string; detail: string }[] = [
   { title: "Define the role", detail: "Tell the AI who it is (e.g. compliance analyst) so tone and rigor match the task." },
@@ -63,13 +64,16 @@ export default function PromptCoach() {
         icon={Sparkles}
         eyebrow="Prompt engineering"
         title="Tuning Bay"
-        subtitle="Transform rough questions into disciplined, source-backed executive prompts. Every rewrite keeps verification and human review in the loop."
+        subtitle="Transform rough questions into disciplined prompts using local templates — not live AI."
         statsClassName="grid grid-cols-2 gap-3 shrink-0"
         stats={[
           { label: "Strategies", value: 6, icon: Target },
           { label: "Output", value: <span className="text-sm">Draft until reviewed</span>, icon: ShieldAlert },
         ]}
       />
+
+      <DemoModeBanner feature="Prompt Coach" />
+      <FeatureScopeNotice scope="template-ai" />
 
       <Alert variant="default" className="bg-destructive/10 text-destructive border-destructive/20">
         <ShieldAlert className="h-4 w-4" />

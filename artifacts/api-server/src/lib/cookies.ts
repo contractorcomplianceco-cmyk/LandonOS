@@ -6,7 +6,8 @@ export const WORKSPACE_COOKIE = "landonos_workspace";
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
 function cookieBase(): CookieOptions {
-  const secure = process.env.NODE_ENV === "production";
+  // Pre-TLS cutover: set COOKIE_SECURE=false so sessions work over HTTP on the Command Center host.
+  const secure = process.env.COOKIE_SECURE === "true" ? true : process.env.COOKIE_SECURE === "false" ? false : process.env.NODE_ENV === "production";
   return {
     httpOnly: true,
     secure,

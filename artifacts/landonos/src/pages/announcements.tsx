@@ -34,6 +34,7 @@ import { PageHeader } from "@/components/page-header";
 import { Toolbar } from "@/components/toolbar";
 import { EmptyState } from "@/components/empty-state";
 import { ConfirmDeleteDialog } from "@/components/confirm-delete-dialog";
+import { FeatureScopeNotice } from "@/components/feature-scope-notice";
 import { ACCENT } from "@/components/stat-card";
 import { cn } from "@/lib/utils";
 import {
@@ -43,12 +44,12 @@ import {
   PinOff,
   Trash2,
   Pencil,
-  Lock,
   ShieldCheck,
   LogOut,
   EyeOff,
   AlertTriangle,
   Radio,
+  PenLine,
 } from "lucide-react";
 
 export default function Announcements() {
@@ -60,10 +61,6 @@ export default function Announcements() {
   const [searchQuery, setSearchQuery] = useState("");
   const [levelFilter, setLevelFilter] = useState<string>("All");
 
-  // Admin sign-in
-  const [signInOpen, setSignInOpen] = useState(false);
-  const [passcodeInput, setPasscodeInput] = useState("");
-
   // Create / edit
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -73,15 +70,12 @@ export default function Announcements() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  const handleSignIn = () => {
-    if (passcodeInput.trim() === (data.admin?.passcode ?? "")) {
-      updateData((prev) => ({ ...prev, admin: { ...prev.admin, unlocked: true } }));
-      toast({ title: "Admin mode enabled", description: "You can now publish and manage announcements." });
-      setSignInOpen(false);
-      setPasscodeInput("");
-    } else {
-      toast({ title: "Incorrect passcode", description: "Admin sign-in failed.", variant: "destructive" });
-    }
+  const handleEnableEditor = () => {
+    updateData((prev) => ({ ...prev, admin: { ...prev.admin, unlocked: true } }));
+    toast({
+      title: "Editor mode enabled",
+      description: "You can publish and manage announcements in this workspace.",
+    });
   };
 
   const handleSignOut = () => {
@@ -189,7 +183,7 @@ export default function Announcements() {
         icon={Megaphone}
         eyebrow="Company broadcast"
         title="Race Control"
-        subtitle="Official company announcements broadcast to everyone in the cockpit. Admins publish here; the whole team reads here."
+        subtitle="Workspace announcements — visible to everyone using this workspace, not a company-wide broadcast system yet."
         action={
           isAdmin ? (
             <div className="flex flex-wrap items-center gap-2">
@@ -201,15 +195,15 @@ export default function Announcements() {
                 onClick={handleSignOut}
                 className="border-white/20 bg-white/5 text-white hover:bg-white/10"
               >
-                <LogOut className="mr-2 h-4 w-4" /> Exit admin
+                <LogOut className="mr-2 h-4 w-4" /> Exit editor
               </Button>
             </div>
           ) : (
             <Button
-              onClick={() => setSignInOpen(true)}
+              onClick={handleEnableEditor}
               className="bg-white text-slate-900 hover:bg-slate-200"
             >
-              <Lock className="mr-2 h-4 w-4" /> Admin sign in
+              <PenLine className="mr-2 h-4 w-4" /> Enable editor mode
             </Button>
           )
         }
@@ -221,13 +215,14 @@ export default function Announcements() {
         ]}
       />
 
+      <FeatureScopeNotice scope="workspace-local" />
+
       {isAdmin && (
         <Alert className="border-red-500/30 bg-red-500/10 text-foreground">
           <ShieldCheck className="h-4 w-4 text-red-400" />
-          <AlertTitle className="text-red-300">Admin mode active</AlertTitle>
+          <AlertTitle className="text-red-300">Editor mode active</AlertTitle>
           <AlertDescription className="text-muted-foreground">
-            Anything you publish here is broadcast to everyone using this workspace in this browser.
-            Archived announcements are hidden from the team but remain visible to you.
+            Changes publish to this workspace only. Archived announcements stay hidden from readers but remain visible to you.
           </AlertDescription>
         </Alert>
       )}
@@ -351,42 +346,6 @@ export default function Announcements() {
           })
         )}
       </div>
-
-      {/* Admin sign-in dialog */}
-      <Dialog open={signInOpen} onOpenChange={setSignInOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Lock className="h-5 w-5 text-red-400" /> Admin sign in
-            </DialogTitle>
-            <DialogDescription>
-              Enter the admin passcode to publish and manage announcements. Demo passcode:{" "}
-              <span className="font-mono font-semibold text-foreground">landon-admin</span> (changeable in code).
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-2 py-2">
-            <Label>Passcode</Label>
-            <Input
-              type="password"
-              value={passcodeInput}
-              autoFocus
-              onChange={(e) => setPasscodeInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleSignIn();
-              }}
-              placeholder="Enter admin passcode"
-            />
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setSignInOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleSignIn}>
-              <ShieldCheck className="mr-2 h-4 w-4" /> Unlock admin
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       {/* Create / edit dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

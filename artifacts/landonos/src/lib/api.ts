@@ -71,6 +71,18 @@ export async function fetchAuthSession(): Promise<AuthSession | null> {
   return (await res.json()) as AuthSession;
 }
 
+/** Rose Review Mode — bootstrap a server session without showing a login form. */
+export async function bootstrapReviewSession(): Promise<AuthSession | null> {
+  const res = await fetch(apiUrl("/api/auth/review-session"), {
+    method: "POST",
+    credentials: "include",
+    headers: jsonHeaders(),
+  });
+  if (res.status === 403) return null;
+  if (!res.ok) throw await parseError(res, "Could not start review session");
+  return (await res.json()) as AuthSession;
+}
+
 export async function loginRequest(email: string, password: string): Promise<AuthSession> {
   const res = await fetch(apiUrl("/api/auth/login"), {
     method: "POST",

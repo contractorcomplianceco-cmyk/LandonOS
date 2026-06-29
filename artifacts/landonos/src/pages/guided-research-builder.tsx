@@ -22,6 +22,8 @@ import { Toolbar } from "@/components/toolbar";
 import { EmptyState } from "@/components/empty-state";
 import { ConfirmDeleteDialog } from "@/components/confirm-delete-dialog";
 import { PageLoadingSkeleton } from "@/components/page-loading";
+import { DemoModeBanner } from "@/components/demo-mode-banner";
+import { FeatureScopeNotice } from "@/components/feature-scope-notice";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function GuidedResearchBuilder() {
@@ -253,6 +255,9 @@ export default function GuidedResearchBuilder() {
         statsClassName="grid grid-cols-3 gap-3 shrink-0"
         stats={kpis.map((k) => ({ label: k.label, value: k.value, icon: k.icon }))}
       />
+
+      <DemoModeBanner feature="Research Engine generators" />
+      <FeatureScopeNotice scope="template-ai" />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="mb-4">

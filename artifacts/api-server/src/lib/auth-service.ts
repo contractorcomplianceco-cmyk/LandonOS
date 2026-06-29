@@ -192,3 +192,53 @@ export async function deleteOwnedWorkspace(userId: string, workspaceId: string) 
     .where(and(eq(workspaces.id, workspaceId), eq(workspaces.ownerId, userId)));
   return true;
 }
+
+const REVIEW_USER_EMAIL = "rose-review@internal.cagteam.local";
+
+/** Rose Review Mode — shared review user for live persistence without a login wall. */
+export async function ensureReviewSession(): Promise<{
+  user: PublicUser;
+  sessionToken: string;
+  activeWorkspaceId: string;
+}> {
+  const rows = await db.select().from(users).where(eq(users.email, REVIEW_USER_EMAIL)).limit(1);
+  let userRow: UserRow;
+
+  if (rows[0]) {
+    userRow = rows[0];
+  } else {
+    const userId = newId();
+    const passwordHash = await hashPassword(newSessionToken());
+    const [created] = await db
+      .insert(users)
+      .values({
+        id: userId,
+        email: REVIEW_USER_EMAIL,
+        passwordHash,
+        displayName: "Rose Review",
+        role: "review",
+      })
+      .returning();
+    userRow = created;
+    const workspaceId = newId();
+    await db.insert(workspaces).values({
+      id: workspaceId,
+      ownerId: userId,
+      name: "Rose Review Workspace",
+      data: EMPTY_WORKSPACE_DATA,
+    });
+  }
+
+  let list = await listWorkspacesForUser(userRow.id);
+  if (list.length === 0) {
+    const created = await createWorkspaceForUser(userRow.id, "Rose Review Workspace");
+    list = [created];
+  }
+
+  const sessionToken = await createSession(userRow.id);
+  return {
+    user: toPublicUser(userRow),
+    sessionToken,
+    activeWorkspaceId: list[0]!.id,
+  };
+}

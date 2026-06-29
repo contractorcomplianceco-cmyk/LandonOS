@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { StatCard } from "@/components/stat-card";
 import { PageHeader } from "@/components/page-header";
+import { FeatureScopeNotice } from "@/components/feature-scope-notice";
 import { useToast } from "@/hooks/use-toast";
 import {
   Rocket,
@@ -89,6 +90,8 @@ export default function TeamLeadTrackPage() {
           { label: "Skills Met", value: `${met}/${COMPETENCIES.length}`, icon: CheckCircle2 },
         ]}
       />
+
+      <FeatureScopeNotice scope="hr-preview" />
 
       {/* Metric strip */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

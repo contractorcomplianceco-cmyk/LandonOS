@@ -22,6 +22,8 @@ const isReplit = process.env.REPL_ID !== undefined;
 
 export default defineConfig({
   base: basePath,
+  /** Load VITE_* from monorepo root where production .env lives. */
+  envDir: path.resolve(import.meta.dirname, "..", ".."),
   plugins: [
     react(),
     tailwindcss(),

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { StatCard, type Accent } from "@/components/stat-card";
 import { PageHeader } from "@/components/page-header";
+import { FeatureScopeNotice } from "@/components/feature-scope-notice";
 import {
   Wallet,
   TrendingUp,
@@ -77,6 +78,8 @@ export default function BonusTrackerPage() {
           { label: "Pending", value: fmt(pending), icon: Clock },
         ]}
       />
+
+      <FeatureScopeNotice scope="hr-preview" />
 
       {/* Metric strip */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

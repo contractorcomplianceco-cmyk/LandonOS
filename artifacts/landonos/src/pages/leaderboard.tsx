@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { StatCard } from "@/components/stat-card";
 import { PageHeader } from "@/components/page-header";
+import { FeatureScopeNotice } from "@/components/feature-scope-notice";
 import { levelForPoints } from "@/lib/rewards";
 import {
   Trophy,
@@ -65,13 +66,15 @@ export default function LeaderboardPage() {
         icon={Trophy}
         eyebrow="Research Team Leaderboard"
         title="Leaderboard"
-        subtitle="Friendly competition across the research team. Points come from verified, human-reviewed work."
+        subtitle="Sample team standings for layout review. Only your points come from this workspace; other names are placeholders."
         statsClassName="grid grid-cols-2 gap-3 shrink-0"
         stats={[
           { label: "Your Rank", value: `#${myRank}`, icon: Trophy },
           { label: "Streak", value: `${me.streak} wks`, icon: Flame },
         ]}
       />
+
+      <FeatureScopeNotice scope="workspace-local" />
 
       {/* Metric strip */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

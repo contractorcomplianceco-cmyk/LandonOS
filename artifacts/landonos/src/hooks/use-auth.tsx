@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import {
   activateWorkspaceRequest,
+  bootstrapReviewSession,
   checkApiHealth,
   createWorkspaceRequest,
   fetchAuthSession,
@@ -18,6 +19,7 @@ import {
   type AuthUser,
   type WorkspaceSummary,
 } from "@/lib/api";
+import { isRoseReviewModeEnabled } from "@/lib/rose-review-mode";
 
 interface AuthContextType {
   user: AuthUser | null;
@@ -65,7 +67,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       applySession({ setUser, setWorkspaces, setActiveWorkspaceId }, null);
       return;
     }
-    const session = await fetchAuthSession();
+    let session = await fetchAuthSession();
+    if (!session && isRoseReviewModeEnabled()) {
+      try {
+        session = await bootstrapReviewSession();
+      } catch (err) {
+        console.warn("Review session bootstrap failed", err);
+      }
+    }
     applySession({ setUser, setWorkspaces, setActiveWorkspaceId }, session);
   }, []);
 

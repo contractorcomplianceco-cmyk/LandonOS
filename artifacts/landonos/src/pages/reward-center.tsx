@@ -8,6 +8,7 @@ import { StatCard } from "@/components/stat-card";
 import { Gauge } from "@/components/gauge";
 import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/page-header";
+import { FeatureScopeNotice } from "@/components/feature-scope-notice";
 import { Award, Star, Medal, Zap, BookOpen, Target, CheckCircle2, TrendingUp, GraduationCap } from "lucide-react";
 
 export default function RewardCenter() {
@@ -25,7 +26,7 @@ export default function RewardCenter() {
         icon={Award}
         eyebrow="Skill Progression"
         title="Garage Rewards"
-        subtitle="Track your professional growth — quality and thoroughness are rewarded over speed."
+        subtitle="Track lesson progress and points in this workspace — not connected to payroll or company-wide rewards yet."
         stats={[
           { label: "Level", value: rewardState.level, icon: Award },
           { label: "Points", value: rewardState.points, icon: Star },
@@ -34,6 +35,8 @@ export default function RewardCenter() {
         ]}
       />
       
+      <FeatureScopeNotice scope="workspace-local" />
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard label="Points" value={rewardState.points} icon={Star} color="blue" />
         <StatCard label="Level" value={rewardState.level} icon={Award} color="indigo" />

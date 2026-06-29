@@ -9,6 +9,7 @@ import {
 } from "../lib/cookies";
 import {
   createWorkspaceForUser,
+  ensureReviewSession,
   getOwnedWorkspace,
   listWorkspacesForUser,
   loginUser,
@@ -17,6 +18,7 @@ import {
   resolveSession,
 } from "../lib/auth-service";
 import { attachAuth } from "../middleware/auth";
+import { isRoseReviewModeActive } from "../lib/review-mode";
 import { logger } from "../lib/logger";
 
 const router: IRouter = Router();
@@ -101,6 +103,29 @@ router.get("/me", async (req, res) => {
     workspaces,
     activeWorkspaceId: req.workspaceId ?? workspaces[0]?.id ?? null,
   });
+});
+
+/** Rose Review Mode — silent session for live workspace sync (no login wall). */
+router.post("/review-session", async (req, res) => {
+  if (!isRoseReviewModeActive()) {
+    res.status(403).json({ error: "forbidden", message: "Review mode is not active" });
+    return;
+  }
+
+  try {
+    const result = await ensureReviewSession();
+    setSessionCookie(res, result.sessionToken);
+    setWorkspaceCookie(res, result.activeWorkspaceId);
+    const workspaces = await listWorkspacesForUser(result.user.id);
+    res.json({
+      user: result.user,
+      workspaces,
+      activeWorkspaceId: result.activeWorkspaceId,
+    });
+  } catch (err) {
+    logger.error({ err }, "Review session bootstrap failed");
+    res.status(503).json({ error: "server_error", message: "Could not start review session" });
+  }
 });
 
 export default router;

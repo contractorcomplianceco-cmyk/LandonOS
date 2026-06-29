@@ -8,6 +8,7 @@ import { ShieldCheck, MessageSquare, Send, User, Bot, AlertTriangle } from "luci
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { DemoModeBanner } from "@/components/demo-mode-banner";
+import { FeatureScopeNotice } from "@/components/feature-scope-notice";
 
 type ChatMode = 
   | "Help me understand this topic"
@@ -170,13 +171,16 @@ export default function RoseOSChat() {
         icon={ShieldCheck}
         eyebrow="Your co-driver"
         title="RoseOS Co-Driver"
-        subtitle="Your AI-guided mentor for research strategy and planning — structured prompts and next steps, always paired with source and human-review reminders."
+        subtitle="Template-based research guide — structured prompts and next steps. Not live AI until separately approved."
         statsClassName="grid grid-cols-2 gap-3 shrink-0"
         stats={[
           { label: "Guidance Modes", value: CHAT_MODES.length, icon: MessageSquare },
           { label: "Human Review", value: "Required", icon: ShieldCheck },
         ]}
       />
+
+      <DemoModeBanner feature="RoseOS Co-Driver" />
+      <FeatureScopeNotice scope="template-ai" />
 
       <div className="bg-primary/10 border border-primary/20 text-primary-foreground p-3 rounded-md flex items-start gap-3">
         <AlertTriangle className="w-5 h-5 text-primary shrink-0 mt-0.5" />

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 /** Shows whether data is syncing to the live API or running locally. */
 export function SyncStatusChip() {
-  const { syncMode, syncError } = useStore();
+  const { syncMode, syncError, isSaving } = useStore();
   const { workspaces, activeWorkspaceId, apiAvailable, user } = useAuth();
   const activeWorkspace = workspaces.find((w) => w.id === activeWorkspaceId);
   const workspaceLabel =
@@ -13,6 +13,19 @@ export function SyncStatusChip() {
 
   const base =
     "inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[10px] font-medium ring-1 sm:px-2.5 sm:text-[11px]";
+
+  if (syncMode === "live" && isSaving) {
+    return (
+      <span
+        className={cn(base, "bg-emerald-500/15 text-emerald-300 ring-emerald-500/30")}
+        title="Saving changes…"
+        role="status"
+      >
+        <Loader2 className="h-3 w-3 animate-spin shrink-0" aria-hidden="true" />
+        <span className="hidden min-[380px]:inline">Saving…</span>
+      </span>
+    );
+  }
 
   if (syncMode === "loading") {
     return (
